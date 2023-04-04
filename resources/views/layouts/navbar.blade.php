@@ -1,7 +1,7 @@
 <!-- [ Header ] start -->
 <header class="pc-header ">
 		<div class="header-wrapper">
-			<div class="mr-auto pc-mob-drp">
+			<!-- <div class="mr-auto pc-mob-drp">
 				<ul class="list-unstyled">
 					<li class="dropdown pc-h-item">
 						<a class="pc-head-link active dropdown-toggle arrow-none mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
@@ -60,7 +60,7 @@
 						</div>
 					</li>
 				</ul>
-			</div>
+			</div> -->
 			<div class="ml-auto">
 				<ul class="list-unstyled">
 					<li class="dropdown pc-h-item">

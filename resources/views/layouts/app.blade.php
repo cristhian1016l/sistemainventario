@@ -15,6 +15,7 @@
     <meta name="description" content="" />
     <meta name="keywords" content="">
     <meta name="author" content="Phoenixcoded" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon icon -->
     <link rel="icon" href="{{ asset('images/favicon.svg') }}" type="image/x-icon">
@@ -28,6 +29,7 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/customizer.css') }}">
 
+    @yield('css')
 </head>
 
 <body class="">
@@ -137,14 +139,7 @@
     <script src="{{ asset('js/plugins/clipboard.min.js') }}"></script>
     <script src="{{ asset('js/uikit.min.js') }}"></script>
 
-<!-- Apex Chart -->
-<script src="{{ asset('js/plugins/apexcharts.min.js') }}"></script>
-<script>
-    $("body").append('<div class="fixed-button active"><a href="https://1.envato.market/VGznk" target="_blank" class="btn btn-md btn-success"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Upgrade To Pro</a> </div>');
-</script>
-
-<!-- custom-chart js -->
-<script src="{{ asset('js/pages/dashboard-sale.js') }}"></script>
+    @yield('js')
 </body>
 
 </html>

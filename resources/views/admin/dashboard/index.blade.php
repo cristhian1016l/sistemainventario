@@ -420,3 +420,13 @@
     <!-- customer-section end -->
 </div>
 @endsection
+@section('js')
+<!-- Apex Chart -->
+    <script src="{{ asset('js/plugins/apexcharts.min.js') }}"></script>
+    <!-- <script>
+        $("body").append('<div class="fixed-button active"><a href="https://1.envato.market/VGznk" target="_blank" class="btn btn-md btn-success"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Upgrade To Pro</a> </div>');
+    </script> -->
+
+    <!-- custom-chart js -->
+    <script src="{{ asset('js/pages/dashboard-sale.js') }}"></script>
+@endsection
