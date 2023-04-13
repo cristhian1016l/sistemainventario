@@ -1,3 +1,4 @@
+<?php date_default_timezone_set('America/Lima'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>    
@@ -15,7 +16,7 @@
     <meta name="description" content="" />
     <meta name="keywords" content="">
     <meta name="author" content="Phoenixcoded" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">    
 
     <!-- Favicon icon -->
     <link rel="icon" href="{{ asset('images/favicon.svg') }}" type="image/x-icon">
@@ -28,6 +29,9 @@
     <!-- vendor css -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/customizer.css') }}">
+
+    <!-- Plugins -->    
+    <link rel="stylesheet" href="{{ asset('css/plugins/sweetalert2.min.css') }}">
 
     @yield('css')
 </head>
@@ -132,13 +136,13 @@
     <!-- Warning Section Ends -->
     <!-- Required Js -->
     <script src="{{ asset('js/vendor-all.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/bootstrap.min.js') }}"></script>        
     <script src="{{ asset('js/plugins/feather.min.js') }}"></script>
     <script src="{{ asset('js/pcoded.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
     <script src="{{ asset('js/plugins/clipboard.min.js') }}"></script>
-    <script src="{{ asset('js/uikit.min.js') }}"></script>
-
+    <script src="{{ asset('js/uikit.min.js') }}"></script>    
+    <script src="{{ asset('js/plugins/sweetalert2.all.min.js') }}"></script>
     @yield('js')
 </body>
 

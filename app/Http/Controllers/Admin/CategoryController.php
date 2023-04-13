@@ -5,47 +5,48 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Brand;
+use App\Models\Category;
 
-class BrandController extends Controller
+
+class CategoryController extends Controller
 {
     public function index()
     {
-        return view('brand.index');
+        return view('category.index');
     }    
 
-    public function returnBrands()
+    public function returnCategories()
     {
-        $brands = DB::table('brands')->get();
-        return $brands;
+        $categories = DB::table('categories')->get();
+        return $categories;
     }
 
     // RETURN DATA LIKE JSON
 
-    public function getBrands()
+    public function getCategories()
     {
-        return response()->json(['brands' => $this->returnBrands() ]);
+        return response()->json(['categories' => $this->returnCategories() ]);
     }
 
     public function insert(Request $request)
-    {        
+    {
         try{
             DB::beginTransaction();
             
-            $brand = new Brand();
-            $brand->name = mb_strtoupper($request->name, 'utf-8');            
-            $brand->save();
+            $category = new Category();
+            $category->name = mb_strtoupper($request->category, 'utf-8');            
+            $category->save();
             DB::commit();            
             return response()->json([
                 'status' => 200,
-                'brands' => $this->returnBrands(),
-                'msg' => "Marca agregada correctamente"
+                'categories' => $this->returnCategories(),
+                'msg' => "Categoría agregada correctamente"
             ]);
         }catch(\Exception $th){
             DB::rollback();
             return response()->json([
                 'status' => 500,
-                'brands' => $this->returnBrands(),
+                'categories' => $this->returnCategories(),
                 'msg' => $th->getMessage()
             ]);
         }     
@@ -55,19 +56,21 @@ class BrandController extends Controller
     {
         try{
             DB::beginTransaction();
-            $update = DB::update('UPDATE brands SET name = ?, updated_at = ? WHERE id = ? ',
-                        [mb_strtoupper($request->brand, 'utf-8'), date_format(now(), "Y-m-d H:i:s"), $request->cod_brand]);
+            $update = DB::update('UPDATE categories SET name = ?, updated_at = ? WHERE id = ? ',
+                        [mb_strtoupper($request->category, 'utf-8'),
+                        date_format(now(), "Y-m-d H:i:s"), 
+                        $request->cod_category]);
             DB::commit();
             return response()->json([
                 'status' => 200,
-                'brands' => $this->returnBrands(),
-                'msg' => 'La marca fue actualizada correctamente'
+                'categories' => $this->returnCategories(),
+                'msg' => 'La categoría fue actualizada correctamente'
             ]);
         }catch(\Exception $th){
             DB::rollback();
             return response()->json([
                 'status' => 500,
-                'brands' => $this->returnBrands(),
+                'categories' => $this->returnCategories(),
                 'msg' => $th->getMessage(),
             ]);
         }
@@ -78,22 +81,22 @@ class BrandController extends Controller
         try{
             DB::beginTransaction();
             
-            $delete = DB::table('brands')                    
-                    ->where('id', $request->cod_brand)
+            $delete = DB::table('categories')                    
+                    ->where('id', $request->cod_category)
                     ->delete();            
             
             DB::commit();            
 
             return response()->json([
                 'status' => 200,
-                'brands' => $this->returnBrands(),
-                'msg' => "La marca fue eliminada correctamente"
+                'categories' => $this->returnCategories(),
+                'msg' => "La categoría fue eliminada correctamente"
             ]);
         }catch(\Exception $th){
             DB::rollback();
             return response()->json([
                 'status' => 500,
-                'brands' => $this->returnBrands(),
+                'categories' => $this->returnCategories(),
                 'msg' => $th->getMessage()
             ]);
         }  
