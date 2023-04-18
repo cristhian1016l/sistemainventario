@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\WorkerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,3 +64,18 @@ Route::post('/categorias/eliminar-categoria', [CategoryController::class, 'delet
 
 // PRODUCTOS
 Route::get('/productos', [ProductController::class, 'index'])->name('product');
+
+Route::post('/productos/obtener-productos', [ProductController::class, 'getProducts']);
+Route::post('/productos/obtener-producto/{id}', [ProductController::class, 'getProductById']);
+Route::post('/productos/agregar-producto', [ProductController::class, 'insert']);
+Route::post('/productos/editar-producto', [ProductController::class, 'edit']);
+Route::post('/productos/eliminar-producto', [ProductController::class, 'delete']);
+
+// TRABAJADORES
+Route::get('/trabajadores', [WorkerController::class, 'index'])->name('worker');
+
+Route::post('/trabajadores/obtener-trabajadores', [WorkerController::class, 'getWorkers']);
+Route::post('/trabajadores/obtener-trabajador/{id}', [WorkerController::class, 'getWorkerById']);
+// Route::post('/trabajadores/agregar-trabajador', [WorkerController::class, 'insert']);
+// Route::post('/trabajadores/editar-trabajador', [WorkerController::class, 'edit']);
+Route::post('/trabajadores/eliminar-trabajador', [WorkerController::class, 'delete']);

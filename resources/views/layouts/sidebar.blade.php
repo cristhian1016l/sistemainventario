@@ -25,14 +25,14 @@
 						<ul class="pc-submenu">
 							<li class="pc-item"><a class="pc-link" href="{{ route('product') }}">Productos</a></li>
 							<li class="pc-item"><a class="pc-link" href="{{ route('category') }}">Categorias</a></li>							
-							<li class="pc-item"><a class="pc-link" href="bc_alert.html">Solicitudes</a></li>
+							<!-- <li class="pc-item"><a class="pc-link" href="bc_alert.html">Solicitudes</a></li> -->
 							<li class="pc-item"><a class="pc-link" href="{{ route('store') }}">Almacén</a></li>
 							<li class="pc-item"><a class="pc-link" href="{{ route('brand') }}">Marcas</a></li>
 							<li class="pc-item"><a class="pc-link" href="{{ route('supplier') }}">Proveedores</a></li>														
 						</ul>
 					</li>
 					<li class="pc-item">
-						<a href="icon-feather.html" class="pc-link "><span class="pc-micon"><i data-feather="feather"></i></span><span class="pc-mtext">Icons</span></a>
+						<a href="{{ route('worker') }}" class="pc-link "><span class="pc-micon"><i data-feather="users"></i></span><span class="pc-mtext">RR.HH</span></a>
 					</li>					
 
 				</ul>				

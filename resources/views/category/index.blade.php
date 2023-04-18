@@ -8,7 +8,7 @@
 <!-- [ Main Content ] start -->
 <div class="row">
     <input type="hidden" class="form-control" id="cod_category">
-    <div class="col-sm-12">
+    <div class="col-sm-6">
         <div class="card">
             <div class="card-header">
                 <div class="button-container">

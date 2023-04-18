@@ -6,7 +6,10 @@ function initializeTable(){
 
     $('#dom-jqry').dataTable().fnClearTable();
     $('#dom-jqry').dataTable().fnDestroy();
-    $('#dom-jqry').DataTable({
+    $('#dom-jqry').DataTable({        
+        // "sScrollX": "100%",
+		// "sScrollXInner": "100%",
+		// "bScrollCollapse": true,
         "ajax":{
             "type": "POST",
             "url": "/productos/obtener-productos",
@@ -17,14 +20,13 @@ function initializeTable(){
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         },
-        "columns":[          
-            {"data": "id"},
-            {"data": "code"},          
-            {"data": "product_name"},            
-            {"data": "store_id"},
+        "columns":[                      
+            {"data": "code"},
+            {"data": "product_name"},
+            {"data": "brand"},
+            {"data": "store"},
             {"data": "description"},
-            {"data": "price"},
-            {"data": "stock"},
+            {"data": "stock"},                        
             {"data": "id"},
         ],
         "columnDefs": [
@@ -32,21 +34,21 @@ function initializeTable(){
                 "targets":[6],
                 render: function(data, type, row){
                     return '<button class="btn btn-shadow btn-primary btn-sm"'+
-                            'onclick="setDataToEdit('+"'" + data + "', "+"'" + row.bussiness_name + "', "+"'" + row.ruc + "', "+"'" + row.address + "', "+"'" + row.phone + "',"+"'" + row.landline + "'"+')"'+ 
-                            'data-toggle="modal" data-target="#editSupplierModal">'+
-                            '<i class="fas fa-edit"></i></button>'+
+                            'onclick="setDataToEdit('+"'" + data + "'"+')"'+ 
+                            // 'data-toggle="modal" data-target="#editProductModal">'+
+                            '<i class="fas fa-edit"></i>Editar</button>'+
                             '<button class="btn btn-shadow btn-danger btn-sm"'+
                             'onclick="setDataToDelete('+"'" + data + "'"+')"'+ 
-                            'data-toggle="modal" data-target="#deleteSupplierModal">'+
+                            'data-toggle="modal" data-target="#deleteProductModal">'+
                             '<i class="fas fa-trash-alt"></i></button>';
                 }
             }
         ],
         "language": {
             "search": "Buscar:",
-            "lengthMenu": "Mostrar _MENU_ proveedores",
-            "info": "Mostrando _START_ a _END_ de _TOTAL_ Proveedores",
-            "infoEmpty": "Mostrando 0 a 0 de 0 proveedores",
+            "lengthMenu": "Mostrar _MENU_ productos",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Productos",
+            "infoEmpty": "Mostrando 0 a 0 de 0 productos",
             "infoFiltered": "(Filtrado de _MAX_ registros)",
             "zeroRecords": "No se encontraron resultados",
             "emptyTable": "Ningún dato disponible en esta tabla",
@@ -60,174 +62,240 @@ function initializeTable(){
     });
 }
 
-// $("#btnInsert").click(function(e){
-//     e.preventDefault();    
-//     let bussiness_insert = document.getElementById('bussiness_insert').value;
-//     let ruc_insert = document.getElementById('ruc_insert').value;
-//     let address_insert = document.getElementById('address_insert').value;
-//     let phone_insert = document.getElementById('phone_insert').value;
-//     let landline_insert = document.getElementById('landline_insert').value;
-//     $.ajax({
-//         headers: {
-//           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//         },
-//         type:'POST',
-//         url: $('#formInsert').attr('action'),
-//         data: {'bussiness': bussiness_insert, 'ruc': ruc_insert, 'address': address_insert, 'phone': phone_insert, 'landline': landline_insert },
-//         success:function(data) {                                 
-//             val = data.status;
-//             msg = data.msg;              
+$("#formButton").click(function(e){
+    e.preventDefault();    
+    const action = $('#myForm').attr('action');
+    
+    let cod_product = document.getElementById('cod_product').value;
 
-//             document.getElementById('closeInsertSupplierModal').click();
-//             console.log(msg)
-//             switch(val){
-//                 case 500:                                        
-//                     Swal.fire({
-//                         position: 'center',
-//                         icon: 'error',
-//                         title: msg,
-//                         showConfirmButton: false,
-//                         timer: 1500
-//                     })                    
-//                     break;
-//                 case 200:
-//                     Swal.fire({
-//                         position: 'center',
-//                         icon: 'success',
-//                         title: msg,
-//                         showConfirmButton: false,
-//                         timer: 1500
-//                     })                    
-//                     break;
-//             }
-//             cleanFields();
-//             initializeTable();
-//         }
-//     });
-// });
+    let product_name = document.getElementById('product_name').value;
+    
+    let supplier_id = document.getElementById('select-supplier').value;
+    let brand_id = document.getElementById('select-brand').value;
+    let category_id = document.getElementById('select-category').value;
+    let store_id = document.getElementById('select-store').value;
 
-// $("#btnDelete").click(function(e){
-//     e.preventDefault();
-//     let cod_supplier = document.getElementById('cod_supplier').value;    
-//     $.ajax({
-//         headers: {
-//           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//         },
-//         type:'POST',
-//         url: $('#formDelete').attr('action'),
-//         data: {'cod_supplier': cod_supplier },
-//         success:function(data) {            
-//             val = data.status;
-//             msg = data.msg;              
+    let description = document.getElementById('description').value;
+    let price = document.getElementById('price').value;
+    let stock = document.getElementById('stock').value;    
 
-//             document.getElementById('closeDeleteSupplierModal').click();
+    hideErrors();
 
-//             switch(val){
-//                 case 500:                    
-//                     Swal.fire({
-//                         position: 'center',
-//                         icon: 'error',
-//                         title: msg,
-//                         showConfirmButton: false,
-//                         timer: 1500
-//                     })                    
-//                     break;
-//                 case 200:
-//                     Swal.fire({
-//                         position: 'center',
-//                         icon: 'success',
-//                         title: msg,
-//                         showConfirmButton: false,
-//                         timer: 1500
-//                     })                    
-//                     break;
-//             }
-//             cleanFields();
-//             initializeTable();
-//         }
-//     });
-// });
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type:'POST',
+        url: action,
+        data: {
+                'id': cod_product,
+                'product_name': product_name, 
+                'supplier_id': supplier_id, 
+                'brand_id': brand_id, 
+                'category_id': category_id, 
+                'store_id': store_id,
+                'description': description,
+                'price': price,
+                'stock': stock },
+        success:function(data) {                                 
+            
 
-// $("#btnEdit").click(function(e){
-//     e.preventDefault();
-//     let cod_supplier = document.getElementById('cod_supplier').value;
-//     let bussiness = document.getElementById('bussiness').value;
-//     let address = document.getElementById('address').value;
-//     let phone = document.getElementById('phone').value;
-//     let landline = document.getElementById('landline').value;
-//     let ruc = document.getElementById('ruc').value;
-//     $.ajax({
-//         headers: {
-//           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//         },
-//         type:'POST',
-//         url: $('#formEdit').attr('action'),
-//         data: {'cod_supplier': cod_supplier, 'bussiness': bussiness, 'ruc': ruc, 'address': address, 'phone': phone, 'landline': landline },
-//         success:function(data) {            
-//             val = data.status;
-//             msg = data.msg;              
+            val = data.status;
+            msg = data.msg;              
+            
+            console.log(data.msg);            
+            switch(val){                
+                case 500:                                        
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })                                            
 
-//             document.getElementById('closeEditSupplierModal').click();
+                    jQuery.each(data.errors, function(key, value){
+                        jQuery('.alert-danger').show("slow");
+                        jQuery('.alert-danger').append('<p>'+value+'</p>');
+                    });
+                    
+                    break;
+                case 200:                    
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    cleanFields();
+                    initializeTable();                    
+                    break;
+            }            
+        }
+    });
+});
 
-//             switch(val){
-//                 case 500:                                        
-//                     Swal.fire({
-//                         position: 'center',
-//                         icon: 'error',
-//                         title: msg,
-//                         showConfirmButton: false,
-//                         timer: 1500
-//                     })                    
-//                     break;
-//                 case 200:
-//                     Swal.fire({
-//                         position: 'center',
-//                         icon: 'success',
-//                         title: msg,
-//                         showConfirmButton: false,
-//                         timer: 1500
-//                     })                    
-//                     break;
-//             }
-//             cleanFields();
-//             initializeTable();
-//         }
-//     });
-// });
+$("#btnDelete").click(function(e){
+    e.preventDefault();
+    let cod_product = document.getElementById('cod_product').value;    
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type:'POST',
+        url: $('#formDelete').attr('action'),
+        data: {'cod_product': cod_product },
+        success:function(data) {            
+            // val = data.status;
+            // msg = data.msg;                          
 
-// function setDataToDelete(cod_supplier){    
-//     document.getElementById('cod_supplier').value = cod_supplier;
-// }
+            // document.getElementById('closeDeleteProductModal').click();
 
-function setDataToEdit(cod_supplier, bussiness, ruc, address, phone, landline){
-    document.getElementById('cod_supplier').value = cod_supplier;
-    document.getElementById("bussiness").value = bussiness;
-    document.getElementById("ruc").value = ruc;
-    document.getElementById("address").value = address;
-    document.getElementById("phone").value = phone;
-    document.getElementById("landline").value = landline;
+            // switch(val){
+            //     case 500:                    
+            //         Swal.fire({
+            //             position: 'center',
+            //             icon: 'error',
+            //             title: msg,
+            //             showConfirmButton: false,
+            //             timer: 1500
+            //         })                    
+            //         break;
+            //     case 200:
+            //         Swal.fire({
+            //             position: 'center',
+            //             icon: 'success',
+            //             title: msg,
+            //             showConfirmButton: false,
+            //             timer: 1500
+            //         })                    
+            //         break;
+            // }
+            // cleanFields();
+            // initializeTable();
+        }
+    });
+});
+
+function setDataToDelete(cod_product){    
+    document.getElementById('cod_product').value = cod_product;
+}
+
+function setDataToInsert(){
+    titleForm = document.getElementById("titleForm").innerHTML = "Agregar Producto <button type='button' class='close' onclick='reduceTable(false)'><span aria-hidden='true'>&times;</span></button>";
+    reduceTable(true);
+    cleanFields();
+    document.getElementById("formButton").innerText = "Agregar";
+
+    $('#myForm').attr('action', 'productos/agregar-producto');
+}
+
+function setDataToEdit(id){
+    document.getElementById('cod_product').value = id;
+
+    titleForm = document.getElementById("titleForm").innerHTML = "Editar Producto <button type='button' class='close' onclick='reduceTable(false)'><span aria-hidden='true'>&times;</span></button>";
+    reduceTable(true);
+
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type:'POST',
+        url: 'productos/obtener-producto/'+id,        
+        success:function(data) {                        
+            const product = data.product            
+            console.log(product);
+            document.getElementById("product_name").value = product['product_name']
+            document.getElementById("description").value = product['description']
+                        
+            $('#select-brand').val(product['brand_id'])            
+            $('#select-brand').trigger('change');
+
+            $('#select-supplier').val(product['supplier_id'])            
+            $('#select-supplier').trigger('change');
+
+            $('#select-category').val(product['category_id'])            
+            $('#select-category').trigger('change');
+
+            $('#select-store').val(product['store_id'])            
+            $('#select-store').trigger('change');
+
+            document.getElementById("price").value = product['price']
+            document.getElementById("stock").value = product['stock']
+            
+            switch(data.status){
+                case 500:                    
+                    msg = data.msg;                          
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })                    
+                    break;                
+            }
+        }
+    });
+    document.getElementById("formButton").innerText = "Actualizar"
+    $('#myForm').attr('action', 'productos/editar-producto');
 }
 
 function cleanFields(){
-    document.getElementById('cod_supplier').value = "";
-    document.getElementById("bussiness").value = "";
-    document.getElementById("ruc").value = "";
-    document.getElementById("bussiness_insert").value = "";
-    document.getElementById("ruc_insert").value = "";
+    document.getElementById('cod_product').value = "";
+    document.getElementById('product_name').value = "";
+
+    $('#select-supplier').val("")
+    $('#select-supplier').trigger('change');
+
+    $('#select-brand').val("")
+    $('#select-brand').trigger('change');
+        
+    $('#select-category').val("")
+    $('#select-category').trigger('change');
+
+    $('#select-store').val("")
+    $('#select-store').trigger('change');
+
+    document.getElementById('description').value = "";
+    document.getElementById('price').value = "";
+    document.getElementById('stock').value = "";
 }
 
-// // PREVENIR ENVIO CON ENTER
+function reduceTable(state){
+    const table = document.getElementsByClassName("data");
+    const form = document.getElementById("form")
+    if(state == false){
+        table[0].classList.add("col-sm-12");
+        table[0].classList.remove("col-sm-8");
+        form.style.display = "none"
+    }
+    if(state == true){        
+        table[0].classList.add("col-sm-8");
+        table[0].classList.remove("col-sm-12");
+        form.style.display = "block"
+    }
+}
 
-// const $elementos = document.querySelectorAll(".form-control");
+function hideErrors(){
+    jQuery('.alert-danger').empty();
+    const error = document.getElementById("error");
+    error.style.display = "none";
+}
 
-// $elementos.forEach(elemento => {
-// 	elemento.addEventListener("keydown", (evento) => {
-// 		if (evento.key == "Enter") {
-// 			// Prevenir
-// 			evento.preventDefault();
-// 			return false;
-// 		}
-// 	});
-// });
+// PREVENIR ENVIO CON ENTER
 
-// // PREVENIR ENVIO CON ENTER
+const $elementos = document.querySelectorAll(".form-control");
+
+$elementos.forEach(elemento => {
+	elemento.addEventListener("keydown", (evento) => {
+		if (evento.key == "Enter") {
+			// Prevenir
+			evento.preventDefault();
+			return false;
+		}
+	});
+});
+
+// PREVENIR ENVIO CON ENTER

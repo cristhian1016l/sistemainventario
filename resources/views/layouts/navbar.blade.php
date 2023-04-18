@@ -80,7 +80,7 @@
 						<a class="pc-head-link dropdown-toggle arrow-none mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
 							<img src="{{ asset('images/user/avatar-2.jpg') }}" alt="user-image" class="user-avtar">
 							<span>
-								<span class="user-name">Joseph William</span>
+								<span class="user-name">Cristhian Carmona</span>
 								<span class="user-desc">Administrator</span>
 							</span>
 						</a>
