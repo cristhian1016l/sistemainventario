@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Models\Worker;
+use App\Validation\WorkerValidation;
 
 class WorkerController extends Controller
-{
+{    
+
     public function index()
     {
         $documents = DB::select("SELECT * FROM document_type");
@@ -18,7 +21,8 @@ class WorkerController extends Controller
 
     public function returnWorkers()
     {        
-        $workers = DB::table('workers')->get();
+        $workers = DB::select("SELECT w.id, w.name, w.lastname, dt.document_type, w.document FROM workers w
+                                INNER JOIN document_type dt ON w.document_type_id = dt.id");
         return $workers;
     }
 
@@ -31,7 +35,8 @@ class WorkerController extends Controller
 
     public function getWorkerById($id)
     {
-        $worker = Worker::where('id', '=', $id)->first();
+        $WorkerValidation = new WorkerValidation;
+        $worker = $WorkerValidation->validateIfExists($id);        
         if($worker === null){            
             return response()->json(['status' => 500, 'msg' => 'El trabajador no existe', 'worker' => []]);
         }else{
@@ -40,132 +45,93 @@ class WorkerController extends Controller
         }
     }
 
-    // public function insert(Request $request)
-    // {
-    //     return response()->json(['data' => $request->all(), 'action' => "insert"]);     
+    public function insert(Request $request)
+    {
+        $WorkerValidation = new WorkerValidation;        
 
-    //     // if(strlen($request->ruc) != 11)
-    //     // {
-    //     //     return response()->json([
-    //     //         'status' => 500,
-    //     //         'suppliers' => $this->returnProducts(),
-    //     //         'msg' => 'EL RUC debe de tener 11 dígitos'
-    //     //     ]);
-    //     // }else{
-    //     //     try{
-    //     //         DB::beginTransaction();
+        $validator = $WorkerValidation->validateInsertAndUpdate($request);
+
+        if($validator->fails()){
+            return response()->json(['status' => 500, 'msg' => 'El trabajador no fue agregado', 'errors' => $validator->errors()->all()]);
+        }else{
+
+            try{
+
+                DB::beginTransaction();
+                $worker = new Worker();
+                $worker->name = mb_strtoupper($request->name, 'utf-8');
+                $worker->lastname = mb_strtoupper($request->lastname, 'utf-8');
+                $worker->document_type_id = $request->document_type_id;
+                $worker->document = $request->document;
+                $worker->save();
+                DB::commit();                   
                 
-    //     //         $supplier = new Supplier();
-    //     //         $supplier->bussiness_name = mb_strtoupper($request->bussiness, 'utf-8');
-    //     //         $supplier->ruc = mb_strtoupper($request->ruc, 'utf-8');
-    //     //         $supplier->address = mb_strtoupper($request->address, 'utf-8');
-    //     //         $supplier->phone = mb_strtoupper($request->phone, 'utf-8');
-    //     //         $supplier->landline = mb_strtoupper($request->landline, 'utf-8');
-    //     //         $supplier->save();
-    //     //         DB::commit();            
-    //     //         return response()->json([
-    //     //             'status' => 200,
-    //     //             'suppliers' => $this->returnProducts(),
-    //     //             'msg' => "Proveedor agregado correctamente"
-    //     //         ]);
-    //     //     }catch(\Exception $th){
-    //     //         DB::rollback();
-    //     //         return response()->json([
-    //     //             'status' => 500,
-    //     //             'suppliers' => $this->returnProducts(),
-    //     //             'msg' => $th->getMessage()
-    //     //         ]);
-    //     //     }
-    //     // }        
-    // }
+                return response()->json([
+                    'status' => 200,                        
+                    'msg' => 'El trabajador fue agregado correctamente'
+                ]);
+            }catch(\Exception $th){
+                DB::rollback();
+                return response()->json([
+                    'status' => 500,                        
+                    'msg' => $th->getMessage(),
+                ]);
+            }
+        }
 
-    // public function edit(Request $request)
-    // {
-    //     // return response()->json($request->all());
+    }
 
-    //     // return response()->json(['data' => $request->all(), 'action' => "update"]);     
+    public function edit(Request $request)
+    {
+        $WorkerValidation = new WorkerValidation;
 
-    //     if($request->id == null || $request->id == ""){
-    //         return response()->json(['status' => 500, 'msg' => 'Error al enviar el código del producto']);
-    //     }
+        $WorkerValidation->validateIfIsNullOrEmpty($request->id);
 
-    //     $product = Product::where('id', '=', $request->id)->first();
-    //     if(isset($product)){
+        $worker = $WorkerValidation->validateIfExists($request->id);
+        if(isset($worker)){
 
-    //         $rules = [
-    //             'id' => 'required',
-    //             'brand_id' => 'required',
-    //             'category_id' => 'required',
-    //             'store_id' => 'required',
-    //             'supplier_id' => 'required',
-    //             'price' => 'required',
-    //             'stock' => 'required|numeric'
-    //         ];
+            $validator = $WorkerValidation->validateInsertAndUpdate($request);
 
-    //         $messages = [
-    //             'id.required' => 'Error en el código del producto',
-    //             'brand_id.required' => 'La marca es obligatoria',
-    //             'category_id.required' => 'La categoría es obligatoria',
-    //             'store_id.required' => 'El almacén es obligatorio',
-    //             'supplier_id.required' => 'El proveedor es obligatorio',
-    //             'price.required' => 'Ingrese el precio mínimo del producto',                
-    //             'stock.required' => 'Ingrese el stock mínimo del producto',
-    //             'stock.numeric' => 'El stock debe de ser numérico'
-    //         ];
+            if($validator->fails()){
+                return response()->json(['status' => 500, 'msg' => 'El trabajador no fue editado', 'errors' => $validator->errors()->all()]);
+            }else{
 
-    //         $validator = Validator::make($request->all(), $rules, $messages);
-
-    //         if($validator->fails()){                
-    //             return response()->json(['status' => 500, 'msg' => 'El producto no fue editado', 'errors' => $validator->errors()->all()]);
-    //         }else{
-    //             $price = 0;
-    //             if(str_starts_with($request->price, 'S/ ')){
-    //                 $price = substr($request->price, 3);
-    //             }else{
-    //                 $price = $request->price;
-    //             }
-
-    //             try{
-    //                 DB::beginTransaction();
-    //                 $update = DB::update('UPDATE products SET
-    //                                     product_name = ?,
-    //                                     supplier_id = ?,
-    //                                     brand_id = ?,
-    //                                     category_id = ?,
-    //                                     store_id = ?,
-    //                                     description = ?,
-    //                                     price = ?,
-    //                                     stock = ?,
-    //                                     updated_at = ?
-    //                                     WHERE id = ? ',
-    //                             [mb_strtoupper($request->product_name, 'utf-8'), 
-    //                             $request->supplier_id,
-    //                             $request->brand_id,
-    //                             $request->category_id,
-    //                             $request->store_id,
-    //                             mb_strtoupper($request->description),
-    //                             $price,
-    //                             $request->stock,
-    //                             date_format(now(), "Y-m-d H:i:s"), 
-    //                             $request->id]);
-    //                 DB::commit();
-    //                 return response()->json([
-    //                     'status' => 200,                        
-    //                     'msg' => 'El producto fue actualizado correctamente'
-    //                 ]);
-    //             }catch(\Exception $th){
-    //                 DB::rollback();
-    //                 return response()->json([
-    //                     'status' => 500,                        
-    //                     'msg' => $th->getMessage(),
-    //                 ]);
-    //             }
-    //         }
+                try{
+                    DB::beginTransaction();
+                    $update = DB::update('UPDATE workers SET
+                                        name = ?,
+                                        lastname = ?,
+                                        document_type_id = ?,
+                                        document = ?,
+                                        updated_at = ?
+                                        WHERE id = ? ',
+                                [mb_strtoupper($request->name, 'utf-8'), 
+                                mb_strtoupper($request->lastname, 'utf-8'),
+                                $request->document_type_id,
+                                $request->document,
+                                date_format(now(), "Y-m-d H:i:s"), 
+                                $request->id]);
+                    DB::commit();
+                    return response()->json([
+                        'status' => 200,                        
+                        'msg' => 'El trabajador fue actualizado correctamente'
+                    ]);
+                }catch(\Exception $th){
+                    DB::rollback();
+                    return response()->json([
+                        'status' => 500,                        
+                        'msg' => $th->getMessage(),
+                    ]);
+                }
+            }
             
-    //     }else{
-    //         return response()->json("NO");
-    //     }        
-    // }
+        }else{
+            return response()->json([
+                'status' => 500,                        
+                'msg' => 'El trabajar no existe en la base de datos',
+            ]);            
+        }        
+    }
 
     public function delete(Request $request)
     {

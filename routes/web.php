@@ -76,6 +76,6 @@ Route::get('/trabajadores', [WorkerController::class, 'index'])->name('worker');
 
 Route::post('/trabajadores/obtener-trabajadores', [WorkerController::class, 'getWorkers']);
 Route::post('/trabajadores/obtener-trabajador/{id}', [WorkerController::class, 'getWorkerById']);
-// Route::post('/trabajadores/agregar-trabajador', [WorkerController::class, 'insert']);
-// Route::post('/trabajadores/editar-trabajador', [WorkerController::class, 'edit']);
+Route::post('/trabajadores/agregar-trabajador', [WorkerController::class, 'insert']);
+Route::post('/trabajadores/editar-trabajador', [WorkerController::class, 'edit']);
 Route::post('/trabajadores/eliminar-trabajador', [WorkerController::class, 'delete']);

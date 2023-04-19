@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
+use App\Validation\ProductValidation;
 
 class ProductController extends Controller
 {
@@ -49,80 +50,65 @@ class ProductController extends Controller
 
     public function insert(Request $request)
     {
-        return response()->json(['data' => $request->all(), 'action' => "insert"]);     
+        
+        $ProductValidation = new ProductValidation;                
 
-        // if(strlen($request->ruc) != 11)
-        // {
-        //     return response()->json([
-        //         'status' => 500,
-        //         'suppliers' => $this->returnProducts(),
-        //         'msg' => 'EL RUC debe de tener 11 dígitos'
-        //     ]);
-        // }else{
-        //     try{
-        //         DB::beginTransaction();
+        $validator = $ProductValidation->validateInsertAndUpdate($request);            
+
+        if($validator->fails()){                
+            return response()->json(['status' => 500, 'msg' => 'El producto no fue agregado', 'errors' => $validator->errors()->all()]);
+        }else{
+
+            $price = 0;
+            if(str_starts_with($request->price, 'S/ ')){
+                $price = substr($request->price, 3);
+            }else{
+                $price = $request->price;
+            }
+
+            try{
+                DB::beginTransaction();
                 
-        //         $supplier = new Supplier();
-        //         $supplier->bussiness_name = mb_strtoupper($request->bussiness, 'utf-8');
-        //         $supplier->ruc = mb_strtoupper($request->ruc, 'utf-8');
-        //         $supplier->address = mb_strtoupper($request->address, 'utf-8');
-        //         $supplier->phone = mb_strtoupper($request->phone, 'utf-8');
-        //         $supplier->landline = mb_strtoupper($request->landline, 'utf-8');
-        //         $supplier->save();
-        //         DB::commit();            
-        //         return response()->json([
-        //             'status' => 200,
-        //             'suppliers' => $this->returnProducts(),
-        //             'msg' => "Proveedor agregado correctamente"
-        //         ]);
-        //     }catch(\Exception $th){
-        //         DB::rollback();
-        //         return response()->json([
-        //             'status' => 500,
-        //             'suppliers' => $this->returnProducts(),
-        //             'msg' => $th->getMessage()
-        //         ]);
-        //     }
-        // }        
+                $product = new Product();
+                $product->product_name = mb_strtoupper($request->product_name, 'utf-8');
+                $product->supplier_id = $request->supplier_id;
+                $product->brand_id = $request->brand_id;
+                $product->category_id = $request->category_id;
+                $product->store_id = $request->store_id;
+                $product->description = mb_strtoupper($request->description, 'utf-8');
+                $product->price = $price;
+                $product->stock = $request->stock;
+                $product->save();
+                DB::commit();            
+                return response()->json([
+                    'status' => 200,                    
+                    'msg' => "Producto agregado correctamente"
+                ]);
+            }catch(\Exception $th){
+                DB::rollback();
+                return response()->json([
+                    'status' => 500,                    
+                    'msg' => $th->getMessage()
+                ]);
+            }
+        }
+
     }
 
     public function edit(Request $request)
     {
-        // return response()->json($request->all());
 
-        // return response()->json(['data' => $request->all(), 'action' => "update"]);     
+        $ProductValidation = new ProductValidation;                
 
-        if($request->id == null || $request->id == ""){
-            return response()->json(['status' => 500, 'msg' => 'Error al enviar el código del producto']);
-        }
+        $ProductValidation->validateIfIsNullOrEmpty($request->id);
 
-        $product = Product::where('id', '=', $request->id)->first();
+        $product = $ProductValidation->validateIfExists($request->id);
+
         if(isset($product)){
 
-            $rules = [
-                'id' => 'required',
-                'brand_id' => 'required',
-                'category_id' => 'required',
-                'store_id' => 'required',
-                'supplier_id' => 'required',
-                'price' => 'required',
-                'stock' => 'required|numeric'
-            ];
+            $validator = $ProductValidation->validateInsertAndUpdate($request);            
 
-            $messages = [
-                'id.required' => 'Error en el código del producto',
-                'brand_id.required' => 'La marca es obligatoria',
-                'category_id.required' => 'La categoría es obligatoria',
-                'store_id.required' => 'El almacén es obligatorio',
-                'supplier_id.required' => 'El proveedor es obligatorio',
-                'price.required' => 'Ingrese el precio mínimo del producto',                
-                'stock.required' => 'Ingrese el stock mínimo del producto',
-                'stock.numeric' => 'El stock debe de ser numérico'
-            ];
-
-            $validator = Validator::make($request->all(), $rules, $messages);
-
-            if($validator->fails()){                
+            if($validator->fails()){
                 return response()->json(['status' => 500, 'msg' => 'El producto no fue editado', 'errors' => $validator->errors()->all()]);
             }else{
                 $price = 0;

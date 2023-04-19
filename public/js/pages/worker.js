@@ -23,7 +23,7 @@ function initializeTable(){
         "columns":[                                  
             {"data": "name"},
             {"data": "lastname"},
-            {"data": "document_type_id"},
+            {"data": "document_type"},
             {"data": "document"},
             {"data": "id"},
         ],
@@ -59,79 +59,71 @@ function initializeTable(){
     });
 }
 
-// $("#formButton").click(function(e){
-//     e.preventDefault();    
-//     const action = $('#myForm').attr('action');
+$("#formButton").click(function(e){
+    e.preventDefault();    
+    const action = $('#myForm').attr('action');
     
-//     let cod_worker = document.getElementById('cod_worker').value;
-
-//     let product_name = document.getElementById('product_name').value;
+    let cod_worker = document.getElementById('cod_worker').value;
+    let name = document.getElementById('name').value;
+    let lastname = document.getElementById('lastname').value;    
     
-//     let supplier_id = document.getElementById('select-supplier').value;
-//     let brand_id = document.getElementById('select-brand').value;
-//     let category_id = document.getElementById('select-category').value;
-//     let store_id = document.getElementById('select-store').value;
+    let document_type_id = document.getElementById('document_type').value;
+    
+    let document_number = document.getElementById('document').value;    
 
-//     let description = document.getElementById('description').value;
-//     let price = document.getElementById('price').value;
-//     let stock = document.getElementById('stock').value;    
+    hideErrors();
 
-//     hideErrors();
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type:'POST',
+        url: action,
+        data: {
+                'id': cod_worker,
+                'name': name, 
+                'lastname': lastname, 
+                'document_type_id': document_type_id,                 
+                'document': document_number },
+        success:function(data) {                                 
 
-//     $.ajax({
-//         headers: {
-//           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//         },
-//         type:'POST',
-//         url: action,
-//         data: {
-//                 'id': cod_worker,
-//                 'product_name': product_name, 
-//                 'supplier_id': supplier_id, 
-//                 'brand_id': brand_id, 
-//                 'category_id': category_id, 
-//                 'store_id': store_id,
-//                 'description': description,
-//                 'price': price,
-//                 'stock': stock },
-//         success:function(data) {                                 
+            console.log(data);
+
+            val = data.status;
+            msg = data.msg;              
             
+            console.log(data.msg);            
+            switch(val){                
+                case 500:                                        
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })                                            
 
-//             val = data.status;
-//             msg = data.msg;              
-            
-//             console.log(data.msg);            
-//             switch(val){                
-//                 case 500:                                        
-//                     Swal.fire({
-//                         position: 'center',
-//                         icon: 'error',
-//                         title: msg,
-//                         showConfirmButton: false,
-//                         timer: 1500
-//                     })                                            
-
-//                     jQuery.each(data.errors, function(key, value){
-//                         jQuery('.alert-danger').show("slow");
-//                         jQuery('.alert-danger').append('<p>'+value+'</p>');
-//                     });
+                    jQuery.each(data.errors, function(key, value){
+                        jQuery('.alert-danger').show("slow");
+                        jQuery('.alert-danger').append('<p>'+value+'</p>');
+                    });
                     
-//                     break;
-//                 case 200:                    
-//                     Swal.fire({
-//                         position: 'center',
-//                         icon: 'success',
-//                         title: msg,
-//                         showConfirmButton: false,
-//                         timer: 1500
-//                     })
-//                     cleanFields();
-//                     initializeTable();                    
-//                     break;
-//             }            
-//         }
-//     });
-// });
+                    break;
+                case 200:                    
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    cleanFields();
+                    initializeTable();                    
+                    break;
+            }            
+        }
+    });
+});
 
 $("#btnDelete").click(function(e){
     e.preventDefault();
@@ -206,7 +198,7 @@ function setDataToEdit(id){
             document.getElementById("name").value = worker['name']
             document.getElementById("lastname").value = worker['lastname']
                         
-            $('#document_type').val(worker['document_type'])
+            $('#document_type').val(worker['document_type_id'])
             $('#document_type').trigger('change');
                         
             document.getElementById("document").value = worker['document']
@@ -255,11 +247,11 @@ function reduceTable(state){
     }
 }
 
-// function hideErrors(){
-//     jQuery('.alert-danger').empty();
-//     const error = document.getElementById("error");
-//     error.style.display = "none";
-// }
+function hideErrors(){
+    jQuery('.alert-danger').empty();
+    const error = document.getElementById("error");
+    error.style.display = "none";
+}
 
 // // PREVENIR ENVIO CON ENTER
 
