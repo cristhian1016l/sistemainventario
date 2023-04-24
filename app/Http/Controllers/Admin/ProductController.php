@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use App\Validation\ProductValidation;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class ProductController extends Controller
 {
@@ -184,5 +185,17 @@ class ProductController extends Controller
                 'msg' => $th->getMessage()
             ]);
         }
+    }
+
+    // ****************************  REPORTES  ****************************
+
+    public function productsReport()
+    {
+        $products = DB::select("SELECT p.product_name, p.description, s.address, p.price, p.stock FROM products p
+                                INNER JOIN stores s ON p.store_id = s.id");
+        $data = ['products' => $products];
+        $pdf=PDF::loadView('admin.reports.products_report', $data);
+        $pdf->setPaper('A4', 'landscape');
+        return $pdf->stream();
     }
 }

@@ -28,7 +28,14 @@
                         onclick="setDataToInsert()">
                         Agregar
                     </button>
-                </div>
+                    <a href="{{ route('product.reports') }}" target="_blank">
+                        <button 
+                            type="button" 
+                            class="btn btn-primary">
+                            Reporte PDF
+                        </button>
+                    </a>
+                </div>                
             </div>
             <div class="card-body">
                 <div class="table-responsive dt-responsive">
@@ -154,7 +161,7 @@
 
 <!-- MODALS -->
 
-<!-- MODAL TO DELETE SUPPLIER -->
+<!-- MODAL TO DELETE PRODUCT -->
 <form id="formDelete" method="POST" action="productos/eliminar-producto">
     <div class="modal fade" id="deleteProductModal">
         <div class="modal-dialog modal-lg">
@@ -174,7 +181,7 @@
         </div>
     </div>
 </form>
-<!-- END MODAL TO DELETE SUPPLIER -->
+<!-- END MODAL TO DELETE PRODUCT -->
 
 <!-- END MODALS -->
 

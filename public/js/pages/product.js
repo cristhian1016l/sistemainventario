@@ -31,11 +31,14 @@ function initializeTable(){
         ],
         "columnDefs": [
             {
+                "targets":[0],
+                "visible": false
+            },
+            {
                 "targets":[6],
                 render: function(data, type, row){
                     return '<button class="btn btn-shadow btn-primary btn-sm"'+
                             'onclick="setDataToEdit('+"'" + data + "'"+')"'+ 
-                            // 'data-toggle="modal" data-target="#editProductModal">'+
                             '<i class="fas fa-edit"></i>Editar</button>'+
                             '<button class="btn btn-shadow btn-danger btn-sm"'+
                             'onclick="setDataToDelete('+"'" + data + "'"+')"'+ 
@@ -146,34 +149,35 @@ $("#btnDelete").click(function(e){
         type:'POST',
         url: $('#formDelete').attr('action'),
         data: {'cod_product': cod_product },
-        success:function(data) {            
-            // val = data.status;
-            // msg = data.msg;                          
+        success:function(data) {        
 
-            // document.getElementById('closeDeleteProductModal').click();
+            val = data.status;
+            msg = data.msg;                          
 
-            // switch(val){
-            //     case 500:                    
-            //         Swal.fire({
-            //             position: 'center',
-            //             icon: 'error',
-            //             title: msg,
-            //             showConfirmButton: false,
-            //             timer: 1500
-            //         })                    
-            //         break;
-            //     case 200:
-            //         Swal.fire({
-            //             position: 'center',
-            //             icon: 'success',
-            //             title: msg,
-            //             showConfirmButton: false,
-            //             timer: 1500
-            //         })                    
-            //         break;
-            // }
-            // cleanFields();
-            // initializeTable();
+            document.getElementById('closeDeleteProductModal').click();
+
+            switch(val){
+                case 500:                    
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })                    
+                    break;
+                case 200:
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })                    
+                    break;
+            }
+            cleanFields();
+            initializeTable();
         }
     });
 });

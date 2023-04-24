@@ -1,4 +1,4 @@
-$(document).ready(function() {    
+$(document).ready(function() {
     initializeTable();
 });
 
@@ -6,7 +6,7 @@ function initializeTable(){
 
     $('#dom-jqry').dataTable().fnClearTable();
     $('#dom-jqry').dataTable().fnDestroy();
-    $('#dom-jqry').DataTable({        
+    $('#dom-jqry').DataTable({
         // "sScrollX": "100%",
 		// "sScrollXInner": "100%",
 		// "bScrollCollapse": true,
@@ -37,7 +37,11 @@ function initializeTable(){
                             '<button class="btn btn-shadow btn-danger btn-sm"'+
                             'onclick="setDataToDelete('+"'" + data + "'"+')"'+ 
                             'data-toggle="modal" data-target="#deleteWorkerModal">'+
-                            '<i class="fas fa-trash-alt"></i></button>';
+                            '<i class="fas fa-trash-alt"></i></button>'+
+                            '<button class="btn btn-shadow btn-info btn-sm"'+
+                            'onclick="setDataToAsignProduct('+"'" + data + "', "+"'" + row.name + "'"+')"'+ 
+                            'data-toggle="modal" data-target="#AddProductWorkerModal">'+
+                            '<i class="fas fa-plus"></i></button>';
                 }
             }
         ],
@@ -85,7 +89,7 @@ $("#formButton").click(function(e){
                 'lastname': lastname, 
                 'document_type_id': document_type_id,                 
                 'document': document_number },
-        success:function(data) {                                 
+        success:function(data) {
 
             console.log(data);
 
@@ -93,7 +97,7 @@ $("#formButton").click(function(e){
             msg = data.msg;              
             
             console.log(data.msg);            
-            switch(val){                
+            switch(val){
                 case 500:                                        
                     Swal.fire({
                         position: 'center',
@@ -125,6 +129,48 @@ $("#formButton").click(function(e){
     });
 });
 
+$("#btnAddProductToWorker").click(function(e){
+    e.preventDefault();
+    let cod_worker = document.getElementById('cod_worker').value;    
+    let product_id = document.getElementById('product_id').value;
+    let amount = document.getElementById('amount').value;
+
+    hideErrors();
+
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type:'POST',
+        url: $('#formAddProductToWorker').attr('action'),
+        data: {'cod_worker': cod_worker, "product_id": product_id, "amount": amount },
+        success:function(data) {
+            val = data.status;
+            msg = data.msg;                                      
+
+            switch(val){
+                case 500:                    
+                    jQuery.each(data.errors, function(key, value){
+                        jQuery('.alert-danger').show("slow");
+                        jQuery('.alert-danger').append('<p>'+value+'</p>');
+                    });                    
+                    break;
+                case 200:
+                    // document.getElementById('closeAddProductWorkerModal').click();
+                    // Swal.fire({
+                    //     position: 'center',
+                    //     icon: 'success',
+                    //     title: msg,
+                    //     showConfirmButton: false,
+                    //     timer: 1500
+                    // })
+                    getProductsAssigned(cod_worker);
+                    break;
+            }
+        }
+    });
+});
+
 $("#btnDelete").click(function(e){
     e.preventDefault();
     let cod_worker = document.getElementById('cod_worker').value;    
@@ -135,9 +181,9 @@ $("#btnDelete").click(function(e){
         type:'POST',
         url: $('#formDelete').attr('action'),
         data: {'cod_worker': cod_worker },
-        success:function(data) {            
+        success:function(data) {
             val = data.status;
-            msg = data.msg;                          
+            msg = data.msg;
 
             document.getElementById('closeDeleteWorkerModal').click();
 
@@ -149,7 +195,7 @@ $("#btnDelete").click(function(e){
                         title: msg,
                         showConfirmButton: false,
                         timer: 1500
-                    })                    
+                    })
                     break;
                 case 200:
                     Swal.fire({
@@ -167,8 +213,105 @@ $("#btnDelete").click(function(e){
     });
 });
 
-function setDataToDelete(cod_worker){    
+function setDataToDelete(cod_worker){
     document.getElementById('cod_worker').value = cod_worker;
+}
+
+function deleteProductAssigned(cod_worker, product_worker_id){
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type:'POST',
+        url: 'trabajadores/eliminar-producto-asignado',
+        data: {'product_worker_id': product_worker_id },
+        success:function(data) {
+            console.log(data);
+            val = data.status;
+            msg = data.msg;
+
+            // document.getElementById('closeDeleteWorkerModal').click();
+
+            switch(val){
+                case 500:                    
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    break;
+                case 200:                    
+                    getProductsAssigned(cod_worker);
+                    break;
+            }
+        }
+    });    
+}
+
+function setDataToAsignProduct(cod_worker, name){
+    document.getElementById('cod_worker').value = cod_worker;
+    document.getElementById('nameToAsign').innerHTML = name;
+    console.log(cod_worker+ ' '+name);
+      
+    getProductsAssigned(cod_worker);
+
+}
+
+function getProductsAssigned(cod_worker){
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type:'POST',
+        url: "trabajadores/obtener-productos-asignados",
+        data: {'cod_worker': cod_worker },
+        success:function(data) {
+            console.log(data);
+            val = data.status;
+            msg = data.msg;                          
+
+            switch(val){
+                case 500:                    
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })                    
+                    break;
+                case 200:                                
+                    $("#products_assigned").slideDown("slow", function() {
+                        table = $("#products_assigned tbody");
+                        table.empty();
+                        $.each(data.products, function(idx, elem){
+                            var options;
+                            
+                            options = "<td>"+
+                                            elem.description+
+                                        "</td>"+
+                                        "<td>"+
+                                            elem.name+
+                                        "</td>"+
+                                        "<td>"+
+                                            elem.amount+
+                                        "</td>"+
+                                        "<td>"+
+                                            "</a><a onclick='deleteProductAssigned("+cod_worker+', '+ elem.id +")'><i class='feather icon-trash-2 ml-3 f-16 text-danger'></i></a>"+
+                                        "</td>";
+                            table.append(
+                                "<tr>"+
+                                    options+
+                                "</tr>"
+                            );
+                        });
+                    });                
+                    break;
+            }
+        }
+    });
 }
 
 function setDataToInsert(){
@@ -192,7 +335,7 @@ function setDataToEdit(id){
         },
         type:'POST',
         url: 'trabajadores/obtener-trabajador/'+id,        
-        success:function(data) {                        
+        success:function(data) {
             const worker = data.worker            
             console.log(worker);
             document.getElementById("name").value = worker['name']
@@ -240,7 +383,7 @@ function reduceTable(state){
         table[0].classList.remove("col-sm-8");
         form.style.display = "none"
     }
-    if(state == true){        
+    if(state == true){
         table[0].classList.add("col-sm-8");
         table[0].classList.remove("col-sm-12");
         form.style.display = "block"

@@ -37,6 +37,7 @@ Route::post('/almacenes/obtener-almacenes', [StoreController::class, 'getStores'
 Route::post('/almacenes/agregar-almacen', [StoreController::class, 'insert']);
 Route::post('/almacenes/editar-almacen', [StoreController::class, 'edit']);
 Route::post('/almacenes/eliminar-almacen', [StoreController::class, 'delete']);
+// FIN ALMACENES
 
 // PROVEEDORES
 Route::get('/proveedores', [SupplierController::class, 'index'])->name('supplier');
@@ -45,6 +46,7 @@ Route::post('/proveedores/obtener-proveedores', [SupplierController::class, 'get
 Route::post('/proveedores/agregar-proveedor', [SupplierController::class, 'insert']);
 Route::post('/proveedores/editar-proveedor', [SupplierController::class, 'edit']);
 Route::post('/proveedores/eliminar-proveedor', [SupplierController::class, 'delete']);
+// FIN PROVEEDORES
 
 // MARCAS
 Route::get('/marcas', [BrandController::class, 'index'])->name('brand');
@@ -53,14 +55,16 @@ Route::post('/marcas/obtener-marcas', [BrandController::class, 'getBrands']);
 Route::post('/marcas/agregar-marca', [BrandController::class, 'insert']);
 Route::post('/marcas/editar-marca', [BrandController::class, 'edit']);
 Route::post('/marcas/eliminar-marca', [BrandController::class, 'delete']);
+// FIN MARCAS
 
-// MARCAS
+// CATEGORÍAS
 Route::get('/categorias', [CategoryController::class, 'index'])->name('category');
 
 Route::post('/categorias/obtener-categorias', [CategoryController::class, 'getCategories']);
 Route::post('/categorias/agregar-categoria', [CategoryController::class, 'insert']);
 Route::post('/categorias/editar-categoria', [CategoryController::class, 'edit']);
 Route::post('/categorias/eliminar-categoria', [CategoryController::class, 'delete']);
+// FIN CATEGORÍAS
 
 // PRODUCTOS
 Route::get('/productos', [ProductController::class, 'index'])->name('product');
@@ -71,6 +75,11 @@ Route::post('/productos/agregar-producto', [ProductController::class, 'insert'])
 Route::post('/productos/editar-producto', [ProductController::class, 'edit']);
 Route::post('/productos/eliminar-producto', [ProductController::class, 'delete']);
 
+Route::get('/productos/reporte-productos', [ProductController::class, 'productsReport'])->name('product.reports');
+
+
+// FIN PRODUCTOS
+
 // TRABAJADORES
 Route::get('/trabajadores', [WorkerController::class, 'index'])->name('worker');
 
@@ -79,3 +88,11 @@ Route::post('/trabajadores/obtener-trabajador/{id}', [WorkerController::class, '
 Route::post('/trabajadores/agregar-trabajador', [WorkerController::class, 'insert']);
 Route::post('/trabajadores/editar-trabajador', [WorkerController::class, 'edit']);
 Route::post('/trabajadores/eliminar-trabajador', [WorkerController::class, 'delete']);
+
+Route::post('/trabajadores/obtener-productos-asignados', [WorkerController::class, 'getAssignedProducts']);
+Route::post('/trabajadores/agregar-producto-asignado', [WorkerController::class, 'assignProductsToWorker']);
+Route::post('/trabajadores/eliminar-producto-asignado', [WorkerController::class, 'deleteProductAssigned']);
+
+Route::get('/trabajadores/declaracion-jurada-pdf', [WorkerController::class, 'swornDeclarationPDF'])->name('worker.sworndeclarationpdf');
+
+// FIN TRABAJADORES

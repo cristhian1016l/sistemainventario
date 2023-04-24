@@ -3,6 +3,7 @@
 namespace App\Validation;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Worker;
+use App\Models\WorkerProduct;
 
 class WorkerValidation{
 
@@ -14,6 +15,10 @@ class WorkerValidation{
 
        function validateIfExists($id){
               return Worker::where('id', '=', $id)->first();
+       }
+
+       function validateIfExistsProductAssigned($id){
+              return WorkerProduct::where('id', '=', $id)->first();
        }
 
        function validateInsertAndUpdate($request){
@@ -36,6 +41,27 @@ class WorkerValidation{
 
             $validator = Validator::make($request->all(), $rules, $messages);
             return $validator;
+       }
+
+       function validateAsignProductToWorker($request){
+              $rules = [                
+                     'cod_worker' => 'required|numeric',
+                     'product_id' => 'required|numeric',
+                     'amount' => 'required|numeric'
+              ];
+
+              $messages = [                
+                     'cod_worker.required' => 'No se seleccionó el trabajador',
+                     'cod_worker.numeric' => 'Error al elegir el trabajador',                     
+                     'product_id.required' => 'Ingrese el producto asignado',
+                     'product_id.numeric' => 'Error al elegir el product',                     
+                     'amount.required' => 'Ingrese la cantidad',
+                     'amount.numeric' => 'Error al ingresar la cantidad',
+                     
+              ];
+
+              $validator = Validator::make($request->all(), $rules, $messages);
+              return $validator;
        }
 
 }
