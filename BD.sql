@@ -9,7 +9,7 @@ drop table if exists brands;
 drop table if exists categories;
 drop table if exists workers;
 drop table if exists document_type;
-
+drop table if exists worker_product;
 
 drop table if exists id_value_tbl;
 create table id_value_tbl
@@ -72,12 +72,16 @@ CREATE TABLE workers
 	id int auto_increment not null primary key,
     name varchar(50) not null,
     lastname varchar(50) not null,
+    address varchar(255),
     document_type_id int not null,
     document varchar(25),
     created_at datetime,
     updated_at datetime,    
 	foreign key (document_type_id) references document_type(id)
 );
+
+ALTER TABLE workers
+ADD COLUMN address VARCHAR(255) AFTER lastname;
 
 drop table if exists products;
 CREATE TABLE products
@@ -144,5 +148,8 @@ INSERT INTO document_type(document_type) VALUES('CARNET DE EXTRANJERÍA');
 
 INSERT INTO workers(name, lastname, document_type_id, document) VALUES('CRISTHIAN', 'RIVEROS', 2, '760569381246461234567');
 SELECT * FROM workers;
+SELECT * FROM worker_product;
 
-SELECT * FROM id_value_tbl;
+SELECT w.name, w.lastname, w.address, w.document, p.description, wp.amount FROM worker_product wp
+INNER JOIN workers w ON wp.worker_id = w.id
+INNER JOIN products p ON wp.product_id = p.id

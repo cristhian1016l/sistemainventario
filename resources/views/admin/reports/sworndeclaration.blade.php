@@ -80,17 +80,43 @@
 </head>
 <body>
     <!-- <img src="{{ asset('dist/img/logo.png') }}" alt="Logo" width="50" height="50" align="right"> -->        
+    @foreach($all_data as $data)
+
     <div>
-        <p style="margin-top: -8px; font-family: 'Inter', sans-serif; font-size: 20px; font-weight: bold; text-align: center;">DECLARACIÓN JURADA</p>        
+        <p style="margin-top: 50px; font-family: monospace; font-size: 15px; font-weight: bold; text-align: center; text-decoration: underline">DECLARACIÓN JURADA</p>        
         <br>
-        <p style="font-family: monospace">
-            POR EL PRESENTE DOCUMENTO, YO RAY ANTHONY CAMPOS RODRIGUEZ, DE 
+        <p style="font-family: monospace; margin-left: 75px; margin-right: 75px; text-align: justify">
+            POR EL PRESENTE DOCUMENTO, YO <b>{{ $data['names'] }}</b>, DE 
             NACIONALIDAD PERUANA, IDENTIFICADO CON DOCUMENTO NACIONAL DE IDENTIDAD 
-            NÚMERO 75268028; SEÑALANDO DOMICILIO LAS MERCEDES IETAPA II MZ. B LT.13, 
-            DISTRITO DE SAN MARTIN DE PORRES, PROVINCIA Y DEPARTAMENTO DE LIMA. EN 
+            NÚMERO <b>{{ $data['document'] }}</b>; SEÑALANDO DOMICILIO <b>{{ $data['address'] }}</b>. EN 
             MI CALIDAD DE TRABAJADOR CON CARGO EDICION DE VIDEOS DESIGNADO DE LA 
             SOCIEDAD DENOMINADA “PRODUCCIONES 89 S.A.C.”., DECLARO BAJO JURAMENTO 
             HABER RECIBIDO EL BIEN QUE A CONTINUACIÓN SE DETALLA.
-        </p>        
+        </p>    
+        <p style="font-family: monospace; font-weight: bold; text-decoration: underline; margin-left: 75px; margin-top: 50px">DESCRIPCIÓN DE LOS BIENES:</p>    
+        <ul style="font-family: monospace; font-weight: bold; text-decoration: none; margin-left: 75px">
+            @foreach($data['products'] as $product)
+            <li>{{ $product['amount'] }} | {{ $product['description'] }}</li>
+            @endforeach
+        </ul>
+        <p style="font-family: monospace; margin-left: 75px; margin-right: 75px; margin-top: 50px; text-align: justify">
+            EL TRABAJADOR DECALARA QUE TODOS LOS BIENES PATRIMONIALES DETALLADOS 
+            SE ENCUENTRAN EN BUEN ESTADO. EL TRABAJADOR ES RESPONSABLE DIRECTO DE 
+            LA EXISTENCIA, PERMANENCIA, CONSERVACION Y BUEN USO DE CADA UNO DE LOS 
+            BIENES DESCRITOS Y MOSTRADOS. POR LO QUE SE RECOMIENDA TOMAR LAS 
+            PROVIDENCIAS DEL CASO PARA EVITAR PERDIDA, SUSTRACCIONES, DETERIORO, 
+            ETC. QUE LUEGO PUEDE SER CONSIDERADO COMO DESCUIDO Y NEGLIGECENCIA Y 
+            DE SER ASI SE PROCEDERA AL DESCUENTO POR EL VALOR ESTIMADO. 
+        </p>    
+
+        <p style="font-family: monospace; margin-left: 50px; margin-right: 50px; margin-top: 120px; text-align: center">
+            <b>{{ $data['names'] }}</b><br>
+            <b>DNI: {{ $data['document'] }}</b><br>
+            <b>EL TRABAJADOR (A)</b>
+        </p>
     </div>
+    <div style="page-break-after:always;"></div>
+
+    @endforeach
+
 </body>

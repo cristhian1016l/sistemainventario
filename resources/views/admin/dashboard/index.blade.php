@@ -77,7 +77,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-6">
                 <div class="card support-bar overflow-hidden">
                     <div class="card-body pb-0">
@@ -130,9 +130,9 @@
                     <div id="support-chart1"></div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
-    <div class="col-xl-6 col-md-12">
+    <!-- <div class="col-xl-6 col-md-12">
         <div class="card">
             <div class="card-header">
                 <h5>Department wise monthly sales report</h5>
@@ -151,10 +151,10 @@
                 <div id="account-chart"></div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- support-section end -->
     <!-- customer-section start -->
-    <div class="col-xl-6 col-md-12">
+    <!-- <div class="col-xl-6 col-md-12">
         <div class="card">
             <div class="card-body">
                 <h6>Customer Satisfaction</h6>
@@ -416,7 +416,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- customer-section end -->
 </div>
 @endsection

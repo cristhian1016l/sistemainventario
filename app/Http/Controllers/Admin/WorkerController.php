@@ -64,6 +64,7 @@ class WorkerController extends Controller
                 $worker = new Worker();
                 $worker->name = mb_strtoupper($request->name, 'utf-8');
                 $worker->lastname = mb_strtoupper($request->lastname, 'utf-8');
+                $worker->address = mb_strtoupper($request->address, 'utf-8');
                 $worker->document_type_id = $request->document_type_id;
                 $worker->document = $request->document;
                 $worker->save();
@@ -104,12 +105,14 @@ class WorkerController extends Controller
                     $update = DB::update('UPDATE workers SET
                                         name = ?,
                                         lastname = ?,
+                                        address = ?,
                                         document_type_id = ?,
                                         document = ?,
                                         updated_at = ?
                                         WHERE id = ? ',
                                 [mb_strtoupper($request->name, 'utf-8'), 
                                 mb_strtoupper($request->lastname, 'utf-8'),
+                                mb_strtoupper($request->address, 'utf-8'),
                                 $request->document_type_id,
                                 $request->document,
                                 date_format(now(), "Y-m-d H:i:s"), 
@@ -255,10 +258,27 @@ class WorkerController extends Controller
 
     public function swornDeclarationPDF()
     {
-        $workers = DB::select("SELECT w.name, w.lastname, w.document, p.description, wp.amount FROM worker_product wp
-                                INNER JOIN workers w ON wp.worker_id = w.id
-                                INNER JOIN products p ON wp.product_id = p.id");
-        $data = ['workers' => $workers];
+        $all_data = array();
+        $products_asigned = array();
+
+        $workers = DB::select("SELECT * FROM workers");
+
+        foreach($workers as $worker){
+            $products = DB::select("SELECT p.id, p.description, wp.amount FROM worker_product wp
+                                    INNER JOIN products p ON wp.product_id = p.id
+                                    WHERE wp.worker_id = ".$worker->id);
+
+            foreach($products as $product){
+                array_push($products_asigned, ['description' => $product->description, 'amount' => $product->amount]);
+            }            
+            array_push($all_data, ['id' => $worker->id, 'names' => $worker->name.' '.$worker->lastname, 'document' => $worker->document, 'address' => $worker->address, 'products' => collect($products_asigned) ]);
+            $products_asigned = [];
+        }
+        
+        
+        $data = ['all_data' => collect($all_data)];
+        // dd($data);
+        // exit;
         $pdf=PDF::loadView('admin.reports.sworndeclaration', $data);        
         return $pdf->stream();
     }

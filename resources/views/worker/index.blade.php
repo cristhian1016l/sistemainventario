@@ -87,6 +87,11 @@
                         <label for="lastname" class="col-form-label">Apellidos:</label>
                         <input type="text" class="form-control" id="lastname">
                     </div>
+
+                    <div class="form-group">
+                        <label for="address" class="col-form-label">Dirección:</label>
+                        <textarea type="text" class="form-control" id="address"></textarea>
+                    </div>
                                                                                 
                     <div class="form-group row">
                         <div class="col-md-6">

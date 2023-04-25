@@ -7,9 +7,6 @@ function initializeTable(){
     $('#dom-jqry').dataTable().fnClearTable();
     $('#dom-jqry').dataTable().fnDestroy();
     $('#dom-jqry').DataTable({
-        // "sScrollX": "100%",
-		// "sScrollXInner": "100%",
-		// "bScrollCollapse": true,
         "ajax":{
             "type": "POST",
             "url": "/trabajadores/obtener-trabajadores",
@@ -70,7 +67,8 @@ $("#formButton").click(function(e){
     let cod_worker = document.getElementById('cod_worker').value;
     let name = document.getElementById('name').value;
     let lastname = document.getElementById('lastname').value;    
-    
+    let address = document.getElementById('address').value;    
+
     let document_type_id = document.getElementById('document_type').value;
     
     let document_number = document.getElementById('document').value;    
@@ -87,6 +85,7 @@ $("#formButton").click(function(e){
                 'id': cod_worker,
                 'name': name, 
                 'lastname': lastname, 
+                'address': address, 
                 'document_type_id': document_type_id,                 
                 'document': document_number },
         success:function(data) {
@@ -340,6 +339,7 @@ function setDataToEdit(id){
             console.log(worker);
             document.getElementById("name").value = worker['name']
             document.getElementById("lastname").value = worker['lastname']
+            document.getElementById("address").value = worker['address']
                         
             $('#document_type').val(worker['document_type_id'])
             $('#document_type').trigger('change');
@@ -368,6 +368,7 @@ function cleanFields(){
     document.getElementById('cod_worker').value = "";
     document.getElementById('name').value = "";
     document.getElementById('lastname').value = "";
+    document.getElementById('address').value = "";
     
     $('#select-supplier').val(1)
     $('#select-supplier').trigger('change');
