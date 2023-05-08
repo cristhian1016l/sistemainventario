@@ -24,8 +24,7 @@
 						<a class="pc-link "><span class="pc-micon"><i data-feather="box"></i></span><span class="pc-mtext">Inventario</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span></a>
 						<ul class="pc-submenu">
 							<li class="pc-item"><a class="pc-link" href="{{ route('product') }}">Productos</a></li>
-							<li class="pc-item"><a class="pc-link" href="{{ route('category') }}">Categorias</a></li>							
-							<!-- <li class="pc-item"><a class="pc-link" href="bc_alert.html">Solicitudes</a></li> -->
+							<li class="pc-item"><a class="pc-link" href="{{ route('category') }}">Categorias</a></li>														
 							<li class="pc-item"><a class="pc-link" href="{{ route('store') }}">Almacén</a></li>
 							<li class="pc-item"><a class="pc-link" href="{{ route('brand') }}">Marcas</a></li>
 							<li class="pc-item"><a class="pc-link" href="{{ route('supplier') }}">Proveedores</a></li>														
@@ -33,7 +32,10 @@
 					</li>
 					<li class="pc-item">
 						<a href="{{ route('worker') }}" class="pc-link "><span class="pc-micon"><i data-feather="users"></i></span><span class="pc-mtext">RR.HH</span></a>
-					</li>					
+					</li>
+					<li class="pc-item">
+						<a href="{{ route('request') }}" class="pc-link "><span class="pc-micon"><i data-feather="users"></i></span><span class="pc-mtext">SOLICITUDES</span></a>
+					</li>
 
 				</ul>				
 			</div>

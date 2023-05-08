@@ -9,6 +9,11 @@ use App\Models\Store;
 
 class StoreController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index()
     {        
         return view('store.index');
@@ -27,14 +32,28 @@ class StoreController extends Controller
         return response()->json(['stores' => $this->returnStores()]);
     }
 
+    public function getStoreById($id)
+    {
+        $store = Store::where('id', '=', $id)->first();
+        if($store === null){            
+            return response()->json(['status' => 500, 'msg' => 'El almacén no existe', 'store' => []]);
+        }else{
+            $store = Store::findOrFail($id);
+            return response()->json(['status' => 200, 'msg' => 'Datos devueltos', 'store' => $store]);
+        }
+    }
+
     public function insert(Request $request)
     {
         try{
             DB::beginTransaction();
             
             $store = new Store();
+            $store->name = mb_strtoupper($request->name, 'utf-8');
+            $store->manager = mb_strtoupper($request->manager, 'utf-8');
             $store->address = mb_strtoupper($request->address, 'utf-8');
-            $store->description = mb_strtoupper($request->description, 'utf-8');
+            $store->phone = mb_strtoupper($request->phone, 'utf-8');
+            $store->city = mb_strtoupper($request->city, 'utf-8');
             $store->save();
             DB::commit();            
             return response()->json([
@@ -57,8 +76,14 @@ class StoreController extends Controller
         
         try{
             DB::beginTransaction();
-            $update = DB::update('UPDATE stores SET address = ?, description = ?, updated_at = ? WHERE id = ? ',
-                        [mb_strtoupper($request->address, 'utf-8'), mb_strtoupper($request->description, 'utf-8'), date_format(now(), "Y-m-d H:i:s"), $request->cod_store]);
+            $update = DB::update('UPDATE stores SET 
+                        name = ?, address = ?, manager = ?, phone = ?, city = ?, updated_at = ? WHERE id = ? ',
+                        [mb_strtoupper($request->name, 'utf-8'), 
+                        mb_strtoupper($request->address, 'utf-8'), 
+                        mb_strtoupper($request->manager, 'utf-8'), 
+                        mb_strtoupper($request->phone, 'utf-8'), 
+                        mb_strtoupper($request->city, 'utf-8'), 
+                        date_format(now(), "Y-m-d H:i:s"), $request->cod_store]);
             DB::commit();
             return response()->json([
                 'status' => 200,

@@ -7,9 +7,6 @@ function initializeTable(){
     $('#dom-jqry').dataTable().fnClearTable();
     $('#dom-jqry').dataTable().fnDestroy();
     $('#dom-jqry').DataTable({        
-        // "sScrollX": "100%",
-		// "sScrollXInner": "100%",
-		// "bScrollCollapse": true,
         "ajax":{
             "type": "POST",
             "url": "/productos/obtener-productos",

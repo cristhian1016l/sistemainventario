@@ -9,7 +9,7 @@ function initializeTable(){
     $('#dom-jqry').DataTable({
         "ajax":{
             "type": "POST",
-            "url": "/trabajadores/obtener-trabajadores",
+            "url": "trabajadores/obtener-trabajadores",
             "dataSrc": function(data) {
                 return data.workers;
             },
@@ -164,6 +164,7 @@ $("#btnAddProductToWorker").click(function(e){
                     //     timer: 1500
                     // })
                     getProductsAssigned(cod_worker);
+                    cleanProducts();
                     break;
             }
         }
@@ -243,6 +244,7 @@ function deleteProductAssigned(cod_worker, product_worker_id){
                     break;
                 case 200:                    
                     getProductsAssigned(cod_worker);
+                    cleanProducts();
                     break;
             }
         }
@@ -374,6 +376,14 @@ function cleanFields(){
     $('#select-supplier').trigger('change');
     
     document.getElementById('document').value = "";    
+}
+
+function cleanProducts(){
+    
+    $('#product_id').val("")
+    $('#product_id').trigger('change');
+    
+    document.getElementById('amount').value = "";
 }
 
 function reduceTable(state){

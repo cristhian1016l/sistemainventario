@@ -80,15 +80,15 @@
 						<a class="pc-head-link dropdown-toggle arrow-none mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
 							<img src="{{ asset('images/user/avatar-2.jpg') }}" alt="user-image" class="user-avtar">
 							<span>
-								<span class="user-name">Cristhian Carmona</span>
-								<span class="user-desc">Administrator</span>
+								<span class="user-name">{{ Auth::user()->email }}</span>
+								<!-- <span class="user-desc">Administrator</span> -->
 							</span>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right pc-h-dropdown">
 							<div class=" dropdown-header">
-								<h6 class="text-overflow m-0">Welcome !</h6>
+								<h6 class="text-overflow m-0">Bienvenido !</h6>
 							</div>
-							<a href="#!" class="dropdown-item">
+							<!-- <a href="#!" class="dropdown-item">
 								<i data-feather="user"></i>
 								<span>My Account</span>
 							</a>
@@ -103,11 +103,14 @@
 							<a href="#!" class="dropdown-item">
 								<i data-feather="lock"></i>
 								<span>Lock Screen</span>
-							</a>
-							<a href="#!" class="dropdown-item">
+							</a> -->
+							<a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item">
 								<i data-feather="power"></i>
-								<span>Logout</span>
+								<span>Cerrar Sesión</span>
 							</a>
+							<form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+								@csrf
+							</form>
 						</div>
 					</li>
 				</ul>

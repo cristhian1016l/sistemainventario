@@ -10,7 +10,7 @@
 	<meta name="description" content="" />
 	<meta name="keywords" content="">
 	<meta name="author" content="Phoenixcoded" />
-
+	
 	<!-- Favicon icon -->
 	<link rel="icon" href="{{ asset('images/favicon.svg') }}" type="image/x-icon">
 
@@ -35,26 +35,32 @@
 					<div class="card-body">
 						<img src="{{ asset('images/logo-ponce-dark.svg') }}" style="width: 180px" alt="" class="img-fluid mb-4">
 						<h4 class="mb-3 f-w-400">Ingreso al sistema</h4>
-						<div class="input-group mb-3">
-							<div class="input-group-prepend">
-								<span class="input-group-text"><i data-feather="mail"></i></span>
+
+						<form method="POST" action="{{ route('login') }}">
+							@csrf
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i data-feather="mail"></i></span>
+								</div>
+								<input type="text" name="email" class="form-control" placeholder="usuario">
 							</div>
-							<input type="email" class="form-control" placeholder="usuario">
-						</div>
-						<div class="input-group mb-4">
-							<div class="input-group-prepend">
-								<span class="input-group-text"><i data-feather="lock"></i></span>
+
+							<div class="input-group mb-4">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i data-feather="lock"></i></span>
+								</div>
+								<input type="password" name="password" class="form-control" placeholder="Contraseña">
 							</div>
-							<input type="password" class="form-control" placeholder="Contraseña">
-						</div>
-						<!-- <div class="form-group text-left mt-2">
-							<div class="custom-control custom-checkbox">
-								<input type="checkbox" class="custom-control-input input-primary" id="customCheckdefh2" checked="">
-								<label class="custom-control-label" for="customCheckdefh2">Guardar credenciales</label>
-							</div>
-						</div> -->
-						<button class="btn btn-block btn-primary mb-4">Iniciar Sesión</button>
-						<!-- <p class="mb-0 text-muted">Don’t have an account? <a href="auth-signup.html" class="f-w-400">Signup</a></p> -->
+							<!-- <div class="form-group text-left mt-2">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input input-primary" id="customCheckdefh2" checked="">
+									<label class="custom-control-label" for="customCheckdefh2">Guardar credenciales</label>
+								</div>
+							</div> -->
+							<button type="submit" class="btn btn-block btn-primary mb-4">Iniciar Sesión</button>
+							<!-- <p class="mb-0 text-muted">Don’t have an account? <a href="auth-signup.html" class="f-w-400">Signup</a></p> -->
+						</form>						
+						
 					</div>
 				</div>
 			</div>
@@ -71,7 +77,34 @@
 <!-- <script>
     $("body").append('<div class="fixed-button active"><a href="https://1.envato.market/VGznk" target="_blank" class="btn btn-md btn-success"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Upgrade To Pro</a> </div>');
 </script> -->
+<script src="{{ asset('js/plugins/sweetalert2.all.min.js') }}"></script>
+<script>
+	$(function() {
+		var Toast = Swal.mixin({
+			toast: true,
+			position: 'top-end',
+			showConfirmButton: false,
+			timer: 3000
+		});
+		// $('.swalDefaultSuccess').click(function() {
+		//     Toast.fire({
+		//         icon: 'error',
+		//         title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+		//     })
+		// });
 
+		var error = "{{ Session::get('msg')}}";
+		var typealert = "{{ Session::get('typealert')}}";
+		if(error){
+			Toast.fire({
+				icon: typealert,
+				title: error
+			})
+		}            
+		// icon: 'error',
+		// title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+	})
+</script>
 
 </body>
 

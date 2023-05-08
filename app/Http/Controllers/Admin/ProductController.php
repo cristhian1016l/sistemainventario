@@ -12,6 +12,11 @@ use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index()
     {
         $categories = DB::select("SELECT * FROM categories");

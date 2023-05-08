@@ -7,7 +7,7 @@
 <!-- [ Main Content ] start -->
 <div class="row">
     <input type="hidden" class="form-control" id="cod_store">
-    <div class="col-md-8">
+    <div class="col-md-12">
         <div class="card">
             <div class="card-header">                
                 <div class="button-container">                    
@@ -26,8 +26,9 @@
                         <thead>
                             <tr>
                                 <th style="width: 10%">Código</th>
-                                <th style="width: 40%">Dirección</th>
-                                <th style="width: 40%">Descripción</th>
+                                <th style="width: 30%">Nombre</th>
+                                <th style="width: 30%">Dirección</th>
+                                <th style="width: 20%">Encargado</th>
                                 <th style="width: 10%">Acciones</th>
                             </tr>
                         </thead>
@@ -36,8 +37,9 @@
                         <tfoot>
                             <tr>
                                 <th>CÓDIGO</th>
+                                <th>NOMBRE</th>
                                 <th>DIRECCIÓN</th>
-                                <th>DESCRIPCIÓN</th>
+                                <th>ENCARGADO</th>
                                 <th>ACCIONES</th>
                             </tr>
                         </tfoot>
@@ -61,14 +63,27 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">                    
-                    <div class="form-group">
-                        <label for="address_insert" class="col-form-label">Dirección:</label>
-                        <input type="text" class="form-control" id="address_insert">
+                    <div class="form-group">                            
+                        <label for="name_insert" class="col-form-label">Nombre del Almacén:</label>
+                        <input type="text" class="form-control" id="name_insert">
                     </div>
                     <div class="form-group">
-                        <label for="description_insert" class="col-form-label">Descripción:</label>
-                        <textarea class="form-control" id="description_insert"></textarea>
+                        <label for="manager_insert" class="col-form-label">Encargado:</label>
+                        <input class="form-control" id="manager_insert">
                     </div>                    
+                    <div class="form-group">
+                        <label for="address_insert" class="col-form-label">Dirección:</label>
+                        <textarea class="form-control" id="address_insert"></textarea>
+                    </div>                                        
+                    <div class="form-group">
+                        <label for="phone_insert" class="col-form-label">Teléfono:</label>
+                        <input class="form-control" id="phone_insert">
+                    </div>                    
+                    <div class="form-group">
+                        <label for="city_insert" class="col-form-label">Ciudad:</label>
+                        <input class="form-control" id="city_insert">
+                    </div>                    
+
                 </div>
                 <div class="modal-footer">
                     <button id="closeInsertStoreModal" type="button" class="btn  btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -91,12 +106,24 @@
                 </div>
                 <div class="modal-body">                    
                     <div class="form-group">                            
-                        <label for="address" class="col-form-label">Dirección:</label>
-                        <input type="text" class="form-control" id="address">
+                        <label for="name" class="col-form-label">Nombre del Almacén:</label>
+                        <input type="text" class="form-control" id="name">
                     </div>
                     <div class="form-group">
-                        <label for="description" class="col-form-label">Descripción:</label>
-                        <textarea class="form-control" id="description"></textarea>
+                        <label for="manager" class="col-form-label">Encargado:</label>
+                        <input class="form-control" id="manager">
+                    </div>                    
+                    <div class="form-group">
+                        <label for="address" class="col-form-label">Dirección:</label>
+                        <textarea class="form-control" id="address"></textarea>
+                    </div>                                        
+                    <div class="form-group">
+                        <label for="phone" class="col-form-label">Teléfono:</label>
+                        <input class="form-control" id="phone">
+                    </div>                    
+                    <div class="form-group">
+                        <label for="city" class="col-form-label">Ciudad:</label>
+                        <input class="form-control" id="city">
                     </div>                    
                 </div>
                 <div class="modal-footer">
@@ -138,5 +165,17 @@
 @section('js')
     <script src="{{ asset('js/plugins/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/plugins/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('js/pages/store.js') }}"></script>            
+    <script src="{{ asset('js/plugins/imask.js') }}"></script>
+    <script src="{{ asset('js/pages/store.js') }}"></script>  
+    <script>
+        var phoneMask = IMask(
+            document.getElementById('phone'), {
+            mask: '+{(00)} 000-000-000'
+        });
+
+        var phoneMask = IMask(
+            document.getElementById('phone_insert'), {
+            mask: '+{(00)} 000-000-000'
+        });
+    </script>          
 @endsection

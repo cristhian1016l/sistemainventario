@@ -8,19 +8,25 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index()
     {
-        $brands = DB::select("SELECT COUNT(*) FROM brands");
-        $suppliers = DB::select("SELECT COUNT(*) FROM suppliers");
-        $stores = DB::select("SELECT COUNT(*) FROM stores");
-        $categories = DB::select("SELECT COUNT(*) FROM categories");
-        $products = DB::select("SELECT COUNT(*) FROM products");
-        $workers = DB::select("SELECT COUNT(*) FROM workers");
-        $data = ['brands' => $brands, 
-                'suppliers' => $suppliers, 
+        $suppliers = DB::select("SELECT COUNT(*) AS total FROM suppliers");
+        $stores = DB::select("SELECT COUNT(*) AS total FROM stores");
+        $categories = DB::select("SELECT COUNT(*) AS total FROM categories");
+        $products = DB::select("SELECT COUNT(*) AS total FROM products");
+        $workers = DB::select("SELECT COUNT(*) AS total FROM workers");
+        $requests = DB::select("SELECT COUNT(*) AS total FROM requests");
+
+        $data = ['suppliers' => $suppliers, 
                 'stores' => $stores, 
                 'categories' => $categories, 
                 'products' => $products,
+                'requests' => $requests,
                 'workers' => $workers];
         return view('admin.dashboard.index', $data);
     }

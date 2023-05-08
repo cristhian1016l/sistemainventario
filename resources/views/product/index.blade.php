@@ -10,13 +10,13 @@
 
 
 
-<!-- MENSAJES DE ERROR -->    
+<!-- MENSAJES DE ERROR -->
 <div class="alert alert-danger" style="display:none" id="error"></div>
 <!-- TERMINO DE MENSAJES DE ERROR -->
 
 
 
-<div class="row">    
+<div class="row">
     <input type="hidden" class="form-control" id="cod_product">
     <div class="col-sm-12 data" id="data">
         <div class="card">
@@ -35,18 +35,18 @@
                             Reporte PDF
                         </button>
                     </a>
-                </div>                
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive dt-responsive">
                     <table id="dom-jqry" class="table table-striped table-bordered nowrap" >
                         <thead>
                             <tr>
-                                <th style="width: 10%">CÓDIGO</th>
-                                <th style="width: 10%">PRODUCTO</th>
+                                <th>CÓDIGO</th>
+                                <th style="width: 20%">PRODUCTO</th>
                                 <th style="width: 10%">MARCA</th>
                                 <th style="width: 10%">ALMACEN</th>
-                                <th style="width: 40%">DESCRIPCIÓN</th>                                
+                                <th style="width: 40%">DESCRIPCIÓN</th>
                                 <th style="width: 10%">STOCK</th>
                                 <th style="width: 10%">ACCIONES</th>
                             </tr>
@@ -59,7 +59,7 @@
                                 <th>PRODUCTO</th>
                                 <th>MARCA</th>
                                 <th>ALMACEN</th>
-                                <th>DESCRIPCIÓN</th>                                
+                                <th>DESCRIPCIÓN</th>
                                 <th>STOCK</th>
                                 <th>ACCIONES</th>
                             </tr>
@@ -68,13 +68,13 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
     <div class="col-sm-4" style="display: none" id="form">
         <div class="card">
-            <div class="card-header">                
-                <h5 class="card-title" id="titleForm">                    
+            <div class="card-header">
+                <h5 class="card-title" id="titleForm">
                     <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
-                </h5>                
+                </h5>
             </div>
             <div class="card-body">
 
@@ -112,7 +112,7 @@
                     
                     <div class="form-group row">
                         <div class="col-md-6">
-                            <label for="select-category" class="col-form-label">Categoría:</label>                                                            
+                            <label for="select-category" class="col-form-label">Categoría:</label>
                             <select class="form-control" id="select-category" autocomplete="off" style="width: 100%">
                                 <option value="">Seleccione una categoría</option>
                                 @foreach($categories as $category)
@@ -129,7 +129,7 @@
                                 @endforeach
                             </select>  
                         </div>
-                    </div>                  
+                    </div>
 
                     <div class="form-group">
                         <label for="description" class="col-form-label">Descripción:</label>
@@ -144,8 +144,8 @@
                         <div class="col-sm-6">
                             <label for="stock" class="col-form-label">Stock:</label>
                             <input type="number" class="form-control" id="stock"></input>
-                        </div>                                            
-                    </div>                    
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <button id="formButton" class="btn btn-info btn-block" type="submit">Actualizar</button>
@@ -191,7 +191,7 @@
     <script src="{{ asset('js/plugins/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/plugins/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('js/pages/product.js') }}"></script>
-    <script src="{{ asset('js/plugins/select2.min.js') }}"></script>    
+    <script src="{{ asset('js/plugins/select2.min.js') }}"></script>
     <script src="{{ asset('js/plugins/jquery.priceformat.min.js') }}"></script>
     <script>
 

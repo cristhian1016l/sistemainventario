@@ -17,6 +17,7 @@
     <meta name="keywords" content="">
     <meta name="author" content="Phoenixcoded" />
     <meta name="csrf-token" content="{{ csrf_token() }}">    
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
 
     <!-- Favicon icon -->
     <link rel="icon" href="{{ asset('images/favicon.svg') }}" type="image/x-icon">

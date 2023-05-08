@@ -8,13 +8,9 @@
 @section('content')
 <!-- [ Main Content ] start -->
 
-
-
 <!-- MENSAJES DE ERROR -->    
 <div class="alert alert-danger" style="display:none" id="error"></div>
 <!-- TERMINO DE MENSAJES DE ERROR -->
-
-
 
 <div class="row">    
     <input type="hidden" class="form-control" id="cod_worker">
@@ -173,7 +169,7 @@
                     </table>                
                 
                     <div class="form-group">
-                        <label for="brand_insert" class="col-form-label">Producto a agregar:</label>
+                        <label for="product_id" class="col-form-label">Producto a agregar:</label>
                         <select class="form-control" id="product_id" autocomplete="off" style="width: 100%">
                             <option value="">Seleccione un producto</option>
                             @foreach($products as $product)
@@ -182,7 +178,7 @@
                         </select>  
                     </div>             
                     <div class="form-group">
-                        <label for="brand_insert" class="col-form-label">Cantidad:</label>
+                        <label for="amount" class="col-form-label">Cantidad:</label>
                         <input type="number" class="form-control" id="amount">
                     </div>             
                 </div>

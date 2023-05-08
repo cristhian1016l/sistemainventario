@@ -13,7 +13,11 @@ use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class WorkerController extends Controller
 {    
-
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index()
     {
         $products = DB::select("SELECT * FROM products");

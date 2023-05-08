@@ -1,3 +1,4 @@
+exit;
 CREATE DATABASE bdinventario;
 USE bdinventario;
 
@@ -14,19 +15,23 @@ drop table if exists worker_product;
 drop table if exists id_value_tbl;
 create table id_value_tbl
 (
-	id int(6) primary key auto_increment,
-    name int
+	id int auto_increment not null primary key
 );
 
 drop table if exists stores;
 create table stores
 (
 	id int auto_increment not null primary key,
-    address varchar(200) not null,
-    description varchar(200),
+    name varchar(200),
+    manager varchar(50),
+    address varchar(200) not null,        
+    phone varchar(25),
+    city varchar(50),
     created_at datetime,
     updated_at datetime
 );
+
+SELECT * FROM stores;
 
 drop table if exists suppliers;
 CREATE TABLE suppliers
@@ -117,6 +122,35 @@ CREATE TABLE worker_product
     foreign key (product_id) references products(id)
 );
 
+drop table if exists requests;
+CREATE TABLE requests
+(	
+	cod_request varchar(12) not null primary key,
+    responsible_id int not null,
+    date datetime,
+    since_date datetime,
+    to_date datetime,
+    deadline datetime,
+    was_entered boolean,
+    created_at datetime,
+    updated_at datetime,
+    foreign key (responsible_id) references workers(id)
+);
+-- SELECT * FROM requests;
+
+drop table if exists requests_details;
+CREATE TABLE requests_details
+(
+	id int auto_increment not null primary key,
+    cod_request varchar(12) not null,
+    product_id int not null,
+    amount int,
+    created_at datetime,
+    updated_at datetime,
+    foreign key (cod_request) references requests(cod_request),
+    foreign key (product_id) references products(id)
+);
+
 -- ------------------------------------------- DATA DE PRUEBA -------------------------------------------
 
 INSERT INTO stores(address, description) VALUE('OFICINA PONCE SALON 4 TERCER PISO', 'SE GUARDA TODO LO RELACIONADO CON CAMARAS, Y LO USADO PARA SALIR A CAMPO');
@@ -147,9 +181,6 @@ INSERT INTO document_type(document_type) VALUES('DNI');
 INSERT INTO document_type(document_type) VALUES('CARNET DE EXTRANJERÍA');
 
 INSERT INTO workers(name, lastname, document_type_id, document) VALUES('CRISTHIAN', 'RIVEROS', 2, '760569381246461234567');
-SELECT * FROM workers;
-SELECT * FROM worker_product;
 
-SELECT w.name, w.lastname, w.address, w.document, p.description, wp.amount FROM worker_product wp
-INNER JOIN workers w ON wp.worker_id = w.id
-INNER JOIN products p ON wp.product_id = p.id
+SELECT * FROM requests;
+SELECT * FROM requests_details;

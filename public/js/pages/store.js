@@ -19,20 +19,23 @@ function initializeTable(){
         },
         "columns":[          
             {"data": "id"},
-            {"data": "address"},          
-            {"data": "description"},            
-            {"data": "id"},            
+            {"data": "name"},
+            {"data": "address"},
+            {"data": "manager"},
+            {"data": "id"},
         ],
         "columnDefs": [
             {
                 "targets":[0],
-                "searchable": false
+                "searchable": false,
+                "visible": false
             },
             {
-                "targets":[3],
+                "targets":[4],
                 render: function(data, type, row){
                     return '<button class="btn btn-shadow btn-primary btn-sm"'+
-                            'onclick="setDataToEdit('+"'" + data + "', "+"'" + row.address + "',"+"'" + row.description + "'"+')"'+ 
+                            // 'onclick="setDataToEdit('+"'" + data + "', "+"'" + row.name + "',"+"'" + row.address + "'"+')"'+ 
+                            'onclick="setDataToEdit('+"'" + data + "'"+')"'+ 
                             'data-toggle="modal" data-target="#editStoreModal">'+
                             '<i class="fas fa-edit"></i></button>'+
                             '<button class="btn btn-shadow btn-danger btn-sm"'+
@@ -62,15 +65,18 @@ function initializeTable(){
 
 $("#btnInsert").click(function(e){
     e.preventDefault();    
+    let name_insert = document.getElementById('name_insert').value;
+    let manager_insert = document.getElementById('manager_insert').value;
     let address_insert = document.getElementById('address_insert').value;
-    let description_insert = document.getElementById('description_insert').value;
+    let phone_insert = document.getElementById('phone_insert').value;
+    let city_insert = document.getElementById('city_insert').value;
     $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         type:'POST',
         url: $('#formInsert').attr('action'),
-        data: {'address': address_insert, 'description': description_insert },
+        data: {'name': name_insert, 'manager': manager_insert, 'address': address_insert, 'phone': phone_insert, 'city': city_insert },
         success:function(data) {            
             console.log(data);
             val = data.status;
@@ -151,15 +157,18 @@ $("#btnDelete").click(function(e){
 $("#btnEdit").click(function(e){
     e.preventDefault();
     let cod_store = document.getElementById('cod_store').value;
+    let name = document.getElementById('name').value;
     let address = document.getElementById('address').value;
-    let description = document.getElementById('description').value;
+    let manager = document.getElementById('manager').value;
+    let phone = document.getElementById('phone').value;
+    let city = document.getElementById('city').value;
     $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         type:'POST',
         url: $('#formEdit').attr('action'),
-        data: {'cod_store': cod_store, 'address': address, 'description': description },
+        data: {'cod_store': cod_store, 'name': name, 'address': address, 'manager': manager, 'phone': phone, 'city': city },
         success:function(data) {            
             val = data.status;
             msg = data.msg;              
@@ -197,18 +206,63 @@ function setDataToDelete(cod_store){
     document.getElementById('cod_store').value = cod_store;
 }
 
-function setDataToEdit(cod_store, address, description){
+function setDataToEdit(cod_store){
     document.getElementById('cod_store').value = cod_store;
-    document.getElementById("address").value = address;
-    document.getElementById("description").value = description;
+
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type:'POST',
+        url: 'almacenes/obtener-almacen/'+cod_store,
+        success:function(data) {               
+
+            const store = data.store            
+            console.log(store);
+
+            document.getElementById("name").value = store['name'];
+            document.getElementById("manager").value = store['manager'];                    
+            document.getElementById("address").value = store['address'];                    
+            document.getElementById("phone").value = store['phone'];                    
+            document.getElementById("city").value = store['city'];                    
+            
+            // $('#select-supplier').val(store['supplier_id'])            
+            // $('#select-supplier').trigger('change');
+
+            // $('#select-category').val(store['category_id'])            
+            // $('#select-category').trigger('change');
+
+            // $('#select-store').val(store['store_id'])            
+            // $('#select-store').trigger('change');
+
+            // document.getElementById("price").value = store['price']
+            // document.getElementById("stock").value = store['stock']
+            
+            // switch(data.status){
+            //     case 500:                    
+            //         msg = data.msg;                          
+            //         Swal.fire({
+            //             position: 'center',
+            //             icon: 'error',
+            //             title: msg,
+            //             showConfirmButton: false,
+            //             timer: 1500
+            //         })                    
+            //         break;                
+            // }
+        }
+    });
+
+    
 }
 
 function cleanFields(){
     document.getElementById('cod_store').value = "";
-    document.getElementById("address").value = "";
-    document.getElementById("description").value = "";
+    document.getElementById("name_insert").value = "";
+    document.getElementById("manager_insert").value = "";
     document.getElementById("address_insert").value = "";
-    document.getElementById("description_insert").value = "";
+    document.getElementById("phone_insert").value = "";
+    document.getElementById("city_insert").value = "";
 }
 
 // PREVENIR ENVIO CON ENTER
