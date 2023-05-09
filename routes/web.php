@@ -118,6 +118,15 @@ Route::group(['middleware' => 'isAdmin'], function (){
 
     // FIN SOLICITUDES
 
+    // AREAS
+    Route::get('/areas', [CategoryController::class, 'index'])->name('category');
+
+    // Route::post('/categorias/obtener-categorias', [CategoryController::class, 'getCategories']);
+    // Route::post('/categorias/agregar-categoria', [CategoryController::class, 'insert']);
+    // Route::post('/categorias/editar-categoria', [CategoryController::class, 'edit']);
+    // Route::post('/categorias/eliminar-categoria', [CategoryController::class, 'delete']);
+    // FIN AREAS
+
 });
 
 Route::get('/create', function(){

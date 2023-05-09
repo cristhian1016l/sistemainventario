@@ -12,6 +12,71 @@ drop table if exists workers;
 drop table if exists document_type;
 drop table if exists worker_product;
 
+-- -------------------- TABLAS EXCLUSIVAS DEL SISTEMA WEB PARA PARA PERMISOS Y ROLES ------------------------------------------------------
+
+DROP TABLE IF EXISTS `model_has_permissions`;
+CREATE TABLE `model_has_permissions` (
+  `permission_id` bigint(20) unsigned NOT NULL,
+  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`permission_id`,`model_id`,`model_type`),
+  KEY `model_has_permissions_model_id_model_type_index` (`model_id`,`model_type`)  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `role_has_permissions`;
+CREATE TABLE `role_has_permissions` (
+  `permission_id` bigint(20) unsigned NOT NULL,
+  `role_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`permission_id`,`role_id`),
+  KEY `role_has_permissions_role_id_foreign` (`role_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `permissions`;
+CREATE TABLE `permissions` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `permissions_name_guard_name_unique` (`name`,`guard_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `roles`;
+CREATE TABLE `roles` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `roles_name_guard_name_unique` (`name`,`guard_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `model_has_roles`;
+CREATE TABLE `model_has_roles` (
+  `role_id` bigint(20) unsigned NOT NULL,
+  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`role_id`,`model_id`,`model_type`),
+  KEY `model_has_roles_model_id_model_type_index` (`model_id`,`model_type`)  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users`
+(
+	id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,	
+    email varchar(255)UNIQUE,
+    email_verified_at varchar(255),
+    password varchar(255),
+    active tinyint(4),    
+    remember_token varchar(100),
+    created_at timestamp,
+    updated_at timestamp
+) ENGINE=innodb DEFAULT CHARSET=utf8;
+
+-- -------------------- TABLAS EXCLUSIVAS DEL SISTEMA WEB PARA PARA PERMISOS Y ROLES ------------------------------------------------------
+
 drop table if exists id_value_tbl;
 create table id_value_tbl
 (
@@ -79,14 +144,28 @@ CREATE TABLE workers
     lastname varchar(50) not null,
     address varchar(255),
     document_type_id int not null,
+    worker_type_id int not null,
+    area_type_id int not null,
     document varchar(25),
+    deleted_at datetime,
     created_at datetime,
     updated_at datetime,    
-	foreign key (document_type_id) references document_type(id)
+	foreign key (document_type_id) references document_type(id),
+    foreign key (worker_type_id) references worker_type(id)
 );
 
 ALTER TABLE workers
-ADD COLUMN address VARCHAR(255) AFTER lastname;
+ADD COLUMN deleted_at timestamp AFTER document;
+
+-- ALTER TABLE workers
+-- ADD COLUMN area_type_id int not null AFTER worker_type_id;
+
+drop table if exists worker_type;
+CREATE TABLE worker_type
+(
+	id int auto_increment not null primary key,
+    name varchar(50) not null
+);
 
 drop table if exists products;
 CREATE TABLE products
@@ -118,8 +197,8 @@ CREATE TABLE worker_product
     amount int,
     created_at datetime,
     updated_at datetime,
-    foreign key (worker_id) references workers(id),
-    foreign key (product_id) references products(id)
+    foreign key (worker_id) references workers(id) ON DELETE CASCADE,
+    foreign key (product_id) references products(id) ON DELETE CASCADE
 );
 
 drop table if exists requests;
@@ -147,9 +226,47 @@ CREATE TABLE requests_details
     amount int,
     created_at datetime,
     updated_at datetime,
-    foreign key (cod_request) references requests(cod_request),
+    foreign key (cod_request) references requests(cod_request) ON DELETE CASCADE,
     foreign key (product_id) references products(id)
 );
+
+drop table if exists teams;
+CREATE TABLE teams
+(
+	id int auto_increment not null primary key,
+    name varchar(50),
+    created_at datetime,
+    updated_at datetime
+);
+
+drop table if exists areas;
+CREATE TABLE areas
+(
+	id int auto_increment not null primary key,
+    name varchar(50) not null
+);
+
+-- --------------- RELACIONES DE LOS ROLES Y PERMISOS --------------- 
+
+ALTER TABLE model_has_permissions
+ADD FOREIGN KEY (`model_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+ALTER TABLE model_has_permissions
+ADD FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE;
+
+ALTER TABLE role_has_permissions 
+ADD FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE;
+
+ALTER TABLE role_has_permissions
+ADD FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;  
+
+ALTER TABLE model_has_roles 
+ADD FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
+
+ALTER TABLE model_has_roles 
+ADD FOREIGN KEY (`model_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+  
+-- --------------- FIN DE LAS RELACIONES DE LOS ROLES Y PERMISOS --------------- 
 
 -- ------------------------------------------- DATA DE PRUEBA -------------------------------------------
 
@@ -180,7 +297,24 @@ INSERT INTO products(code, product_name, supplier_id, brand_id, category_id, sto
 INSERT INTO document_type(document_type) VALUES('DNI');
 INSERT INTO document_type(document_type) VALUES('CARNET DE EXTRANJERÍA');
 
-INSERT INTO workers(name, lastname, document_type_id, document) VALUES('CRISTHIAN', 'RIVEROS', 2, '760569381246461234567');
+SELECT * FROM workers; 35
+SELECT * FROM worker_product; 258
 
 SELECT * FROM requests;
 SELECT * FROM requests_details;
+SELECT * FROM roles;
+SELECT * FROM users;
+SELECT * FROM model_has_roles;
+SELECT * FROM worker_type;
+SELECT * FROM areas;
+
+
+-- UPDATE workers SET area_type_id = 2;
+-- UPDATE workers SET worker_type_id = 2;
+
+-- ************ SACAR LOS TRIGGUERS ************
+		-- SELECT  ACTION_STATEMENT
+		-- FROM    INFORMATION_SCHEMA.TRIGGERS
+		-- WHERE   TRIGGER_SCHEMA = 'bd_name'
+		-- AND     TRIGGER_NAME = 'trigguer_name';
+-- ************ SACAR LOS TRIGGUERS ************

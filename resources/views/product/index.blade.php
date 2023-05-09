@@ -43,9 +43,9 @@
                         <thead>
                             <tr>
                                 <th>CÓDIGO</th>
-                                <th style="width: 20%">PRODUCTO</th>
+                                <th style="width: 10%">PRODUCTO</th>
                                 <th style="width: 10%">MARCA</th>
-                                <th style="width: 10%">ALMACEN</th>
+                                <th style="width: 20%">ALMACEN</th>
                                 <th style="width: 40%">DESCRIPCIÓN</th>
                                 <th style="width: 10%">STOCK</th>
                                 <th style="width: 10%">ACCIONES</th>

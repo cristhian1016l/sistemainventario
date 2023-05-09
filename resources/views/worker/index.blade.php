@@ -12,9 +12,80 @@
 <div class="alert alert-danger" style="display:none" id="error"></div>
 <!-- TERMINO DE MENSAJES DE ERROR -->
 
+<div class="row">
+    <div class="col-md-12" style="display: none" id="form">
+        <div class="card">
+            <div class="card-header">                
+                <h5 class="card-title" id="titleForm">                    
+                    <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+                </h5>                
+            </div>
+            <div class="card-body">
+
+                <form id="myForm" method="POST" action="#">
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label for="name" class="col-form-label">Nombres:</label>
+                            <input type="text" class="form-control" id="name">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="lastname" class="col-form-label">Apellidos:</label>
+                            <input type="text" class="form-control" id="lastname">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="address" class="col-form-label">Dirección:</label>
+                            <textarea type="text" class="form-control" id="address"></textarea>
+                        </div>
+                    </div>
+                                                                                    
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label for="document_type" class="col-form-label">Tipo de Documento:</label>
+                            <select class="form-control" id="document_type" autocomplete="off" style="width: 100%">
+                                <option value="">Seleccione un tipo de documento</option>
+                                @foreach($documents as $document)
+                                <option value="{{ $document->id }}">{{ $document->document_type }}</option>
+                                @endforeach
+                            </select>                              
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="document" class="col-form-label">Documento:</label>
+                            <input type="number" class="form-control" id="document"></input>
+                        </div>                                            
+                        <div class="col-sm-3">
+                            <label for="worker_type" class="col-form-label">Seleccione el cargo:</label>
+                            <select class="form-control" id="worker_type" autocomplete="off" style="width: 100%">                        
+                                @foreach($types as $type)
+                                <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>                                            
+                        <div class="col-sm-3">
+                            <label for="area_type" class="col-form-label">Seleccione un área:</label>
+                            <select class="form-control" id="area_type" autocomplete="off" style="width: 100%">                        
+                                @foreach($areas as $area)
+                                <option value="{{ $area->id }}">{{ $area->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>                                            
+                    </div>                    
+
+                        
+                    <div class="form-group">
+                        <button id="formButton" class="btn btn-info btn-block" type="submit">Actualizar</button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">    
     <input type="hidden" class="form-control" id="cod_worker">
-    <div class="col-sm-12 data" id="data">
+    <div class="col-md-12 data" id="data">
         <div class="card">
             <div class="card-header">
                 <div class="button-container">
@@ -40,8 +111,9 @@
                     <table id="dom-jqry" class="table table-striped table-bordered nowrap" >
                         <thead>
                             <tr>                                
-                                <th style="width: 10%">NOMBRES</th>
-                                <th style="width: 10%">APELLIDOS</th>
+                                <th style="width: 50%">NOMBRES</th>                                
+                                <th style="width: 10%">CARGO</th>
+                                <th style="width: 10%">AREA</th>
                                 <th style="width: 10%">TIP. DOC.</th>
                                 <th style="width: 10%">DOCUMENTO</th>
                                 <th style="width: 10%">ACCIONES</th>
@@ -51,8 +123,9 @@
                         </tbody>
                         <tfoot>
                             <tr>                                
-                                <th>NOMBRES</th>
-                                <th>APELLIDOS</th>
+                                <th>NOMBRES</th>                                
+                                <th>CARGO</th>
+                                <th>AREA</th>
                                 <th>TIP. DOC.</th>
                                 <th>DOCUMENTO</th>
                                 <th>ACCIONES</th>
@@ -62,59 +135,7 @@
                 </div>
             </div>
         </div>
-    </div>    
-    <div class="col-sm-4" style="display: none" id="form">
-        <div class="card">
-            <div class="card-header">                
-                <h5 class="card-title" id="titleForm">                    
-                    <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
-                </h5>                
-            </div>
-            <div class="card-body">
-
-                <form id="myForm" method="POST" action="#">
-
-                    <div class="form-group">
-                        <label for="name" class="col-form-label">Nombres:</label>
-                        <input type="text" class="form-control" id="name">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="lastname" class="col-form-label">Apellidos:</label>
-                        <input type="text" class="form-control" id="lastname">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="address" class="col-form-label">Dirección:</label>
-                        <textarea type="text" class="form-control" id="address"></textarea>
-                    </div>
-                                                                                
-                    <div class="form-group row">
-                        <div class="col-md-6">
-                            <label for="document_type" class="col-form-label">Tipo de Documento:</label>
-                            <select class="form-control" id="document_type" autocomplete="off" style="width: 100%">
-                                <option value="">Seleccione un tipo de documento</option>
-                                @foreach($documents as $document)
-                                <option value="{{ $document->id }}">{{ $document->document_type }}</option>
-                                @endforeach
-                            </select>  
-                            
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="document" class="col-form-label">Documento:</label>
-                            <input type="number" class="form-control" id="document"></input>
-                        </div>                                            
-                    </div>                    
-
-                    <div class="form-group">
-                        <button id="formButton" class="btn btn-info btn-block" type="submit">Actualizar</button>
-                    </div>
-
-                </form>
-
-            </div>
-        </div>
-    </div>
+    </div>        
 </div>
 <!-- [ Main Content ] end -->
 
@@ -204,6 +225,8 @@
     <script src="{{ asset('js/plugins/select2.min.js') }}"></script>
     <script>
         $("#document_type").select2();            
+        $("#worker_type").select2();            
+        $("#area_type").select2();            
     </script>
     <script>
         $("#product_id").select2({

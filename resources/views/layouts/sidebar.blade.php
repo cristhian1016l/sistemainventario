@@ -36,6 +36,9 @@
 					<li class="pc-item">
 						<a href="{{ route('request') }}" class="pc-link "><span class="pc-micon"><i data-feather="users"></i></span><span class="pc-mtext">SOLICITUDES</span></a>
 					</li>
+					<li class="pc-item">
+						<a href="{{ route('request') }}" class="pc-link "><span class="pc-micon"><i data-feather="users"></i></span><span class="pc-mtext">EQUIPOS</span></a>
+					</li>
 
 				</ul>				
 			</div>

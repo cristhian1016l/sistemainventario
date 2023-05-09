@@ -26,6 +26,8 @@ class WorkerValidation{
                 'name' => 'required',
                 'lastname' => 'required',
                 'document_type_id' => 'required|numeric',
+                'worker_type_id' => 'required|numeric',
+                'area_type' => 'required|numeric',
                 'document' => 'required|numeric|min_digits:8'
             ];
 
@@ -34,6 +36,10 @@ class WorkerValidation{
                 'lastname.required' => 'Ingrese el apellido',
                 'document_type_id.required' => 'Elige el tipo de documento',
                 'document_type_id.numeric' => 'Error al elegir el tipo de documento',
+                'worker_type_id.required' => 'Elija el cargo',
+                'worker_type_id.numeric' => 'Error al elegir el cargo',
+                'area_type.required' => 'Elija el area',
+                'area_type.numeric' => 'Error al elegir el area',
                 'document.required' => 'Ingrese el documento',
                 'document.numeric' => 'El documento no tiene el formato correcto',
                 'document.min_digits' => 'El documento no tiene los dígitos suficientes'

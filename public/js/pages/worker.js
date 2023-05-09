@@ -18,15 +18,16 @@ function initializeTable(){
             }
         },
         "columns":[                                  
-            {"data": "name"},
-            {"data": "lastname"},
+            {"data": "names"},
+            {"data": "type"},
+            {"data": "area"},
             {"data": "document_type"},
             {"data": "document"},
             {"data": "id"},
         ],
         "columnDefs": [
             {
-                "targets":[4],
+                "targets":[5],
                 render: function(data, type, row){
                     return '<button class="btn btn-shadow btn-primary btn-sm"'+
                             'onclick="setDataToEdit('+"'" + data + "'"+')"'+                             
@@ -36,7 +37,7 @@ function initializeTable(){
                             'data-toggle="modal" data-target="#deleteWorkerModal">'+
                             '<i class="fas fa-trash-alt"></i></button>'+
                             '<button class="btn btn-shadow btn-info btn-sm"'+
-                            'onclick="setDataToAsignProduct('+"'" + data + "', "+"'" + row.name + "'"+')"'+ 
+                            'onclick="setDataToAsignProduct('+"'" + data + "', "+"'" + row.names + "'"+')"'+ 
                             'data-toggle="modal" data-target="#AddProductWorkerModal">'+
                             '<i class="fas fa-plus"></i></button>';
                 }
@@ -73,6 +74,10 @@ $("#formButton").click(function(e){
     
     let document_number = document.getElementById('document').value;    
 
+    let worker_type_id = document.getElementById('worker_type').value;
+
+    let area_type = document.getElementById('area_type').value;
+
     hideErrors();
 
     $.ajax({
@@ -87,6 +92,8 @@ $("#formButton").click(function(e){
                 'lastname': lastname, 
                 'address': address, 
                 'document_type_id': document_type_id,                 
+                'worker_type_id': worker_type_id,
+                'area_type': area_type,
                 'document': document_number },
         success:function(data) {
 
@@ -120,8 +127,9 @@ $("#formButton").click(function(e){
                         showConfirmButton: false,
                         timer: 1500
                     })
+                    reduceTable(false);
                     cleanFields();
-                    initializeTable();                    
+                    initializeTable();
                     break;
             }            
         }
@@ -346,6 +354,12 @@ function setDataToEdit(id){
             $('#document_type').val(worker['document_type_id'])
             $('#document_type').trigger('change');
                         
+            $('#worker_type').val(worker['worker_type_id'])
+            $('#worker_type').trigger('change');
+
+            $('#area_type').val(worker['area_type_id'])
+            $('#area_type').trigger('change');
+            
             document.getElementById("document").value = worker['document']
             
             switch(data.status){
@@ -372,8 +386,14 @@ function cleanFields(){
     document.getElementById('lastname').value = "";
     document.getElementById('address').value = "";
     
-    $('#select-supplier').val(1)
-    $('#select-supplier').trigger('change');
+    $('#document_type').val("")
+    $('#document_type').trigger('change');
+
+    $('#worker_type').val(1)
+    $('#worker_type').trigger('change');
+
+    $('#area_type').val(1)
+    $('#area_type').trigger('change');
     
     document.getElementById('document').value = "";    
 }
