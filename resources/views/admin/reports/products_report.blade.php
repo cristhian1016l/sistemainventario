@@ -113,10 +113,7 @@
                         <span style="font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: bold; text-align: center;">Producto</span>
                     </td>
                     <td>
-                        <span style="font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: bold; text-align: center;">Descripción</span>
-                    </td>
-                    <td>
-                        <span style="font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: bold; text-align: center;">Almacén</span>
+                        <span style="font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: bold; text-align: center;">Categoría</span>
                     </td>
                     <td style="text-align: center">
                         <span style="font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: bold; text-align: center;">Precio</span>
@@ -136,12 +133,9 @@
                         </td>                        
                         <td>
                             <span style="font-family: 'Inter', sans-serif; font-size: 9px; font-weight: bold">{{ $product->product_name }}</span>
-                        </td>
+                        </td>                        
                         <td>
-                            <span style="font-family: 'Inter', sans-serif; font-size: 9px; font-weight: bold">{{ $product->description }}</span>
-                        </td>
-                        <td>
-                            <span style="text-align: center; font-family: 'Inter', sans-serif; font-size: 9px; text-align: center">{{ $product->address }}</span>
+                            <span style="text-align: center; font-family: 'Inter', sans-serif; font-size: 9px; text-align: center">{{ $product->category }}</span>
                         </td>
                         <td style="text-align: center">
                             <span style="text-align: center; font-family: 'Inter', sans-serif; font-size: 9px; text-align: center">S/. {{ $product->price }}</span>

@@ -163,7 +163,7 @@
         <p style="font-family: monospace; font-weight: bold; text-decoration: underline; margin-left: 75px; margin-top: 50px">DESCRIPCIÓN DE LOS BIENES:</p>    
         <ul style="font-family: monospace; font-weight: bold; text-decoration: none; margin-left: 75px">
             @foreach($details as $detail)
-            <li>{{ $detail->amount }} | {{ $detail->description }}</li>
+            <li>{{ $detail->amount }} | {{ $detail->product_name }}</li>
             @endforeach
         </ul>
         <p style="font-family: monospace; margin-left: 75px; margin-right: 75px; margin-top: 50px; text-align: justify">            

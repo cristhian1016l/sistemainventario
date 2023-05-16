@@ -30,9 +30,9 @@ class ProductController extends Controller
 
     public function returnProducts()
     {        
-        $products = DB::select("SELECT p.id, p.code, p.stock, p.product_name, p.description, b.name AS brand, st.address AS store FROM products p
-                                INNER JOIN brands b ON p.brand_id = b.id                                
-                                INNER JOIN stores st ON p.store_id = st.id;");
+        $products = DB::select("SELECT p.id, p.code, p.stock, p.product_name, p.description, b.name AS brand, c.name AS category FROM products p
+                                INNER JOIN brands b ON p.brand_id = b.id
+                                INNER JOIN categories c ON p.category_id = c.id");
         return $products;
     }
 
@@ -80,7 +80,7 @@ class ProductController extends Controller
                 $product->supplier_id = $request->supplier_id;
                 $product->brand_id = $request->brand_id;
                 $product->category_id = $request->category_id;
-                $product->store_id = $request->store_id;
+                // $product->store_id = $request->store_id;
                 $product->description = mb_strtoupper($request->description, 'utf-8');
                 $product->price = $price;
                 $product->stock = $request->stock;
@@ -131,7 +131,7 @@ class ProductController extends Controller
                                         supplier_id = ?,
                                         brand_id = ?,
                                         category_id = ?,
-                                        store_id = ?,
+                                        -- store_id = ?,
                                         description = ?,
                                         price = ?,
                                         stock = ?,
@@ -141,7 +141,7 @@ class ProductController extends Controller
                                 $request->supplier_id,
                                 $request->brand_id,
                                 $request->category_id,
-                                $request->store_id,
+                                // $request->store_id,
                                 mb_strtoupper($request->description),
                                 $price,
                                 $request->stock,
@@ -196,11 +196,11 @@ class ProductController extends Controller
 
     public function productsReport()
     {
-        $products = DB::select("SELECT p.product_name, p.description, s.address, p.price, p.stock FROM products p
-                                INNER JOIN stores s ON p.store_id = s.id");
+        $products = DB::select("SELECT p.product_name, p.price, p.stock, c.name AS category FROM products p
+                                INNER JOIN categories c ON p.category_id = c.id");
         $data = ['products' => $products];
         $pdf=PDF::loadView('admin.reports.products_report', $data);
-        $pdf->setPaper('A4', 'landscape');
+        // $pdf->setPaper('A4', 'landscape');
         return $pdf->stream();
     }
 }

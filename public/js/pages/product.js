@@ -20,8 +20,8 @@ function initializeTable(){
         "columns":[                      
             {"data": "code"},
             {"data": "product_name"},
-            {"data": "brand"},
-            {"data": "store"},
+            {"data": "category"},
+            {"data": "brand"},            
             {"data": "description"},
             {"data": "stock"},                        
             {"data": "id"},
@@ -73,7 +73,7 @@ $("#formButton").click(function(e){
     let supplier_id = document.getElementById('select-supplier').value;
     let brand_id = document.getElementById('select-brand').value;
     let category_id = document.getElementById('select-category').value;
-    let store_id = document.getElementById('select-store').value;
+    // let store_id = document.getElementById('select-store').value;
 
     let description = document.getElementById('description').value;
     let price = document.getElementById('price').value;
@@ -93,7 +93,7 @@ $("#formButton").click(function(e){
                 'supplier_id': supplier_id, 
                 'brand_id': brand_id, 
                 'category_id': category_id, 
-                'store_id': store_id,
+                // 'store_id': store_id,
                 'description': description,
                 'price': price,
                 'stock': stock },

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
-
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
@@ -35,6 +35,21 @@ class CategoryController extends Controller
 
     public function insert(Request $request)
     {
+
+        $rules = [                
+            'category' => 'required',            
+        ];
+
+        $messages = [                
+            'category.required' => 'Ingrese la categoría'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        
+        if($validator->fails()){
+            return response()->json(['status' => 500, 'msg' => 'No se pudo registrar la categoría', 'errors' => $validator->errors()->all()]);
+        }
+
         try{
             DB::beginTransaction();
             
@@ -59,6 +74,31 @@ class CategoryController extends Controller
 
     public function edit(Request $request)
     {
+
+        if($request->cod_category == null || $request->cod_category == ""){
+            return response()->json(['status' => 500, 'msg' => 'Error al enviar el código de la categoría']);
+        }
+
+        $ExistsCategory = Category::where('id', '=', $request->cod_category)->first();
+
+        if($ExistsCategory == []){
+            return response()->json(['status' => 500, 'msg' => 'La categoría que se quiere editar no existe']);
+        }
+
+        $rules = [                
+            'category' => 'required',            
+        ];
+
+        $messages = [                
+            'category.required' => 'Ingrese la categoría'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        
+        if($validator->fails()){
+            return response()->json(['status' => 500, 'msg' => 'No se pudo actualizar la categoría', 'errors' => $validator->errors()->all()]);
+        }
+
         try{
             DB::beginTransaction();
             $update = DB::update('UPDATE categories SET name = ?, updated_at = ? WHERE id = ? ',

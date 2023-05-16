@@ -57,7 +57,8 @@ function initializeTable(){
 
 $("#btnInsert").click(function(e){
     e.preventDefault();    
-    let category_insert = document.getElementById('category_insert').value;    
+    let category_insert = document.getElementById('category_insert').value;
+    hideErrors();
     $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -68,18 +69,14 @@ $("#btnInsert").click(function(e){
         success:function(data) {                                 
             val = data.status;
             msg = data.msg;              
-
-            document.getElementById('closeInsertCategoryModal').click();
+            
             console.log(msg)
             switch(val){
                 case 500:                                        
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'error',
-                        title: msg,
-                        showConfirmButton: false,
-                        timer: 1500
-                    })                    
+                    jQuery.each(data.errors, function(key, value){
+                        jQuery('.alert-danger').show("slow");
+                        jQuery('.alert-danger').append('<p>'+value+'</p>');
+                    });       
                     break;
                 case 200:
                     Swal.fire({
@@ -88,11 +85,12 @@ $("#btnInsert").click(function(e){
                         title: msg,
                         showConfirmButton: false,
                         timer: 1500
-                    })                    
+                    })
+                    document.getElementById('closeInsertCategoryModal').click();                
+                    cleanFields();
+                    initializeTable();
                     break;
-            }
-            cleanFields();
-            initializeTable();
+            }            
         }
     });
 });
@@ -143,6 +141,7 @@ $("#btnEdit").click(function(e){
     e.preventDefault();
     let cod_category = document.getElementById('cod_category').value;
     let category = document.getElementById('category').value;    
+    hideErrors();
     $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -152,19 +151,14 @@ $("#btnEdit").click(function(e){
         data: {'cod_category': cod_category, 'category': category },
         success:function(data) {            
             val = data.status;
-            msg = data.msg;              
-
-            document.getElementById('closeEditCategoryModal').click();
-
+            msg = data.msg;                          
+            console.log(data);
             switch(val){
                 case 500:                                        
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'error',
-                        title: msg,
-                        showConfirmButton: false,
-                        timer: 1500
-                    })                    
+                    jQuery.each(data.errors, function(key, value){
+                        jQuery('.alert-danger').show("slow");
+                        jQuery('.alert-danger').append('<p>'+value+'</p>');
+                    });
                     break;
                 case 200:
                     Swal.fire({
@@ -173,11 +167,12 @@ $("#btnEdit").click(function(e){
                         title: msg,
                         showConfirmButton: false,
                         timer: 1500
-                    })                    
+                    })                   
+                    document.getElementById('closeEditCategoryModal').click(); 
+                    cleanFields();
+                    initializeTable();
                     break;
-            }
-            cleanFields();
-            initializeTable();
+            }            
         }
     });
 });
@@ -195,6 +190,12 @@ function cleanFields(){
     document.getElementById('cod_category').value = "";
     document.getElementById("category").value = "";
     document.getElementById("category_insert").value = "";
+}
+
+function hideErrors(){
+    jQuery('.alert-danger').empty();
+    const error = document.getElementById("error");
+    error.style.display = "none";
 }
 
 // PREVENIR ENVIO CON ENTER

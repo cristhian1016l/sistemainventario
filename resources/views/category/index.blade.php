@@ -59,7 +59,8 @@
                     <h5 class="modal-title" id="insertCategoryModal">Nuevo categoría</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
-                <div class="modal-body">                    
+                <div class="modal-body">
+                    <div class="alert alert-danger" style="display:none" id="error"></div>
                     <div class="form-group">
                         <label for="category_insert" class="col-form-label">Categoría:</label>
                         <input class="form-control" id="category_insert"></input>
@@ -85,6 +86,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert alert-danger" style="display:none" id="error"></div>
                     <div class="form-group">
                         <label for="category" class="col-form-label">Categoría:</label>
                         <input type="text" class="form-control" id="category">

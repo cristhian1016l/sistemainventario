@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 
 use App\Models\User;
+use App\Models\Supplier; //DELETE
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
 //ADMIN CONTROLLER 
@@ -16,6 +18,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\WorkerController;
 use App\Http\Controllers\Admin\RequestController;
 use App\Http\Controllers\Admin\TeamController;
+use App\Http\Controllers\Admin\FlashdriveController;
 
 /*
 |--------------------------------------------------------------------------
@@ -128,9 +131,20 @@ Route::group(['middleware' => 'isAdmin'], function (){
     // Route::post('/equipos/eliminar-equipo', [TeamController::class, 'delete']);
     // FIN AREAS
 
+    // MEMORIAS
+    Route::get('/memorias', [FlashdriveController::class, 'index'])->name('flashdrive');
+    Route::post('/memorias/obtener-memorias', [FlashdriveController::class, 'getFlashdrives']);
+    Route::post('/memorias/agregar-memoria', [FlashdriveController::class, 'insert']);    
+    // FIN MEMORIAS
 });
 
 Route::get('/create', function(){
+
+    // User::create([
+    //     'email' => 'juanup@ponceproducciones.com',
+    //     'password' => bcrypt('123456'),
+    //     'active' => 1
+    // ]);
 
     // Role::create(['name' => 'admin']);
     // Role::create(['name' => 'lidercdp']);
@@ -145,3 +159,87 @@ Route::get('/create', function(){
     // User::find(1)->assignRole('mentor');
     // User::find(6)->assignRole('tesorero');
 });
+
+// Route::get('/create-user', function(){
+
+//     Role::create(['name' => 'admin']);
+
+//     User::create([
+//         'email' => 'juanup@ponceproducciones.com',
+//         'password' => bcrypt('123456'),
+//         'active' => '1'
+//     ]);
+
+//     User::find(1)->assignRole('admin');
+// });
+
+// Route::get('/create-supplier', function(){
+
+//     $supplier = new Supplier();    
+//     $supplier->bussiness_name = 'GRUPO COMPUTEL';
+//     $supplier->ruc = '20608449320';
+//     $supplier->address = 'AV. GARCILAZO DE LA VEGA NRO. 1348 TDA 1A-179 (CENTRO COMERCIAL CIBERPLAZA) LIMA-LIMA-LIMA';
+//     $supplier->phone = '+51 951803761';
+//     $supplier->landline = '01 0000000';
+//     $supplier->save();
+// });
+
+// Route::get('/create-document', function(){
+
+//     DB::table('document_type')->insert(
+//         array(
+//             'document_type' => 'DNI'
+//         )
+//     );
+    
+//     DB::table('document_type')->insert(
+//         array(
+//             'document_type' => 'CARNET DE EXTRANJERÍA'
+//         )
+//     );
+    
+// });
+
+// Route::get('/create-worker-type', function(){
+
+//     DB::table('worker_type')->insert(
+//         array(
+//             'name' => 'EDITOR'
+//         )
+//     );
+    
+//     DB::table('worker_type')->insert(
+//         array(
+//             'name' => 'PRODUCTOR'
+//         )
+//     );
+
+//     DB::table('worker_type')->insert(
+//         array(
+//             'name' => 'OTRO CARGO'
+//         )
+//     );
+    
+// });
+
+// Route::get('/create-area', function(){
+
+//     DB::table('areas')->insert(
+//         array(
+//             'name' => 'EDICIÓN'
+//         )
+//     );
+    
+//     DB::table('areas')->insert(
+//         array(
+//             'name' => 'DISTRIBUCIÓN'
+//         )
+//     );
+
+//     DB::table('areas')->insert(
+//         array(
+//             'name' => 'CAMPO'
+//         )
+//     );
+    
+// });

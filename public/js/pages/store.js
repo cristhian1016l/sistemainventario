@@ -70,30 +70,27 @@ $("#btnInsert").click(function(e){
     let address_insert = document.getElementById('address_insert').value;
     let phone_insert = document.getElementById('phone_insert').value;
     let city_insert = document.getElementById('city_insert').value;
+    let in_use_insert = document.querySelector('#in_use_insert').checked;
+    hideErrors();
     $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         type:'POST',
         url: $('#formInsert').attr('action'),
-        data: {'name': name_insert, 'manager': manager_insert, 'address': address_insert, 'phone': phone_insert, 'city': city_insert },
-        success:function(data) {            
+        data: {'name': name_insert, 'manager': manager_insert, 'address': address_insert, 'phone': phone_insert, 'city': city_insert, 'in_use': in_use_insert },
+        success:function(data) {
             console.log(data);
+            console.log(data.errors);
             val = data.status;
             msg = data.msg;              
 
-            document.getElementById('closeInsertStoreModal').click();
-
             switch(val){
-                case 500:                    
-                    console.log(msg);
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'error',
-                        title: 'Ha ocurrido un error, no se pudo agregar el almacén',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })                    
+                case 500:                                        
+                    jQuery.each(data.errors, function(key, value){
+                        jQuery('.alert-danger').show("slow");
+                        jQuery('.alert-danger').append('<p>'+value+'</p>');
+                    });
                     break;
                 case 200:
                     Swal.fire({
@@ -102,11 +99,12 @@ $("#btnInsert").click(function(e){
                         title: 'El almacén fue agregado exitosamente',
                         showConfirmButton: false,
                         timer: 1500
-                    })                    
+                    })
+                    document.getElementById('closeInsertStoreModal').click();
+                    cleanFields();
+                    initializeTable();
                     break;
-            }
-            cleanFields();
-            initializeTable();
+            }            
         }
     });
 });
@@ -162,29 +160,26 @@ $("#btnEdit").click(function(e){
     let manager = document.getElementById('manager').value;
     let phone = document.getElementById('phone').value;
     let city = document.getElementById('city').value;
+    let in_use = document.querySelector('#in_use').checked;
+    hideErrors();
     $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         type:'POST',
         url: $('#formEdit').attr('action'),
-        data: {'cod_store': cod_store, 'name': name, 'address': address, 'manager': manager, 'phone': phone, 'city': city },
-        success:function(data) {            
+        data: {'cod_store': cod_store, 'name': name, 'address': address, 'manager': manager, 'phone': phone, 'city': city, 'in_use' : in_use },
+        success:function(data) { 
+            console.log(data);           
             val = data.status;
             msg = data.msg;              
 
-            document.getElementById('closeEditStoreModal').click();
-
             switch(val){
-                case 500:                    
-                    console.log(msg);
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'error',
-                        title: 'Ha ocurrido un error, no se pudo actualizar el almacén',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })                    
+                case 500:                                        
+                    jQuery.each(data.errors, function(key, value){
+                        jQuery('.alert-danger').show("slow");
+                        jQuery('.alert-danger').append('<p>'+value+'</p>');
+                    });
                     break;
                 case 200:
                     Swal.fire({
@@ -193,11 +188,12 @@ $("#btnEdit").click(function(e){
                         title: 'El almacén fue actualizado exitosamente',
                         showConfirmButton: false,
                         timer: 1500
-                    })                    
+                    })
+                    document.getElementById('closeEditStoreModal').click();
+                    cleanFields();
+                    initializeTable();
                     break;
             }
-            cleanFields();
-            initializeTable();
         }
     });
 });
@@ -221,10 +217,11 @@ function setDataToEdit(cod_store){
             console.log(store);
 
             document.getElementById("name").value = store['name'];
-            document.getElementById("manager").value = store['manager'];                    
-            document.getElementById("address").value = store['address'];                    
-            document.getElementById("phone").value = store['phone'];                    
-            document.getElementById("city").value = store['city'];                    
+            document.getElementById("manager").value = store['manager'];
+            document.getElementById("address").value = store['address'];
+            document.getElementById("phone").value = store['phone'];
+            document.getElementById("city").value = store['city'];
+            document.getElementById("in_use").checked = store['in_use'] == 1 ? true : false;
             
             // $('#select-supplier').val(store['supplier_id'])            
             // $('#select-supplier').trigger('change');
@@ -240,7 +237,7 @@ function setDataToEdit(cod_store){
             
             // switch(data.status){
             //     case 500:                    
-            //         msg = data.msg;                          
+            //         msg = data.msg;
             //         Swal.fire({
             //             position: 'center',
             //             icon: 'error',
@@ -263,6 +260,12 @@ function cleanFields(){
     document.getElementById("address_insert").value = "";
     document.getElementById("phone_insert").value = "";
     document.getElementById("city_insert").value = "";
+}
+
+function hideErrors(){
+    jQuery('.alert-danger').empty();
+    const error = document.getElementById("error");
+    error.style.display = "none";
 }
 
 // PREVENIR ENVIO CON ENTER

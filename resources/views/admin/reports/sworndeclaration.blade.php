@@ -112,7 +112,7 @@
         <p style="font-family: monospace; margin-left: 50px; margin-right: 50px; margin-top: 120px; text-align: center">
             <b>{{ $data['names'] }}</b><br>
             <b>DNI: {{ $data['document'] }}</b><br>
-            <b>EL TRABAJADOR (A)</b>
+            <b>EL TRABAJADOR(A)</b>
         </p>
     </div>
     <div style="page-break-after:always;"></div>

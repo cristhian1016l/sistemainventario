@@ -5,19 +5,20 @@
 @endsection
 @section('content')
 <!-- [ Main Content ] start -->
+
 <div class="row">
     <input type="hidden" class="form-control" id="cod_store">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">                
-                <div class="button-container">                    
+                <div class="button-container">
                     <button 
                         type="button" 
                         class="btn btn-primary" 
                         data-toggle="modal" 
                         data-target="#insertStoreModal">
                         Agregar
-                    </button>                    
+                    </button>
                 </div>
             </div>
             <div class="card-body">
@@ -62,28 +63,32 @@
                     <h5 class="modal-title" id="insertStoreModalLabel">Nuevo almacén</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
-                <div class="modal-body">                    
-                    <div class="form-group">                            
+                <div class="modal-body">
+                    <div class="alert alert-danger" style="display:none" id="error"></div>
+                    <div class="form-group">
                         <label for="name_insert" class="col-form-label">Nombre del Almacén:</label>
                         <input type="text" class="form-control" id="name_insert">
                     </div>
                     <div class="form-group">
                         <label for="manager_insert" class="col-form-label">Encargado:</label>
                         <input class="form-control" id="manager_insert">
-                    </div>                    
+                    </div>
                     <div class="form-group">
                         <label for="address_insert" class="col-form-label">Dirección:</label>
                         <textarea class="form-control" id="address_insert"></textarea>
-                    </div>                                        
+                    </div>
                     <div class="form-group">
                         <label for="phone_insert" class="col-form-label">Teléfono:</label>
                         <input class="form-control" id="phone_insert">
-                    </div>                    
+                    </div>
                     <div class="form-group">
                         <label for="city_insert" class="col-form-label">Ciudad:</label>
                         <input class="form-control" id="city_insert">
-                    </div>                    
-
+                    </div>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="in_use_insert">
+                        <label class="custom-control-label" for="in_use_insert">¿Los productos de este almacén están siendo usados?</label>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button id="closeInsertStoreModal" type="button" class="btn  btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -104,27 +109,32 @@
                     <h5 class="modal-title" id="editStoreModalLabel">Editar almacén</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
-                <div class="modal-body">                    
-                    <div class="form-group">                            
+                <div class="modal-body">
+                    <div class="alert alert-danger" style="display:none" id="error"></div>
+                    <div class="form-group">
                         <label for="name" class="col-form-label">Nombre del Almacén:</label>
                         <input type="text" class="form-control" id="name">
                     </div>
                     <div class="form-group">
                         <label for="manager" class="col-form-label">Encargado:</label>
                         <input class="form-control" id="manager">
-                    </div>                    
+                    </div>
                     <div class="form-group">
                         <label for="address" class="col-form-label">Dirección:</label>
                         <textarea class="form-control" id="address"></textarea>
-                    </div>                                        
+                    </div>
                     <div class="form-group">
                         <label for="phone" class="col-form-label">Teléfono:</label>
                         <input class="form-control" id="phone">
-                    </div>                    
+                    </div>
                     <div class="form-group">
                         <label for="city" class="col-form-label">Ciudad:</label>
                         <input class="form-control" id="city">
-                    </div>                    
+                    </div>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="in_use">
+                        <label class="custom-control-label" for="in_use">¿Los productos de este almacén están siendo usados?</label>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button id="closeEditStoreModal" type="button" class="btn  btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -146,7 +156,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                </div>                                            
+                </div>
                 <div class="modal-footer justify-content-between">
                     <button id="closeDeleteStoreModal" type="button" class="btn btn-secondary" data-dismiss="modal">CERRAR</button>
                     <button id="btnDelete" type="submit" class="btn btn-success">ESTOY SEGURO</button>

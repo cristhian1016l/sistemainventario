@@ -2,7 +2,7 @@
 @extends('layouts.app')
 @section('title', 'Crear Solicitud')
 @section('css')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
 <link href="{{ asset('css/plugins/daterangepicker.css') }}" rel="stylesheet" />
 <link href="{{ asset('css/plugins/toastify.min.css') }}" rel="stylesheet" />
 @endsection
@@ -48,7 +48,7 @@
                                 <label for="product_id" class="col-form-label">Producto a agregar:</label>
                                 <select class="form-control" id="product_id" autocomplete="off" style="width: 100%">
                                     @foreach($products as $product)
-                                    <option value="{{ $product->id }}">{{ $product->description }}</option>
+                                    <option value="{{ $product->id }}">{{ $product->product_name }}</option>
                                     @endforeach
                                 </select>  
                             </div>

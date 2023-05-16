@@ -3,14 +3,27 @@ CREATE DATABASE bdinventario;
 USE bdinventario;
 
 drop table if exists id_value_tbl;
+drop table if exists requests_details;
+drop table if exists worker_product;
+
+drop table if exists model_has_permissions;
+drop table if exists model_has_roles;
+drop table if exists role_has_permissions;
+drop table if exists permissions;
+drop table if exists users;
+
+drop table if exists requests;
+drop table if exists teams;
+drop table if exists workers;
+drop table if exists areas;
+drop table if exists roles;
 drop table if exists products;
 drop table if exists stores;
-drop table if exists suppliers;
 drop table if exists brands;
+drop table if exists suppliers;
 drop table if exists categories;
-drop table if exists workers;
 drop table if exists document_type;
-drop table if exists worker_product;
+drop table if exists worker_type;
 
 -- -------------------- TABLAS EXCLUSIVAS DEL SISTEMA WEB PARA PARA PERMISOS Y ROLES ------------------------------------------------------
 
@@ -92,11 +105,12 @@ create table stores
     address varchar(200) not null,        
     phone varchar(25),
     city varchar(50),
+    in_use tinyint(4),
     created_at datetime,
     updated_at datetime
 );
 
-SELECT * FROM stores;
+-- SELECT * FROM stores;
 
 drop table if exists suppliers;
 CREATE TABLE suppliers
@@ -136,6 +150,20 @@ CREATE TABLE document_type
     document_type varchar(50) not null
 );
 
+drop table if exists worker_type;
+CREATE TABLE worker_type
+(
+	id int auto_increment not null primary key,
+    name varchar(50) not null
+);
+
+drop table if exists areas;
+CREATE TABLE areas
+(
+	id int auto_increment not null primary key,
+    name varchar(50) not null
+);
+
 drop table if exists workers;
 CREATE TABLE workers
 (
@@ -151,21 +179,12 @@ CREATE TABLE workers
     created_at datetime,
     updated_at datetime,    
 	foreign key (document_type_id) references document_type(id),
-    foreign key (worker_type_id) references worker_type(id)
+    foreign key (worker_type_id) references worker_type(id),
+    foreign key (area_type_id) references areas(id)
 );
-
-ALTER TABLE workers
-ADD COLUMN deleted_at timestamp AFTER document;
 
 -- ALTER TABLE workers
 -- ADD COLUMN area_type_id int not null AFTER worker_type_id;
-
-drop table if exists worker_type;
-CREATE TABLE worker_type
-(
-	id int auto_increment not null primary key,
-    name varchar(50) not null
-);
 
 drop table if exists products;
 CREATE TABLE products
@@ -230,13 +249,6 @@ CREATE TABLE requests_details
     foreign key (product_id) references products(id)
 );
 
-drop table if exists areas;
-CREATE TABLE areas
-(
-	id int auto_increment not null primary key,
-    name varchar(50) not null
-);
-
 drop table if exists teams;
 CREATE TABLE teams
 (
@@ -245,6 +257,19 @@ CREATE TABLE teams
     productor_id int not null,
 	foreign key (productor_id) references workers(id)
 );
+
+drop table if exists flashdrives;
+CREATE TABLE flashdrives
+(
+	id int auto_increment not null primary key,
+    speed varchar(20),
+    storage varchar(20),
+    color varchar(20),
+    description varchar(255),
+    brand_id int not null,
+	foreign key (brand_id) references brands(id)
+);
+
 -- --------------- RELACIONES DE LOS ROLES Y PERMISOS --------------- 
 
 ALTER TABLE model_has_permissions
@@ -269,48 +294,6 @@ ADD FOREIGN KEY (`model_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 -- ------------------------------------------- DATA DE PRUEBA -------------------------------------------
 
-INSERT INTO stores(address, description) VALUE('OFICINA PONCE SALON 4 TERCER PISO', 'SE GUARDA TODO LO RELACIONADO CON CAMARAS, Y LO USADO PARA SALIR A CAMPO');
-INSERT INTO stores(address, description) VALUE('OFICINA PONCE SALON 2 TERCER PISO', 'SE GUARDA TODO LO QUE SE USA PARA CASA DE LA COMEDIA');
--- SELECT * FROM stores;
-
-INSERT INTO suppliers(bussiness_name, ruc, address, phone, landline) VALUE('IMPORTACIONES RIO', '45132164578', 'LIMA', '+51 988-246-123', '01 3754687');
-INSERT INTO suppliers(bussiness_name, ruc, address, phone, landline) VALUE('GRUPO COMPUTEL', '20608449320', 'AV. GARCILAZO DE LA VEGA NRO. 1348 TDA 1A-179 (CENTRO COMERCIAL CIBERPLAZA) LIMA-LIMA-LIMA', '+51 951803761', '01 0000000');
--- SELECT * FROM suppliers;
-
-INSERT INTO brands(name) VALUE('KINGSTON');
-INSERT INTO brands(name) VALUE('LENOVO');
-INSERT INTO brands(name) VALUE('ASUS');
-INSERT INTO brands(name) VALUE('HP');
--- SELECT * FROM brands;
-
-INSERT INTO categories(name) VALUE('COMPUTO');
-INSERT INTO categories(name) VALUE('UTILERÍA');
--- SELECT * FROM categories;
-
-INSERT INTO products(code, product_name, supplier_id, brand_id, category_id, store_id, description, price, stock) VALUES('PRO_0000001', 'ALL IN ONE', 1, 1, 1, 1, 'TODO EN UNO', 750.50, 4);
-INSERT INTO products(code, product_name, supplier_id, brand_id, category_id, store_id, description, price, stock) VALUES('PRO_0000002', 'MONITOR', 1, 1, 1, 1, 'MONITORES', 750.50, 4);
-INSERT INTO products(code, product_name, supplier_id, brand_id, category_id, store_id, description, price, stock) VALUES('PRO_0000003', 'TECLADO', 1, 1, 1, 1, 'TECLADOS RGB', 750.50, 4);
--- TRUNCATE products;
--- SELECT * FROM products;
-
-INSERT INTO document_type(document_type) VALUES('DNI');
-INSERT INTO document_type(document_type) VALUES('CARNET DE EXTRANJERÍA');
-
-SELECT * FROM workers; 35
-SELECT * FROM worker_product; 258
-
-SELECT * FROM requests;
-SELECT * FROM requests_details;
-SELECT * FROM roles;
-SELECT * FROM users;
-SELECT * FROM model_has_roles;
-SELECT * FROM worker_type;
-SELECT * FROM areas;
-SELECT * FROM teams;
-
--- UPDATE workers SET area_type_id = 2;
--- UPDATE workers SET worker_type_id = 2;
-
 -- ************ SACAR LOS TRIGGUERS ************
 		-- SELECT  ACTION_STATEMENT
 		-- FROM    INFORMATION_SCHEMA.TRIGGERS
@@ -319,10 +302,14 @@ SELECT * FROM teams;
 -- ************ SACAR LOS TRIGGUERS ************
 
 
-SELECT t.*, CONCAT(w.lastname, " ", w.name) as names FROM teams t
-INNER JOIN workers w ON t.productor_id = w.id
+-- HACER ESTOS CAMBIOS
 
-SELECT t.*, w.lastname, w.name as names FROM teams t
-INNER JOIN workers w ON t.productor_id = w.id
+-- ALTER TABLE stores
+-- ADD in_use tinyint(4) AFTER city;
 
-SELECT * FROM workers WHERE id = 1
+SHOW CREATE TABLE products;
+ALTER TABLE products DROP FOREIGN KEY products_ibfk_4;
+ALTER TABLE products DROP COLUMN store_id;
+
+SELECT * FROM worker_type;
+SELECT * FROM flashdrives;

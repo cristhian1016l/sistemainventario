@@ -3,7 +3,7 @@
 @section('title', 'Productos')
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
 @endsection
 @section('content')
 <!-- [ Main Content ] start -->
@@ -39,10 +39,10 @@
                         <thead>
                             <tr>
                                 <th>CÓDIGO</th>
-                                <th style="width: 10%">PRODUCTO</th>
-                                <th style="width: 10%">MARCA</th>
-                                <th style="width: 20%">ALMACEN</th>
-                                <th style="width: 40%">DESCRIPCIÓN</th>
+                                <th style="width: 40%">PRODUCTO</th>
+                                <th style="width: 20%">CATEGORÍA</th>                                
+                                <th style="width: 20%">MARCA</th>                                
+                                <th style="width: 20%">DESCRIPCIÓN</th>
                                 <th style="width: 10%">STOCK</th>
                                 <th style="width: 10%">ACCIONES</th>
                             </tr>
@@ -53,8 +53,8 @@
                             <tr>
                                 <th>CÓDIGO</th>
                                 <th>PRODUCTO</th>
-                                <th>MARCA</th>
-                                <th>ALMACEN</th>
+                                <th>CATEGORÍA</th>
+                                <th>MARCA</th>                                
                                 <th>DESCRIPCIÓN</th>
                                 <th>STOCK</th>
                                 <th>ACCIONES</th>
@@ -90,8 +90,7 @@
                                 @foreach($suppliers as $supplier)
                                 <option value="{{ $supplier->id }}">{{ $supplier->bussiness_name }}</option>
                                 @endforeach
-                            </select>  
-                            
+                            </select>
                         </div>
 
                         <div class="col-md-6">
@@ -116,7 +115,11 @@
                                 @endforeach
                             </select>  
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-sm-6">
+                            <label for="description" class="col-form-label">Descripción (opcional):</label>
+                            <textarea class="form-control" id="description"></textarea>
+                        </div>
+                        <!-- <div class="col-md-6">
                             <label for="select-store" class="col-form-label">Almacén:</label>
                             <select class="form-control" id="select-store" autocomplete="off" style="width: 100%">
                                 <option value="">Seleccione un almacén</option>
@@ -124,12 +127,7 @@
                                 <option value="{{ $store->id }}">{{ $store->address }}</option>
                                 @endforeach
                             </select>  
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="description" class="col-form-label">Descripción:</label>
-                        <textarea class="form-control" id="description"></textarea>
+                        </div> -->
                     </div>
 
                     <div class="form-group row">

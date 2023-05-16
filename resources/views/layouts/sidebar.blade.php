@@ -23,10 +23,10 @@
 					<li class="pc-item pc-hasmenu">
 						<a class="pc-link "><span class="pc-micon"><i data-feather="box"></i></span><span class="pc-mtext">Inventario</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span></a>
 						<ul class="pc-submenu">
-							<li class="pc-item"><a class="pc-link" href="#">Memorias</a></li>
+							<li class="pc-item"><a class="pc-link" href="{{ route('flashdrive') }}">Memorias</a></li>
 							<li class="pc-item"><a class="pc-link" href="{{ route('product') }}">Productos</a></li>
 							<li class="pc-item"><a class="pc-link" href="{{ route('category') }}">Categorias</a></li>														
-							<li class="pc-item"><a class="pc-link" href="{{ route('store') }}">Almacén</a></li>
+							<!-- <li class="pc-item"><a class="pc-link" href="{{ route('store') }}">Almacén</a></li> -->
 							<li class="pc-item"><a class="pc-link" href="{{ route('brand') }}">Marcas</a></li>
 							<li class="pc-item"><a class="pc-link" href="{{ route('supplier') }}">Proveedores</a></li>														
 						</ul>

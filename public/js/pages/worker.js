@@ -299,7 +299,7 @@ function getProductsAssigned(cod_worker){
                             var options;
                             
                             options = "<td>"+
-                                            elem.description+
+                                            elem.product_name+
                                         "</td>"+
                                         "<td>"+
                                             elem.name+

@@ -19,7 +19,7 @@ class TeamController extends Controller
     {
         $productors = DB::select("SELECT w.id, CONCAT(w.lastname, ' ', w.name) AS names FROM workers w 
                                 INNER JOIN worker_type wt ON w.worker_type_id = wt.id
-                                WHERE wt.id = 3");
+                                WHERE wt.id = 2");
         
         $data = ['productors' => $productors];
 
