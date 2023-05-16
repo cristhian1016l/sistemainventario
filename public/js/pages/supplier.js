@@ -210,9 +210,16 @@ function setDataToEdit(cod_supplier, bussiness, ruc, address, phone, landline){
 function cleanFields(){
     document.getElementById('cod_supplier').value = "";
     document.getElementById("bussiness").value = "";
-    document.getElementById("ruc").value = "";
     document.getElementById("bussiness_insert").value = "";
+    document.getElementById("ruc").value = "";
     document.getElementById("ruc_insert").value = "";
+    document.getElementById("address").value = "";
+    document.getElementById("address_insert").value = "";
+    document.getElementById("phone").value = "";
+    document.getElementById("phone_insert").value = "";
+    document.getElementById("landline").value = "";
+    document.getElementById("landline_insert").value = "";
+
 }
 
 // PREVENIR ENVIO CON ENTER

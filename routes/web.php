@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\WorkerController;
 use App\Http\Controllers\Admin\RequestController;
+use App\Http\Controllers\Admin\TeamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -119,12 +120,12 @@ Route::group(['middleware' => 'isAdmin'], function (){
     // FIN SOLICITUDES
 
     // AREAS
-    Route::get('/areas', [CategoryController::class, 'index'])->name('category');
+    Route::get('/equipos', [TeamController::class, 'index'])->name('team');
 
-    // Route::post('/categorias/obtener-categorias', [CategoryController::class, 'getCategories']);
-    // Route::post('/categorias/agregar-categoria', [CategoryController::class, 'insert']);
-    // Route::post('/categorias/editar-categoria', [CategoryController::class, 'edit']);
-    // Route::post('/categorias/eliminar-categoria', [CategoryController::class, 'delete']);
+    Route::post('/equipos/obtener-equipos', [TeamController::class, 'getTeams']);
+    Route::post('/equipos/agregar-equipo', [TeamController::class, 'insert']);
+    // Route::post('/equipos/editar-equipo', [TeamController::class, 'edit']);
+    // Route::post('/equipos/eliminar-equipo', [TeamController::class, 'delete']);
     // FIN AREAS
 
 });

@@ -8,13 +8,9 @@
 @section('content')
 <!-- [ Main Content ] start -->
 
-
-
 <!-- MENSAJES DE ERROR -->
 <div class="alert alert-danger" style="display:none" id="error"></div>
 <!-- TERMINO DE MENSAJES DE ERROR -->
-
-
 
 <div class="row">
     <input type="hidden" class="form-control" id="cod_product">

@@ -156,8 +156,8 @@
             POR EL PRESENTE DOCUMENTO, YO <b>{{ $header[0]->name }}</b>, DE 
             NACIONALIDAD PERUANA, IDENTIFICADO CON DOCUMENTO NACIONAL DE IDENTIDAD 
             NÚMERO <b>{{ $header[0]->document }}</b>; SEÑALANDO DOMICILIO <b>{{ $header[0]->address }}</b>. EN 
-            MI CALIDAD DE TRABAJADOR CON CARGO EDICION DE VIDEOS DESIGNADO DE LA 
-            SOCIEDAD DENOMINADA “PRODUCCIONES 89 S.A.C.”., DECLARO BAJO JURAMENTO 
+            MI CALIDAD DE PRODUCTOR DESIGNADO DE LA SOCIEDAD DENOMINDAD
+            “UNIHUAY RECORDS S.A.C.”., DECLARO BAJO JURAMENTO 
             HABER RECIBIDO EL BIEN QUE A CONTINUACIÓN SE DETALLA.
         </p>    
         <p style="font-family: monospace; font-weight: bold; text-decoration: underline; margin-left: 75px; margin-top: 50px">DESCRIPCIÓN DE LOS BIENES:</p>    
@@ -166,7 +166,7 @@
             <li>{{ $detail->amount }} | {{ $detail->description }}</li>
             @endforeach
         </ul>
-        <p style="font-family: monospace; margin-left: 75px; margin-right: 75px; margin-top: 50px; text-align: justify">
+        <p style="font-family: monospace; margin-left: 75px; margin-right: 75px; margin-top: 50px; text-align: justify">            
             EL TRABAJADOR DECALARA QUE TODOS LOS BIENES PATRIMONIALES DETALLADOS 
             SE ENCUENTRAN EN BUEN ESTADO. EL TRABAJADOR ES RESPONSABLE DIRECTO DE 
             LA EXISTENCIA, PERMANENCIA, CONSERVACION Y BUEN USO DE CADA UNO DE LOS 
@@ -179,7 +179,7 @@
         <p style="font-family: monospace; margin-left: 50px; margin-right: 50px; margin-top: 120px; text-align: center">
             <b>{{ $header[0]->name }}</b><br>
             <b>DNI: {{ $header[0]->document }}</b><br>
-            <b>EL TRABAJADOR (A)</b>
+            <b>EL TRABAJADOR(A)</b>
         </p>
     </div>
 

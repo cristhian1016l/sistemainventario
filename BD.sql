@@ -230,15 +230,6 @@ CREATE TABLE requests_details
     foreign key (product_id) references products(id)
 );
 
-drop table if exists teams;
-CREATE TABLE teams
-(
-	id int auto_increment not null primary key,
-    name varchar(50),
-    created_at datetime,
-    updated_at datetime
-);
-
 drop table if exists areas;
 CREATE TABLE areas
 (
@@ -246,6 +237,14 @@ CREATE TABLE areas
     name varchar(50) not null
 );
 
+drop table if exists teams;
+CREATE TABLE teams
+(
+	id int auto_increment not null primary key,
+    name varchar(50),
+    productor_id int not null,
+	foreign key (productor_id) references workers(id)
+);
 -- --------------- RELACIONES DE LOS ROLES Y PERMISOS --------------- 
 
 ALTER TABLE model_has_permissions
@@ -307,7 +306,7 @@ SELECT * FROM users;
 SELECT * FROM model_has_roles;
 SELECT * FROM worker_type;
 SELECT * FROM areas;
-
+SELECT * FROM teams;
 
 -- UPDATE workers SET area_type_id = 2;
 -- UPDATE workers SET worker_type_id = 2;
@@ -318,3 +317,12 @@ SELECT * FROM areas;
 		-- WHERE   TRIGGER_SCHEMA = 'bd_name'
 		-- AND     TRIGGER_NAME = 'trigguer_name';
 -- ************ SACAR LOS TRIGGUERS ************
+
+
+SELECT t.*, CONCAT(w.lastname, " ", w.name) as names FROM teams t
+INNER JOIN workers w ON t.productor_id = w.id
+
+SELECT t.*, w.lastname, w.name as names FROM teams t
+INNER JOIN workers w ON t.productor_id = w.id
+
+SELECT * FROM workers WHERE id = 1
