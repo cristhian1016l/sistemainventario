@@ -24,6 +24,7 @@ drop table if exists suppliers;
 drop table if exists categories;
 drop table if exists document_type;
 drop table if exists worker_type;
+drop table if exists type_worker;
 
 -- -------------------- TABLAS EXCLUSIVAS DEL SISTEMA WEB PARA PARA PERMISOS Y ROLES ------------------------------------------------------
 
@@ -313,3 +314,5 @@ ALTER TABLE products DROP COLUMN store_id;
 
 SELECT * FROM worker_type;
 SELECT * FROM flashdrives;
+
+SELECT * FROM users;
