@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE-edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- <link rel="stylesheet" href="{{ asset('css/app.css') }}">     -->
-    <title>Declaración Jurada</title>
+    <title>Solicitud</title>
     <style>
         body {
             margin: -30px;
@@ -155,9 +155,9 @@
         <p style="font-family: monospace; margin-left: 75px; margin-right: 75px; text-align: justify">
             POR EL PRESENTE DOCUMENTO, YO <b>{{ $header[0]->name }}</b>, DE 
             NACIONALIDAD PERUANA, IDENTIFICADO CON DOCUMENTO NACIONAL DE IDENTIDAD 
-            NÚMERO <b>{{ $header[0]->document }}</b>; SEÑALANDO DOMICILIO <b>{{ $header[0]->address }}</b>. EN 
-            MI CALIDAD DE PRODUCTOR DESIGNADO DE LA SOCIEDAD DENOMINDAD
-            “UNIHUAY RECORDS S.A.C.”., DECLARO BAJO JURAMENTO 
+            NÚMERO <b>{{ $header[0]->document }}</b>; EN MI CALIDAD DE TRABAJADOR 
+            CON CARGO DE PRODUCTOR DESIGNADO DE LA SOCIEDAD DENOMINDAD
+            “UNSIHUAY RECORDS S.A.C.”. DECLARO BAJO JURAMENTO
             HABER RECIBIDO EL BIEN QUE A CONTINUACIÓN SE DETALLA.
         </p>    
         <p style="font-family: monospace; font-weight: bold; text-decoration: underline; margin-left: 75px; margin-top: 50px">DESCRIPCIÓN DE LOS BIENES:</p>    

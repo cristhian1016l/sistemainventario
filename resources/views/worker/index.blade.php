@@ -13,6 +13,73 @@
 <!-- TERMINO DE MENSAJES DE ERROR -->
 
 <div class="row">
+    <div class="col-md-12" style="display: none" id="reports">
+        <div class="card">
+            <div class="card-header">                
+                <h5 class="card-title">
+                    Reportes Personalizados
+                    <button type="button" class="close" onclick="showAndHideReports(false)"><span aria-hidden="true">&times;</span></button>
+                </h5>                
+            </div>
+            <div class="card-body">                
+                <div class="form-row row">
+
+                    <div class="col-md-6">
+                        <fieldset style="margin: 8px; border: 1px solid silver; padding: 8px; border-radius: 4px">
+                        <legend>Declaración Jurada por área</legend>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <select class="form-control" id="area_type_report" autocomplete="off" style="width: 100%">                        
+                                    @foreach($areas as $area)
+                                    <option value="{{ $area->id }}">{{ $area->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <a href="#">
+                                    <button onclick="sworndeclarationpdf()"
+                                        class="btn btn-success btn-block">
+                                        Descargar declaración jurada
+                                    </button>
+                                </a>
+                            </div>
+                        </div>                                                        
+                        </fieldset>
+                    </div>
+
+                    <div class="col-md-6">
+                        <fieldset style="margin: 8px; border: 1px solid silver; padding: 8px; border-radius: 4px">
+                        <legend>Listado por cargo</legend>
+                        <div class="row">
+                            <div class="col-md-6">
+                            <select class="form-control" id="worker_type_report" autocomplete="off" style="width: 100%">
+                                    @foreach($types as $type)
+                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6">                                
+                                <a href="#">
+                                    <button  onclick="downloadListing()"
+                                        class="btn btn-success btn-block">
+                                        Descargar Listado
+                                    </button>
+                                </a>
+                            </div>
+                        </div>                                                        
+                        </fieldset>
+                    </div>
+                    
+                    <div class="col-md-6"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-md-12" style="display: none" id="form">
         <div class="card">
             <div class="card-header">                
@@ -96,13 +163,12 @@
                         Agregar
                     </button>
 
-                    <a href="{{ route('worker.sworndeclarationpdf') }}" target="_blank">
-                        <button 
-                            type="button" 
-                            class="btn btn-primary">
-                            Declaración Jurada PDF
-                        </button>
-                    </a>
+                    <button 
+                        type="button" 
+                        class="btn btn-primary"
+                        onclick="showAndHideReports(true)">
+                        Crear Reporte
+                    </button>
 
                 </div>
             </div>
@@ -224,13 +290,38 @@
     <script src="{{ asset('js/pages/worker.js') }}"></script>
     <script src="{{ asset('js/plugins/select2.min.js') }}"></script>
     <script>
-        $("#document_type").select2();            
-        $("#worker_type").select2();            
-        $("#area_type").select2();            
+        $("#document_type").select2();
+        $("#worker_type").select2();
+        $("#area_type").select2();
+
+        $("#area_type_report").select2();
+        $("#worker_type_report").select2();
     </script>
     <script>
         $("#product_id").select2({
             dropdownParent: $("#AddProductWorkerModal")
         });        
+    </script>
+
+    <script>
+        function downloadListing(){
+            var cod_type = $('#worker_type_report').val();
+            var url = '{{ route("worker.listingByPosition", ":id") }}'
+            url = url.replace(':id', cod_type);
+            window.open(
+            url,
+            "_blank"
+            );   
+        }
+
+        function sworndeclarationpdf(){
+            var cod_area = $('#area_type_report').val();
+            var url = '{{ route("worker.sworndeclarationpdf", ":id") }}'
+            url = url.replace(':id', cod_area);
+            window.open(
+            url,
+            "_blank"
+            );   
+        }
     </script>
 @endsection

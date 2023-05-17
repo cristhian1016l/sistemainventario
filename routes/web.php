@@ -81,6 +81,7 @@ Route::group(['middleware' => 'isAdmin'], function (){
 
     Route::post('/productos/obtener-productos', [ProductController::class, 'getProducts']);
     Route::post('/productos/obtener-producto/{id}', [ProductController::class, 'getProductById']);
+    Route::post('/productos/obtener-productos-categoria', [ProductController::class, 'gerProductsByCategory']);
     Route::post('/productos/agregar-producto', [ProductController::class, 'insert']);
     Route::post('/productos/editar-producto', [ProductController::class, 'edit']);
     Route::post('/productos/eliminar-producto', [ProductController::class, 'delete']);
@@ -103,7 +104,8 @@ Route::group(['middleware' => 'isAdmin'], function (){
     Route::post('/trabajadores/agregar-producto-asignado', [WorkerController::class, 'assignProductsToWorker']);
     Route::post('/trabajadores/eliminar-producto-asignado', [WorkerController::class, 'deleteProductAssigned']);
 
-    Route::get('/trabajadores/declaracion-jurada-pdf', [WorkerController::class, 'swornDeclarationPDF'])->name('worker.sworndeclarationpdf');
+    Route::get('/trabajadores/declaracion-jurada-pdf/{area}', [WorkerController::class, 'swornDeclarationPDF'])->name('worker.sworndeclarationpdf');
+    Route::get('/trabajadores/listado-por-cargo/{cod_type}', [WorkerController::class, 'listingByPositionPDF'])->name('worker.listingByPosition');
 
     // FIN TRABAJADORES
 

@@ -25,16 +25,17 @@ class RequestController extends Controller
 
     public function create()
     {
+        $categories = DB::select("SELECT * FROM categories");
         $products = DB::select("SELECT * FROM products");
         $workers = DB::select("SELECT * FROM workers WHERE worker_type_id = 2");
-        $data = ["products" => $products, "workers" => $workers];
+        $data = ["products" => $products, "workers" => $workers, "categories" => $categories];
         
         return view('request.create', $data);
     }
 
     public function returnRequests()
     {        
-        $requests = DB::select("SELECT r.cod_request, r.date, r.was_entered, CONCAT(w.name, ' ', w.lastname) as name FROM requests r INNER JOIN workers w 
+        $requests = DB::select("SELECT r.cod_request, r.since_date, r.to_date, r.deadline, r.was_entered, CONCAT(w.name, ' ', w.lastname) as name FROM requests r INNER JOIN workers w 
                                 ON r.responsible_id = w.id");
         return $requests;
     }

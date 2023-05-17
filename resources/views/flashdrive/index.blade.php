@@ -13,7 +13,7 @@
 <!-- TERMINO DE MENSAJES DE ERROR -->
 
 <div class="row">
-    <div class="col-md-12" style="display: none" id="form">
+    <div class="col-md-8" style="display: none" id="form">
         <div class="card">
             <div class="card-header">                
                 <h5 class="card-title" id="titleForm">                    
@@ -25,23 +25,37 @@
                 <form id="myForm" method="POST" action="#">
 
                     <div class="form-group row">
-                        <div class="col-md-2">
-                            <label for="name" class="col-form-label">Almacenamiento:</label>
-                            <input type="text" class="form-control" id="name">
+                        <div class="col-md-4">                                                        
+                            <label for="storage" class="col-form-label">Almacenamiento:</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="storage">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">GB</span>                                    
+                                </div>
+                            </div>
+                        </div>                    
+
+                        <div class="col-md-4">
+                            <label for="speed" class="col-form-label">Velocidad:</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="speed">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">MB/s</span>                                    
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-2">
-                            <label for="lastname" class="col-form-label">Velocidad:</label>
-                            <input type="text" class="form-control" id="lastname">
-                        </div>
-                        <div class="col-md-2">
-                            <label for="address" class="col-form-label">Color:</label>
-                            <input type="number" class="form-control" id="document"></input>
-                        </div>
-                        <div class="col-sm-3">
-                            <label for="document" class="col-form-label">Descripción:</label>                            
-                            <textarea type="text" class="form-control" id="address"></textarea>
+                        <div class="col-md-4">
+                            <label for="color" class="col-form-label">Color:</label>
+                            <input type="text" class="form-control" id="color">                            
+                        </div>                        
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-4">
+                            <label for="description" class="col-form-label">Descripción:</label>
+                            <textarea type="text" class="form-control" id="description"></textarea>
                         </div>                                            
-                        <div class="col-sm-3">                            
+                        <div class="col-sm-4">                            
                             <label for="brand_id" class="col-form-label">Marca:</label>
                             <select class="form-control" id="brand_id" autocomplete="off" style="width: 100%">
                                 <option value="">Seleccione una marca</option>
@@ -50,6 +64,15 @@
                                 @endforeach
                             </select>                              
                         </div>
+                        <div class="col-sm-4">
+                            <label for="stock" class="col-form-label">Stock:</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="stock">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">Unidad(es)</span>
+                                </div>
+                            </div>                            
+                        </div>              
                     </div>
                         
                     <div class="form-group">
@@ -64,7 +87,7 @@
 </div>
 
 <div class="row">    
-    <input type="hidden" class="form-control" id="cod_worker">
+    <input type="hidden" class="form-control" id="cod_flashdrive">
     <div class="col-md-12 data" id="data">
         <div class="card">
             <div class="card-header">
@@ -75,15 +98,7 @@
                         onclick="setDataToInsert()">
                         Agregar
                     </button>
-
-                    <a href="{{ route('worker.sworndeclarationpdf') }}" target="_blank">
-                        <button 
-                            type="button" 
-                            class="btn btn-primary">
-                            Declaración Jurada PDF
-                        </button>
-                    </a>
-
+                    
                 </div>
             </div>
             <div class="card-body">
@@ -91,11 +106,11 @@
                     <table id="dom-jqry" class="table table-striped table-bordered nowrap" >
                         <thead>
                             <tr>                                
-                                <th style="width: 50%">ALMACENAMIENTO</th>                                
+                                <th style="width: 10%">ALMACENAMIENTO</th>                                
                                 <th style="width: 10%">VELOCIDAD</th>
-                                <th style="width: 10%">COLOR</th>
-                                <th style="width: 10%">DESCRIPCIÓN</th>
-                                <th style="width: 10%">MARCA</th>
+                                <th style="width: 15%">COLOR</th>
+                                <th style="width: 40%">DESCRIPCIÓN</th>
+                                <th style="width: 15%">MARCA</th>
                                 <th style="width: 10%">ACCIONES</th>
                             </tr>
                         </thead>

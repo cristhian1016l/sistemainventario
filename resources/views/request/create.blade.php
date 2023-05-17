@@ -20,16 +20,16 @@
             <div class="card-header">
                 <h4>Crear Nueva Solicitud</h4>
             </div>
-        
+
             <div class="card-body">
                 <form method="POST" action="#">
                     @csrf
                     <div class="form-group">
                         <div class="form-row">
                             <div class="col-md-6">
-                                <label for="select-responsible" class="col-form-label">Responsable:</label>
+                                <label for="select-responsible" class="col-form-label">Productor:</label>
                                 <select class="form-control" id="select-responsible" autocomplete="off" style="width: 100%">
-                                    <option value="">Seleccione un responsable</option>
+                                    <option value="">Seleccione un productor</option>
                                     @foreach($workers as $worker)
                                     <option value="{{ $worker->id }}">{{ $worker->lastname.' '.$worker->name }}</option>
                                     @endforeach
@@ -44,7 +44,15 @@
                         </div>
 
                         <div class="form-row">
-                            <div class="col-md-8">
+                            <div class="col-md-3">
+                                <label for="select_category" class="col-form-label">Seleccione la categoría:</label>
+                                <select class="form-control" id="select_category" autocomplete="off" style="width: 100%">
+                                    @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>  
+                            </div>
+                            <div class="col-md-5">
                                 <label for="product_id" class="col-form-label">Producto a agregar:</label>
                                 <select class="form-control" id="product_id" autocomplete="off" style="width: 100%">
                                     @foreach($products as $product)
@@ -113,12 +121,41 @@
     <script src="{{ asset('js/plugins/toastify-js.js') }}"></script>
     <script>
 
+        $("#select_category").change(function() {
+            
+            let category_id = document.getElementById('select_category').value;
+
+            $.ajax({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type:'POST',
+                url: '../productos/obtener-productos-categoria',
+                data: { 'category_id': category_id },
+                success:function(data) {
+                    console.log(data.products);
+
+                    $("#product_id").empty();
+
+                    $.each(data.products, function(idx, opt) {                
+                        $('#product_id').append(
+                        "<option value="+opt.id+">" + opt.product_name + "</option>"
+                        );               
+                    });
+                    
+                }
+            });
+        })
+
+        $('#select_category').trigger('change');
+
         let since_date;
         let to_date;
 
+        $("#select_category").select2({});
         $("#product_id").select2({});
         $("#select-responsible").select2({});
-            
+                
         $(function() {
             $('input[id="date"]').daterangepicker({
                 "locale": {
@@ -159,7 +196,7 @@
                 since_date = start.format('YYYY-MM-DD')
                 to_date = end.format('YYYY-MM-DD')
             });
-        });
+        });        
 
         let products = new Array();
 
@@ -297,19 +334,7 @@
             window.open(
             url,
             "_blank"
-            );   
-
-            // $.ajax({
-            //     headers: {
-            //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //     },
-            //     type:'POST',
-            //     url: 'solicitud-pdf',
-            //     data: { 'cod_request': id },
-            //     success:function(data) {
-            //         console.log(data);
-            //     }
-            // });
+            );               
         }
 
         function deleteProductAssigned(cod_product){

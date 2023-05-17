@@ -22,7 +22,10 @@ function initializeTable(){
         "columns":[                                  
             {"data": "cod_request"},
             {"data": "name"},
-            {"data": "date"},
+            {"data": "since_date"},
+            {"data": "to_date"},
+            {"data": "deadline"},
+            {"data": "to_date"},
             {"data": "was_entered"},
         ],
         "columnDefs": [
@@ -31,7 +34,48 @@ function initializeTable(){
                 "visible": false
             },
             {
+                "targets":[2],
+                render: function(data, type, row){
+                    return moment(data).format("YYYY/MM/DD");
+                }
+            },
+            {
                 "targets":[3],
+                render: function(data, type, row){
+                    return moment(data).format("YYYY/MM/DD");
+                }
+            },
+            {
+                "targets":[4],
+                render: function(data, type, row){                    
+                    if(data == null){
+                        return "<label class='badge badge-light-danger'>NO ENTREGADO</label>";
+                    }else{
+                        return moment(data).format("YYYY/MM/DD");
+                    }
+                }
+            },
+            {
+                "targets":[5],
+                render: function(data, type, row){
+
+                    if(row.deadline != null){
+                        return "<label class='badge badge-light-success'>SE ENTREGÓ</label>"                        
+                    }
+
+                    var desde = moment(row.since_date);
+                    var hasta = moment(data);
+
+                    if(hasta > desde){                        
+                        return "<label class='badge badge-light-warning'>"+moment(hasta).diff(desde, 'days')+" DÍA(S) RESTANTES"+"</label>"
+                    }else{
+                        return "<label class='badge badge-light-danger'>HAN PASADO "+moment(desde).diff(hasta, 'days')+"DÍAS(S)"+"</label>"                        
+                    }
+
+                }
+            },
+            {
+                "targets":[6],
                 render: function(data, type, row){
 
                     let was_entered = '';

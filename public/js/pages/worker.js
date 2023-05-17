@@ -421,6 +421,16 @@ function reduceTable(state){
     }
 }
 
+function showAndHideReports(state){
+    const form = document.getElementById("reports")
+    if(state == false){        
+        form.style.display = "none"
+    }
+    if(state == true){
+        form.style.display = "block"
+    }
+}
+
 function hideErrors(){
     jQuery('.alert-danger').empty();
     const error = document.getElementById("error");

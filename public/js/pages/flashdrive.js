@@ -61,123 +61,74 @@ function initializeTable(){
     });
 }
 
-// $("#formButton").click(function(e){
-//     e.preventDefault();    
-//     const action = $('#myForm').attr('action');
+$("#formButton").click(function(e){
+    e.preventDefault();    
+    const action = $('#myForm').attr('action');
     
-//     let cod_worker = document.getElementById('cod_worker').value;
-//     let name = document.getElementById('name').value;
-//     let lastname = document.getElementById('lastname').value;    
-//     let address = document.getElementById('address').value;    
+    let cod_flashdrive = document.getElementById('cod_flashdrive').value;
+    let storage = document.getElementById('storage').value;
+    let speed = document.getElementById('speed').value;
+    let color = document.getElementById('color').value;    
+    let description = document.getElementById('description').value;    
+    let brand_id = document.getElementById('brand_id').value;
+    let stock = document.getElementById('stock').value;
 
-//     let document_type_id = document.getElementById('document_type').value;
-    
-//     let document_number = document.getElementById('document').value;    
+    hideErrors();
 
-//     let worker_type_id = document.getElementById('worker_type').value;
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type:'POST',
+        url: action,
+        data: {
+                'id': cod_flashdrive,
+                'storage': storage,
+                'speed': speed,
+                'color': color,
+                'description': description,
+                'brand_id': brand_id,
+                'stock': stock },
+        success:function(data) {
 
-//     let area_type = document.getElementById('area_type').value;
+            console.log(data);
 
-//     hideErrors();
-
-//     $.ajax({
-//         headers: {
-//           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//         },
-//         type:'POST',
-//         url: action,
-//         data: {
-//                 'id': cod_worker,
-//                 'name': name, 
-//                 'lastname': lastname, 
-//                 'address': address, 
-//                 'document_type_id': document_type_id,                 
-//                 'worker_type_id': worker_type_id,
-//                 'area_type': area_type,
-//                 'document': document_number },
-//         success:function(data) {
-
-//             console.log(data);
-
-//             val = data.status;
-//             msg = data.msg;              
+            // val = data.status;
+            // msg = data.msg;              
             
-//             console.log(data.msg);            
-//             switch(val){
-//                 case 500:                                        
-//                     Swal.fire({
-//                         position: 'center',
-//                         icon: 'error',
-//                         title: msg,
-//                         showConfirmButton: false,
-//                         timer: 1500
-//                     })                                            
+            // console.log(data.msg);            
+            // switch(val){
+            //     case 500:                                        
+            //         Swal.fire({
+            //             position: 'center',
+            //             icon: 'error',
+            //             title: msg,
+            //             showConfirmButton: false,
+            //             timer: 1500
+            //         })                                            
 
-//                     jQuery.each(data.errors, function(key, value){
-//                         jQuery('.alert-danger').show("slow");
-//                         jQuery('.alert-danger').append('<p>'+value+'</p>');
-//                     });
+            //         jQuery.each(data.errors, function(key, value){
+            //             jQuery('.alert-danger').show("slow");
+            //             jQuery('.alert-danger').append('<p>'+value+'</p>');
+            //         });
                     
-//                     break;
-//                 case 200:                    
-//                     Swal.fire({
-//                         position: 'center',
-//                         icon: 'success',
-//                         title: msg,
-//                         showConfirmButton: false,
-//                         timer: 1500
-//                     })
-//                     reduceTable(false);
-//                     cleanFields();
-//                     initializeTable();
-//                     break;
-//             }            
-//         }
-//     });
-// });
-
-// $("#btnAddProductToWorker").click(function(e){
-//     e.preventDefault();
-//     let cod_worker = document.getElementById('cod_worker').value;    
-//     let product_id = document.getElementById('product_id').value;
-//     let amount = document.getElementById('amount').value;
-
-//     hideErrors();
-
-//     $.ajax({
-//         headers: {
-//           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//         },
-//         type:'POST',
-//         url: $('#formAddProductToWorker').attr('action'),
-//         data: {'cod_worker': cod_worker, "product_id": product_id, "amount": amount },
-//         success:function(data) {
-//             val = data.status;
-//             msg = data.msg;                                      
-
-//             switch(val){
-//                 case 500:                    
-//                     jQuery.each(data.errors, function(key, value){
-//                         jQuery('.alert-danger').show("slow");
-//                         jQuery('.alert-danger').append('<p>'+value+'</p>');
-//                     });                    
-//                     break;
-//                 case 200:
-//                     // document.getElementById('closeAddProductWorkerModal').click();
-//                     // Swal.fire({
-//                     //     position: 'center',
-//                     //     icon: 'success',
-//                     //     title: msg,
-//                     //     showConfirmButton: false,
-//                     //     timer: 1500
-//                     // })
-//                     getProductsAssigned(cod_worker);
-//                     cleanProducts();
-//                     break;
-//             }
-//         }
-//     });
-// });
+            //         break;
+            //     case 200:                    
+            //         Swal.fire({
+            //             position: 'center',
+            //             icon: 'success',
+            //             title: msg,
+            //             showConfirmButton: false,
+            //             timer: 1500
+            //         })
+            //         reduceTable(false);
+            //         cleanFields();
+            //         initializeTable();
+            //         break;
+            // }            
+        }
+    });
+});
 
 // $("#btnDelete").click(function(e){
 //     e.preventDefault();
@@ -329,7 +280,7 @@ function setDataToInsert(){
     cleanFields();
     document.getElementById("formButton").innerText = "Agregar";
 
-    $('#myForm').attr('action', 'trabajadores/agregar-trabajador');
+    $('#myForm').attr('action', 'memorias/agregar-memoria');
 }
 
 // function setDataToEdit(id){
@@ -381,21 +332,13 @@ function setDataToInsert(){
 // }
 
 function cleanFields(){
-    document.getElementById('cod_worker').value = "";
-    document.getElementById('name').value = "";
-    document.getElementById('lastname').value = "";
-    document.getElementById('address').value = "";
+    document.getElementById('storage').value = "";
+    document.getElementById('speed').value = "";
+    document.getElementById('color').value = "";
+    document.getElementById('description').value = "";
     
-    $('#document_type').val("")
-    $('#document_type').trigger('change');
-
-    $('#worker_type').val(1)
-    $('#worker_type').trigger('change');
-
-    $('#area_type').val(1)
-    $('#area_type').trigger('change');
-    
-    document.getElementById('document').value = "";    
+    $('#brand_id').val(1)
+    $('#brand_id').trigger('change');    
 }
 
 // function cleanProducts(){
@@ -406,26 +349,21 @@ function cleanFields(){
 //     document.getElementById('amount').value = "";
 // }
 
-function reduceTable(state){
-    const table = document.getElementsByClassName("data");
+function reduceTable(state){    
     const form = document.getElementById("form")
-    if(state == false){
-        table[0].classList.add("col-sm-12");
-        table[0].classList.remove("col-sm-8");
+    if(state == false){        
         form.style.display = "none"
     }
     if(state == true){
-        table[0].classList.add("col-sm-8");
-        table[0].classList.remove("col-sm-12");
         form.style.display = "block"
     }
 }
 
-// function hideErrors(){
-//     jQuery('.alert-danger').empty();
-//     const error = document.getElementById("error");
-//     error.style.display = "none";
-// }
+function hideErrors(){
+    jQuery('.alert-danger').empty();
+    const error = document.getElementById("error");
+    error.style.display = "none";
+}
 
 // // PREVENIR ENVIO CON ENTER
 

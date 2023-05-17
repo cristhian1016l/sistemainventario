@@ -36,7 +36,8 @@ class WorkerController extends Controller
         $workers = DB::select("SELECT w.id, CONCAT(w.lastname,' ', w.name) as names, wt.name AS type, dt.document_type, w.document, a.name as area FROM workers w
                                 INNER JOIN document_type dt ON w.document_type_id = dt.id
                                 INNER JOIN worker_type wt ON w.worker_type_id = wt.id
-                                INNER JOIN areas a ON w.area_type_id = a.id");
+                                INNER JOIN areas a ON w.area_type_id = a.id
+                                WHERE w.deleted_at IS NULL");
         return $workers;
     }
 
@@ -303,20 +304,22 @@ class WorkerController extends Controller
 
     // ****************************  REPORTES  ****************************
 
-    public function swornDeclarationPDF()
+    public function swornDeclarationPDF($area)
     {
+        // dd($area);
+        // exit;
         $all_data = array();
         $products_asigned = array();
 
-        $workers = DB::select("SELECT * FROM workers");
+        $workers = DB::select("SELECT * FROM workers WHERE area_type_id = ".$area);
 
         foreach($workers as $worker){
-            $products = DB::select("SELECT p.id, p.description, wp.amount FROM worker_product wp
+            $products = DB::select("SELECT p.id, p.product_name, wp.amount FROM worker_product wp
                                     INNER JOIN products p ON wp.product_id = p.id
                                     WHERE wp.worker_id = ".$worker->id);
 
             foreach($products as $product){
-                array_push($products_asigned, ['description' => $product->description, 'amount' => $product->amount]);
+                array_push($products_asigned, ['product_name' => $product->product_name, 'amount' => $product->amount]);
             }
             array_push($all_data, ['id' => $worker->id, 'names' => $worker->name.' '.$worker->lastname, 'document' => $worker->document, 'address' => $worker->address, 'products' => collect($products_asigned) ]);
             $products_asigned = [];
@@ -327,6 +330,17 @@ class WorkerController extends Controller
         // dd($data);
         // exit;
         $pdf=PDF::loadView('admin.reports.sworndeclaration', $data);
+        return $pdf->stream();
+    }
+
+    public function listingByPositionPDF($cod_type)
+    {        
+        $workers = DB::select("SELECT * FROM workers WHERE worker_type_id = ".$cod_type);
+
+        $type = DB::select("SELECT name FROM worker_type WHERE id = ".$cod_type);
+
+        $data = ['workers' => $workers, 'type' => $type];
+        $pdf=PDF::loadView('admin.reports.listingByPosition', $data);
         return $pdf->stream();
     }
 

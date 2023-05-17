@@ -54,6 +54,12 @@ class ProductController extends Controller
         }
     }
 
+    public function gerProductsByCategory(Request $request)
+    {
+        $products = DB::select("SELECT * FROM products WHERE category_id = ".$request->category_id);
+        return response()->json(['products' => $products]);
+    }
+
     public function insert(Request $request)
     {
         

@@ -36,8 +36,11 @@
                         <thead>
                             <tr>                                
                                 <th style="width: 0%">ID</th>
-                                <th style="width: 70%">RESPONSABLE</th>
-                                <th style="width: 15%">FECHA</th>
+                                <th style="width: 45%">RESPONSABLE</th>
+                                <th style="width: 10%">FECHA ENTREGA</th>
+                                <th style="width: 10%">FECHA DEVOL.</th>
+                                <th style="width: 10%">FECHA DE ENTREGA</th>
+                                <th style="width: 10%">TIEMPO</th>
                                 <th style="width: 15%">ENTREGÓ?</th>
                             </tr>
                         </thead>
@@ -47,7 +50,10 @@
                             <tr>
                                 <th>ID</th>
                                 <th>RESPONSABLE</th>
-                                <th>FECHA</th>
+                                <th>FECHA ENTREGA</th>
+                                <th>FECHA DEVOL.</th>
+                                <th>FECHA DE ENTREGA</th>
+                                <th>TIEMPO</th>
                                 <th>ENTREGÓ?</th>
                             </tr>
                         </tfoot>

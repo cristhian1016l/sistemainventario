@@ -267,10 +267,10 @@ CREATE TABLE flashdrives
     storage varchar(20),
     color varchar(20),
     description varchar(255),
+    stock int,
     brand_id int not null,
 	foreign key (brand_id) references brands(id)
 );
-
 -- --------------- RELACIONES DE LOS ROLES Y PERMISOS --------------- 
 
 ALTER TABLE model_has_permissions
@@ -302,17 +302,9 @@ ADD FOREIGN KEY (`model_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 		-- AND     TRIGGER_NAME = 'trigguer_name';
 -- ************ SACAR LOS TRIGGUERS ************
 
-
--- HACER ESTOS CAMBIOS
-
--- ALTER TABLE stores
--- ADD in_use tinyint(4) AFTER city;
-
-SHOW CREATE TABLE products;
-ALTER TABLE products DROP FOREIGN KEY products_ibfk_4;
-ALTER TABLE products DROP COLUMN store_id;
-
-SELECT * FROM worker_type;
 SELECT * FROM flashdrives;
-
-SELECT * FROM users;
+SELECT * FROM workers;
+SELECT * FROM categories;
+SELECT * FROM products;
+SELECT * FROM worker_product;
+SELECT * FROM requests;
