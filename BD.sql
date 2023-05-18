@@ -271,6 +271,14 @@ CREATE TABLE flashdrives
     brand_id int not null,
 	foreign key (brand_id) references brands(id)
 );
+
+drop table if exists companies;
+CREATE TABLE companies
+(
+	id int auto_increment not null primary key,
+    name varchar(255)
+);
+
 -- --------------- RELACIONES DE LOS ROLES Y PERMISOS --------------- 
 
 ALTER TABLE model_has_permissions
@@ -308,3 +316,36 @@ SELECT * FROM categories;
 SELECT * FROM products;
 SELECT * FROM worker_product;
 SELECT * FROM requests;
+
+
+
+
+
+
+
+-- EJECUTAR ESTO- 
+
+drop table if exists companies;
+CREATE TABLE companies
+(
+	id int auto_increment not null primary key,
+    name varchar(255)
+);
+
+ALTER TABLE workers
+ADD company_id int not null after document;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+ALTER TABLE workers
+ADD FOREIGN KEY (company_id) REFERENCES companies(id);
+
+SELECT * FROM companies;
+SELECT * FROM workers;
+
+SELECT w.id, CONCAT(w.lastname,' ', w.name) as names, wt.name AS type, dt.document_type, w.document, a.name AS area, c.name AS company FROM workers w
+INNER JOIN document_type dt ON w.document_type_id = dt.id
+INNER JOIN worker_type wt ON w.worker_type_id = wt.id
+INNER JOIN areas a ON w.area_type_id = a.id
+INNER JOIN companies c ON w.company_id = c.id
+WHERE w.deleted_at IS NULL
