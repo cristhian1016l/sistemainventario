@@ -20,13 +20,14 @@ class WorkerController extends Controller
 
     public function index()
     {
-        $products = DB::select("SELECT * FROM products");
+        $categories = DB::select("SELECT * FROM categories");
+        
         $documents = DB::select("SELECT * FROM document_type");
         $worker_types = DB::select("SELECT * FROM worker_type");
         $areas = DB::select("SELECT * FROM areas");
         $companies = DB::select("SELECT * FROM companies");
         $data = ["documents" => $documents,
-                "products" => $products,
+                "categories" => $categories,                
                 "types" => $worker_types,
                 "areas" => $areas,
                 "companies" => $companies];

@@ -265,19 +265,27 @@
                         </tbody>
                     </table>                
                 
-                    <div class="form-group">
-                        <label for="product_id" class="col-form-label">Producto a agregar:</label>
-                        <select class="form-control" id="product_id" autocomplete="off" style="width: 100%">
-                            <option value="">Seleccione un producto</option>
-                            @foreach($products as $product)
-                            <option value="{{ $product->id }}">{{ $product->product_name }}</option>
-                            @endforeach
-                        </select>  
-                    </div>             
-                    <div class="form-group">
-                        <label for="amount" class="col-form-label">Cantidad:</label>
-                        <input type="number" class="form-control" id="amount">
-                    </div>             
+                    <div class="form-group row">
+                        <div class="col-md-5">
+                            <label for="select_category" class="col-form-label">Seleccione la categoría:</label>
+                            <select class="form-control" id="select_category" autocomplete="off" style="width: 100%">                                
+                                @foreach($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>  
+                        </div>
+                        <div class="col-md-5">
+                            <label for="product_id" class="col-form-label">Producto a agregar:</label>
+                            <select class="form-control" id="product_id" autocomplete="off" style="width: 100%">
+                                <option value="">Seleccione un producto</option>
+                                <option></option>                                
+                            </select>  
+                        </div>                        
+                        <div class="col-md-2">
+                            <label for="amount" class="col-form-label">Cantidad:</label>
+                            <input type="number" class="form-control" id="amount">
+                        </div>                        
+                    </div>
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button id="closeAddProductWorkerModal" type="button" class="btn btn-secondary" data-dismiss="modal">CERRAR</button>
@@ -300,6 +308,35 @@
     <script src="{{ asset('js/pages/worker.js') }}"></script>
     <script src="{{ asset('js/plugins/select2.min.js') }}"></script>
     <script>
+
+        $("#select_category").change(function() {
+            
+            let category_id = document.getElementById('select_category').value;
+
+            $.ajax({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type:'POST',
+                url: '../productos/obtener-productos-categoria',
+                data: { 'category_id': category_id },
+                success:function(data) {
+                    console.log(data.products);
+
+                    $("#product_id").empty();
+
+                    $.each(data.products, function(idx, opt) {                
+                        $('#product_id').append(
+                        "<option value="+opt.id+">" + opt.product_name + "</option>"
+                        );               
+                    });
+                    
+                }
+            });
+        })
+
+        $('#select_category').trigger('change');
+
         $("#document_type").select2();
         $("#worker_type").select2();
         $("#area_type").select2();
@@ -309,6 +346,10 @@
         $("#worker_type_report").select2();
     </script>
     <script>
+        $("#select_category").select2({
+            dropdownParent: $("#AddProductWorkerModal")
+        });        
+
         $("#product_id").select2({
             dropdownParent: $("#AddProductWorkerModal")
         });        
