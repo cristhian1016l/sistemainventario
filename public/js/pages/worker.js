@@ -19,6 +19,7 @@ function initializeTable(){
         },
         "columns":[                                  
             {"data": "names"},
+            {"data": "company"},
             {"data": "type"},
             {"data": "area"},
             {"data": "document_type"},
@@ -27,7 +28,7 @@ function initializeTable(){
         ],
         "columnDefs": [
             {
-                "targets":[5],
+                "targets":[6],
                 render: function(data, type, row){
                     return '<button class="btn btn-shadow btn-primary btn-sm"'+
                             'onclick="setDataToEdit('+"'" + data + "'"+')"'+                             
@@ -78,6 +79,8 @@ $("#formButton").click(function(e){
 
     let area_type = document.getElementById('area_type').value;
 
+    let company_id = document.getElementById('company_id').value;
+
     hideErrors();
 
     $.ajax({
@@ -94,6 +97,7 @@ $("#formButton").click(function(e){
                 'document_type_id': document_type_id,                 
                 'worker_type_id': worker_type_id,
                 'area_type': area_type,
+                'company_id': company_id,
                 'document': document_number },
         success:function(data) {
 
@@ -360,6 +364,9 @@ function setDataToEdit(id){
             $('#area_type').val(worker['area_type_id'])
             $('#area_type').trigger('change');
             
+            $('#company_id').val(worker['company_id'])
+            $('#company_id').trigger('change');
+
             document.getElementById("document").value = worker['document']
             
             switch(data.status){

@@ -44,7 +44,7 @@
                                     </button>
                                 </a>
                             </div>
-                        </div>                                                        
+                        </div>
                         </fieldset>
                     </div>
 
@@ -60,7 +60,7 @@
                                 </select>
                             </div>
                             
-                            <div class="col-md-6">                                
+                            <div class="col-md-6">
                                 <a href="#">
                                     <button  onclick="downloadListing()"
                                         class="btn btn-success btn-block">
@@ -68,7 +68,7 @@
                                     </button>
                                 </a>
                             </div>
-                        </div>                                                        
+                        </div>
                         </fieldset>
                     </div>
                     
@@ -119,23 +119,31 @@
                         <div class="col-sm-3">
                             <label for="document" class="col-form-label">Documento:</label>
                             <input type="number" class="form-control" id="document"></input>
-                        </div>                                            
-                        <div class="col-sm-3">
+                        </div>
+                        <div class="col-sm-2">
                             <label for="worker_type" class="col-form-label">Seleccione el cargo:</label>
                             <select class="form-control" id="worker_type" autocomplete="off" style="width: 100%">                        
                                 @foreach($types as $type)
                                 <option value="{{ $type->id }}">{{ $type->name }}</option>
                                 @endforeach
                             </select>
-                        </div>                                            
-                        <div class="col-sm-3">
+                        </div>
+                        <div class="col-sm-2">
                             <label for="area_type" class="col-form-label">Seleccione un área:</label>
                             <select class="form-control" id="area_type" autocomplete="off" style="width: 100%">                        
                                 @foreach($areas as $area)
                                 <option value="{{ $area->id }}">{{ $area->name }}</option>
                                 @endforeach
                             </select>
-                        </div>                                            
+                        </div>
+                        <div class="col-sm-2">
+                            <label for="company_id" class="col-form-label">Seleccione la empresa:</label>
+                            <select class="form-control" id="company_id" autocomplete="off" style="width: 100%">                        
+                                @foreach($companies as $company)
+                                <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>                    
 
                         
@@ -176,8 +184,9 @@
                 <div class="table-responsive dt-responsive">
                     <table id="dom-jqry" class="table table-striped table-bordered nowrap" >
                         <thead>
-                            <tr>                                
-                                <th style="width: 50%">NOMBRES</th>                                
+                            <tr>
+                                <th style="width: 30%">NOMBRES</th>
+                                <th style="width: 20%">EMPRESA</th>
                                 <th style="width: 10%">CARGO</th>
                                 <th style="width: 10%">AREA</th>
                                 <th style="width: 10%">TIP. DOC.</th>
@@ -188,8 +197,9 @@
                         <tbody>
                         </tbody>
                         <tfoot>
-                            <tr>                                
-                                <th>NOMBRES</th>                                
+                            <tr>
+                                <th>NOMBRES</th>
+                                <th>EMPRESA</th>
                                 <th>CARGO</th>
                                 <th>AREA</th>
                                 <th>TIP. DOC.</th>
@@ -251,7 +261,7 @@
                                 <th>Eliminar?</th>
                             </tr>
                         </thead>
-                        <tbody>                                                                
+                        <tbody>
                         </tbody>
                     </table>                
                 
@@ -293,6 +303,7 @@
         $("#document_type").select2();
         $("#worker_type").select2();
         $("#area_type").select2();
+        $("#company_id").select2();
 
         $("#area_type_report").select2();
         $("#worker_type_report").select2();

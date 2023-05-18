@@ -245,3 +245,31 @@ Route::get('/create', function(){
 //     );
     
 // });
+
+// Route::get('/create-companies', function(){
+
+//     DB::table('companies')->insert(
+//         array(
+//             'name' => '*** SIN EMPRESA ***'
+//         )
+//     );
+
+//     DB::table('companies')->insert(
+//         array(
+//             'name' => 'PRODUCCIONES 89'
+//         )
+//     );
+    
+//     DB::table('companies')->insert(
+//         array(
+//             'name' => 'UNSIHUAY RECORDS'
+//         )
+//     );
+
+//     DB::table('companies')->insert(
+//         array(
+//             'name' => 'PONCE PRODUCCIONES'
+//         )
+//     );
+    
+// });
