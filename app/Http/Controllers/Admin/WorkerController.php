@@ -348,6 +348,7 @@ class WorkerController extends Controller
 
         $data = ['workers' => $workers, 'type' => $type];
         $pdf=PDF::loadView('admin.reports.listingByPosition', $data);
+        $pdf->setPaper('A4', 'landscape');
         return $pdf->stream();
     }
 

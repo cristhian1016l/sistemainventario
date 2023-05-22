@@ -228,7 +228,7 @@ Route::get('/create', function(){
 
 //     DB::table('areas')->insert(
 //         array(
-//             'name' => 'EDICIÓN'
+//             'name' => 'POST-PRODUCCIÓN'
 //         )
 //     );
     
@@ -240,10 +240,34 @@ Route::get('/create', function(){
 
 //     DB::table('areas')->insert(
 //         array(
-//             'name' => 'CAMPO'
+//             'name' => 'PRODUCCIÓN'
 //         )
 //     );
-    
+
+//     DB::table('areas')->insert(
+//         array(
+//             'name' => 'RR.HH'
+//         )
+//     );
+
+//     DB::table('areas')->insert(
+//         array(
+//             'name' => 'CONTABLE'
+//         )
+//     );
+
+//     DB::table('areas')->insert(
+//         array(
+//             'name' => 'COMPRAS'
+//         )
+//     );
+
+//     DB::table('areas')->insert(
+//         array(
+//             'name' => 'MANTENIMIENTO'
+//         )
+//     );
+
 // });
 
 // Route::get('/create-companies', function(){
