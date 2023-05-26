@@ -232,7 +232,7 @@ class WorkerController extends Controller
     {
 
         try{
-            $products = DB::select("SELECT wp.id, p.product_name, b.name, wp.amount FROM worker_product wp
+            $products = DB::select("SELECT wp.id, p.product_name, p.color, b.name, wp.amount FROM worker_product wp
                         INNER JOIN workers w ON wp.worker_id = w.id
                         INNER JOIN products p ON wp.product_id = p.id
                         INNER JOIN brands b ON p.brand_id = b.id

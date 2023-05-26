@@ -271,6 +271,7 @@
                             <tr>
                                 <th>Productos</th>
                                 <th>Marca</th>
+                                <th>Color</th>
                                 <th>Cantidad</th>
                                 <th>Eliminar?</th>
                             </tr>
@@ -428,10 +429,9 @@
 
                     $.each(data.products, function(idx, opt) {                
                         $('#product_id').append(
-                        "<option value="+opt.id+">" + opt.product_name + "</option>"
+                        "<option value="+opt.id+">" + opt.product_name + " - " + opt.name + "</option>"
                         );               
-                    });
-                    
+                    });                    
                 }
             });
         })

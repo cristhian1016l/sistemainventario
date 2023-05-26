@@ -26,9 +26,8 @@ class RequestController extends Controller
     public function create()
     {
         $categories = DB::select("SELECT * FROM categories");
-        $products = DB::select("SELECT * FROM products");
         $workers = DB::select("SELECT * FROM workers WHERE worker_type_id = 2");
-        $data = ["products" => $products, "workers" => $workers, "categories" => $categories];
+        $data = ["workers" => $workers, "categories" => $categories];
         
         return view('request.create', $data);
     }

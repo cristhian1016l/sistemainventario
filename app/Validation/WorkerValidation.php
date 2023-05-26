@@ -29,7 +29,7 @@ class WorkerValidation{
                 'worker_type_id' => 'required|numeric',
                 'company_id' => 'required|numeric',
                 'document' => 'required|numeric|min_digits:8',
-                'birthdate' => 'required|date',
+                'birthdate' => 'nullable|date',
                 'phone' => 'nullable|min:17',
                 'email' => 'nullable|email'
             ];
@@ -45,8 +45,7 @@ class WorkerValidation{
                 'company_id.numeric' => 'Error al elegir la empresa',
                 'document.required' => 'Ingrese el documento',
                 'document.numeric' => 'El documento no tiene el formato correcto',
-                'document.min_digits' => 'El documento no tiene los dígitos suficientes',
-                'birthdate.required' => 'Ingrese la fecha de nacimiento',
+                'document.min_digits' => 'El documento no tiene los dígitos suficientes',              
                 'birthdate.date' => 'La fecha no tiene el formato correcto',
                 'phone.min' => 'El celular no tiene el formato correcto',
                 'email.email' => 'El correo no tiene el formato correcto'

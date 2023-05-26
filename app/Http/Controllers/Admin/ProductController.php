@@ -55,8 +55,10 @@ class ProductController extends Controller
     }
 
     public function getProductsByCategory(Request $request)
-    {
-        $products = DB::select("SELECT * FROM products WHERE category_id = ".$request->category_id);
+    {        
+        $products = DB::select("SELECT p.id, p.product_name, p. color, b.name FROM products p 
+                                INNER JOIN brands b ON p.brand_id = b.id 
+                                WHERE p.category_id = ".$request->category_id);
         return response()->json(['products' => $products]);
     }
 

@@ -318,6 +318,9 @@ function getProductsAssigned(cod_worker){
                                             elem.name+
                                         "</td>"+
                                         "<td>"+
+                                            elem.color+
+                                        "</td>"+
+                                        "<td>"+
                                             elem.amount+
                                         "</td>"+
                                         "<td>"+

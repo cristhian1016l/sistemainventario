@@ -54,10 +54,7 @@
                             </div>
                             <div class="col-md-5">
                                 <label for="product_id" class="col-form-label">Producto a agregar:</label>
-                                <select class="form-control" id="product_id" autocomplete="off" style="width: 100%">
-                                    @foreach($products as $product)
-                                    <option value="{{ $product->id }}">{{ $product->product_name }}</option>
-                                    @endforeach
+                                <select class="form-control" id="product_id" autocomplete="off" style="width: 100%">                                    
                                 </select>  
                             </div>
                             <div class="col-md-2">
@@ -94,15 +91,13 @@
                     <thead>
                         <tr>
                             <th>ARTÍCULO</th>
+                            <th>COLOR</th>
+                            <th>DESCRIPCIÓN</th>
                             <th>CANTIDAD</th>
                             <th>OPCIONES</th>
                         </tr>                                                
                     </thead>
                     <tbody>
-                        <!-- <tr>
-                            <td>CPU MARCA DEEP COOL RYZEN 5 36000 6	</td>
-                            <td>1</td>
-                        </tr> -->
                     </tbody>
                 </table>
             </div>
@@ -139,8 +134,8 @@
 
                     $.each(data.products, function(idx, opt) {                
                         $('#product_id').append(
-                        "<option value="+opt.id+">" + opt.product_name + "</option>"
-                        );               
+                        "<option value="+opt.id+">" + opt.product_name +' - '+ opt.name + ' - ' + opt.color + "</option>"
+                        );
                     });
                     
                 }
@@ -219,17 +214,38 @@
                         showConfirmButton: false,
                         timer: 1500
                     })
-                }else{                    
-                    products.push({id: product_id, product: selected[i].text, amount: amount})                    
-                    Toastify({
-                        text: "Fueron añadidos "+amount + " " + selected[i].text,
-                        duration: 3000
-                    }).showToast();
+                }else{                  
+                    
+
+                    
+                    $.ajax({
+                        headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type:'POST',
+                        url: '../productos/obtener-producto/'+product_id,        
+                        success:function(data) {                                                    
+                            console.log(data.product);
+                            if(data.product != []){
+                                const productSelected = data.product
+
+                                products.push({id: productSelected.id, 
+                                            product: productSelected.product_name, 
+                                            color: productSelected.color,
+                                            description: productSelected.description,
+                                            amount: amount});
+                                Toastify({
+                                    text: "Fueron añadidos "+amount + " " + productSelected.product_name,
+                                    duration: 3000
+                                }).showToast();
+                            }
+                        },
+                        complete: function(data){
+                            updateTableProduct(products)
+                        }
+                    });                                
                 }
             }                        
-
-            console.log(products);
-            updateTableProduct(products)
         })
 
         function updateTableProduct(products){
@@ -242,6 +258,12 @@
                     
                     options = "<td>"+
                                     elem.product+
+                                "</td>"+
+                                "<td>"+
+                                    elem.color+
+                                "</td>"+
+                                "<td>"+
+                                    elem.description+
                                 "</td>"+
                                 "<td>"+
                                     elem.amount+
