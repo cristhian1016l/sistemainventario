@@ -36,10 +36,9 @@ class WorkerController extends Controller
 
     public function returnWorkers()
     {
-        $workers = DB::select("SELECT w.id, CONCAT(w.lastname,' ', w.name) as names, wt.name AS type, dt.document_type, w.document, a.name AS area, c.name AS company FROM workers w
+        $workers = DB::select("SELECT w.id, CONCAT(w.lastname,' ', w.name) as names, wt.name AS type, dt.document_type, w.document, c.name AS company FROM workers w
                                 INNER JOIN document_type dt ON w.document_type_id = dt.id
                                 INNER JOIN worker_type wt ON w.worker_type_id = wt.id
-                                INNER JOIN areas a ON w.area_type_id = a.id
                                 INNER JOIN companies c ON w.company_id = c.id
                                 WHERE w.deleted_at IS NULL");
         return $workers;
@@ -59,8 +58,12 @@ class WorkerController extends Controller
         if($worker === null){
             return response()->json(['status' => 500, 'msg' => 'El trabajador no existe', 'worker' => []]);
         }else{
-            $worker = Worker::findOrFail($id);
-            return response()->json(['status' => 200, 'msg' => 'Datos devueltos', 'worker' => $worker]);
+            // $worker = Worker::findOrFail($id);
+            $worker = DB::select("SELECT w.*, a.id as area_type_id FROM workers w 
+                                INNER JOIN worker_type wt ON w.worker_type_id = wt.id
+                                INNER JOIN areas a ON wt.area_id = a.id 
+                                WHERE w.id = ".$id);
+            return response()->json(['status' => 200, 'msg' => 'Datos devueltos', 'worker' => $worker[0]]);
         }
     }
 
@@ -84,8 +87,10 @@ class WorkerController extends Controller
                 $worker->document_type_id = $request->document_type_id;
                 $worker->document = $request->document;
                 $worker->worker_type_id = $request->worker_type_id;
-                $worker->area_type_id = $request->area_type;
                 $worker->company_id = $request->company_id;
+                $worker->birthdate = $request->birthdate;
+                $worker->phone = $request->phone;
+                $worker->email = $request->email;
                 $worker->save();
                 DB::commit();
 
@@ -106,6 +111,7 @@ class WorkerController extends Controller
 
     public function edit(Request $request)
     {
+        // return response()->json($request->all());
         $WorkerValidation = new WorkerValidation;
 
         $WorkerValidation->validateIfIsNullOrEmpty($request->id);
@@ -127,9 +133,11 @@ class WorkerController extends Controller
                                         address = ?,
                                         document_type_id = ?,
                                         worker_type_id = ?,
-                                        area_type_id = ?,
                                         company_id = ?,
                                         document = ?,
+                                        birthdate = ?,
+                                        phone = ?,
+                                        email = ?,
                                         updated_at = ?
                                         WHERE id = ? ',
                                 [mb_strtoupper($request->name, 'utf-8'),
@@ -137,9 +145,11 @@ class WorkerController extends Controller
                                 mb_strtoupper($request->address, 'utf-8'),
                                 $request->document_type_id,
                                 $request->worker_type_id,
-                                $request->area_type,
                                 $request->company_id,
                                 $request->document,
+                                $request->birthdate,
+                                $request->phone,
+                                $request->email,
                                 date_format(now(), "Y-m-d H:i:s"),
                                 $request->id]);
                     DB::commit();
@@ -318,15 +328,21 @@ class WorkerController extends Controller
         $all_data = array();
         $products_asigned = array();
 
-        $workers = DB::select("SELECT * FROM workers WHERE area_type_id = ".$area);
+        // $workers = DB::select("SELECT * FROM workers WHERE area_type_id = ".$area);
+
+        $workers = DB::select("SELECT w.* FROM workers w 
+                            INNER JOIN worker_type wt ON w.worker_type_id = wt.id 
+                            INNER JOIN areas a ON wt.area_id = a.id
+                            WHERE a.id = ".$area);
 
         foreach($workers as $worker){
-            $products = DB::select("SELECT p.id, p.product_name, wp.amount FROM worker_product wp
+            $products = DB::select("SELECT p.id, p.product_name, wp.amount, c.name FROM worker_product wp
                                     INNER JOIN products p ON wp.product_id = p.id
+                                    INNER JOIN categories c ON p.category_id = c.id
                                     WHERE wp.worker_id = ".$worker->id);
 
             foreach($products as $product){
-                array_push($products_asigned, ['product_name' => $product->product_name, 'amount' => $product->amount]);
+                array_push($products_asigned, ['amount' => $product->amount, 'product_name' => $product->product_name, 'category' => $product->name]);
             }
             array_push($all_data, ['id' => $worker->id, 'names' => $worker->name.' '.$worker->lastname, 'document' => $worker->document, 'address' => $worker->address, 'products' => collect($products_asigned) ]);
             $products_asigned = [];

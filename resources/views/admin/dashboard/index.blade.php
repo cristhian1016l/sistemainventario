@@ -28,17 +28,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 d-none d-md-table-cell d-lg-table-cell d-xl-table-cell card-body br">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <i class="icon feather icon-download text-primary mb-1 d-block"></i>
-                        </div>
-                        <div class="col-sm-8 text-md-center">
-                            <h5>{{ $stores[0]->total }}</h5>
-                            <span>Almacenes</span>
-                        </div>
-                    </div>
-                </div>
                 <div class="col-sm-6 card-body">
                     <div class="row">
                         <div class="col-sm-4">
@@ -480,14 +469,118 @@
     </div> -->
     <!-- customer-section end -->
 </div>
+<div class="row">    
+    <div class="col-md-8">
+        <h4 style="text-align: center">Empleados por Empresas</h4>
+        <canvas id="myChart"></canvas>
+    </div>
+    <div class="col-md-4">
+        <h4 style="text-align: center">Categorías con más Productos</h4>
+        <canvas id="myChart2"></canvas>
+    </div>
+</div>
 @endsection
 @section('js')
 <!-- Apex Chart -->
-    <script src="{{ asset('js/plugins/apexcharts.min.js') }}"></script>
+    <!-- <script src="{{ asset('js/plugins/apexcharts.min.js') }}"></script>     -->
     <!-- <script>
         $("body").append('<div class="fixed-button active"><a href="https://1.envato.market/VGznk" target="_blank" class="btn btn-md btn-success"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Upgrade To Pro</a> </div>');
     </script> -->
 
     <!-- custom-chart js -->
-    <script src="{{ asset('js/pages/dashboard-sale.js') }}"></script>
+    <!-- <script src="{{ asset('js/pages/dashboard-sale.js') }}"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+    <script src="{{ asset('js/plugins/chart.min.js') }}"></script>
+
+    <script>
+        
+        getCategoriesWithMoreProducts();
+        getEmployeesInCompanies();
+
+        function getCategoriesWithMoreProducts() {            
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type:'POST',
+                url:'/panel/categorias-con-mas-productos',
+                data: {'_token' : '{{ csrf_token() }}'},
+                success:function(data) {
+                    // console.log(data);            
+                    // document.getElementById('total').innerHTML = data.asistencia+' MIEMBROS ASISTIERON Y '+data.falta+' FALTARON';
+                    // showGraphicNetworksData(data);                    
+                    showCategoriesWithMoreProducts(data.categories_with_more_products);
+                    // console.log(Object.keys(data.categories_with_more_products).length);
+                }
+            });
+        }
+
+        function getEmployeesInCompanies() {            
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type:'POST',
+                url:'/panel/empleados-en-empresas',
+                data: {'_token' : '{{ csrf_token() }}'},
+                success:function(data) {
+                    console.log(data);            
+                    showWorkersInCompanies(data.employees_in_companies);                    
+                }
+            });
+        }
+
+        function showWorkersInCompanies(companies){
+            const ctx = document.getElementById('myChart');
+            new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [ companies[0].name, companies[1].name, companies[2].name ],
+                datasets: [{
+                label: '# de Empleados',
+                data: [companies[0].total, companies[1].total, companies[2].total],
+                borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                y: {
+                    beginAtZero: true
+                }
+                }
+            }
+            });
+        }
+        
+        function showCategoriesWithMoreProducts(categories){
+            console.log(categories);
+            const ctx2 = document.getElementById('myChart2');            
+            const data = {
+                labels: [
+                    categories[0].name,
+                    categories[1].name,
+                    categories[2].name,
+                    categories[3].name,
+                    categories[4].name
+                ],
+                datasets: [{
+                    label: 'Unidades',
+                    data: [categories[0].stock, categories[1].stock, categories[2].stock, categories[3].stock, categories[4].stock],
+                    backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(63, 274, 86)',
+                    'rgb(73, 23, 86)',
+                    'rgb(82, 73, 36)'
+                    ],
+                    hoverOffset: 4
+                }]
+            };
+
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: data,
+            });
+        }
+    </script>
 @endsection

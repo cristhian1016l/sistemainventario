@@ -54,7 +54,7 @@ class ProductController extends Controller
         }
     }
 
-    public function gerProductsByCategory(Request $request)
+    public function getProductsByCategory(Request $request)
     {
         $products = DB::select("SELECT * FROM products WHERE category_id = ".$request->category_id);
         return response()->json(['products' => $products]);
@@ -86,7 +86,7 @@ class ProductController extends Controller
                 $product->supplier_id = $request->supplier_id;
                 $product->brand_id = $request->brand_id;
                 $product->category_id = $request->category_id;
-                // $product->store_id = $request->store_id;
+                $product->color = mb_strtoupper($request->color, 'utf-8');
                 $product->description = mb_strtoupper($request->description, 'utf-8');
                 $product->price = $price;
                 $product->stock = $request->stock;
@@ -137,7 +137,7 @@ class ProductController extends Controller
                                         supplier_id = ?,
                                         brand_id = ?,
                                         category_id = ?,
-                                        -- store_id = ?,
+                                        color = ?,
                                         description = ?,
                                         price = ?,
                                         stock = ?,
@@ -147,7 +147,7 @@ class ProductController extends Controller
                                 $request->supplier_id,
                                 $request->brand_id,
                                 $request->category_id,
-                                // $request->store_id,
+                                mb_strtoupper($request->color),
                                 mb_strtoupper($request->description),
                                 $price,
                                 $request->stock,

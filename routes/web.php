@@ -19,7 +19,8 @@ use App\Http\Controllers\Admin\WorkerController;
 use App\Http\Controllers\Admin\RequestController;
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\FlashdriveController;
-
+use App\Http\Controllers\Admin\AreaController;
+use App\Http\Controllers\Admin\WorkerTypeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -39,15 +40,18 @@ Route::get('/panel', [DashboardController::class, 'index'])->name('panel');
 
 Route::group(['middleware' => 'isAdmin'], function (){
 
-    // ALMACENES
-    Route::get('/almacenes', [StoreController::class, 'index'])->name('store');
+    Route::post('/panel/categorias-con-mas-productos', [DashboardController::class, 'categories_with_more_products']);
+    Route::post('/panel/empleados-en-empresas', [DashboardController::class, 'employees_in_companies']);
 
-    Route::post('/almacenes/obtener-almacenes', [StoreController::class, 'getStores']);
-    Route::post('/almacenes/obtener-almacen/{id}', [StoreController::class, 'getStoreById']);
-    Route::post('/almacenes/agregar-almacen', [StoreController::class, 'insert']);
-    Route::post('/almacenes/editar-almacen', [StoreController::class, 'edit']);
-    Route::post('/almacenes/eliminar-almacen', [StoreController::class, 'delete']);
-    // FIN ALMACENES
+    // // ALMACENES
+    // Route::get('/almacenes', [StoreController::class, 'index'])->name('store');
+
+    // Route::post('/almacenes/obtener-almacenes', [StoreController::class, 'getStores']);
+    // Route::post('/almacenes/obtener-almacen/{id}', [StoreController::class, 'getStoreById']);
+    // Route::post('/almacenes/agregar-almacen', [StoreController::class, 'insert']);
+    // Route::post('/almacenes/editar-almacen', [StoreController::class, 'edit']);
+    // Route::post('/almacenes/eliminar-almacen', [StoreController::class, 'delete']);
+    // // FIN ALMACENES
 
     // PROVEEDORES
     Route::get('/proveedores', [SupplierController::class, 'index'])->name('supplier');
@@ -81,7 +85,7 @@ Route::group(['middleware' => 'isAdmin'], function (){
 
     Route::post('/productos/obtener-productos', [ProductController::class, 'getProducts']);
     Route::post('/productos/obtener-producto/{id}', [ProductController::class, 'getProductById']);
-    Route::post('/productos/obtener-productos-categoria', [ProductController::class, 'gerProductsByCategory']);
+    Route::post('/productos/obtener-productos-categoria', [ProductController::class, 'getProductsByCategory']);
     Route::post('/productos/agregar-producto', [ProductController::class, 'insert']);
     Route::post('/productos/editar-producto', [ProductController::class, 'edit']);
     Route::post('/productos/eliminar-producto', [ProductController::class, 'delete']);
@@ -124,20 +128,31 @@ Route::group(['middleware' => 'isAdmin'], function (){
 
     // FIN SOLICITUDES
 
-    // AREAS
+    // EQUIPO
     Route::get('/equipos', [TeamController::class, 'index'])->name('team');
 
     Route::post('/equipos/obtener-equipos', [TeamController::class, 'getTeams']);
     Route::post('/equipos/agregar-equipo', [TeamController::class, 'insert']);
     // Route::post('/equipos/editar-equipo', [TeamController::class, 'edit']);
     // Route::post('/equipos/eliminar-equipo', [TeamController::class, 'delete']);
-    // FIN AREAS
+    // FIN EQUIPO
 
-    // MEMORIAS
-    Route::get('/memorias', [FlashdriveController::class, 'index'])->name('flashdrive');
-    Route::post('/memorias/obtener-memorias', [FlashdriveController::class, 'getFlashdrives']);
-    Route::post('/memorias/agregar-memoria', [FlashdriveController::class, 'insert']);    
-    // FIN MEMORIAS
+    // // MEMORIAS
+    // Route::get('/memorias', [FlashdriveController::class, 'index'])->name('flashdrive');
+    // Route::post('/memorias/obtener-memorias', [FlashdriveController::class, 'getFlashdrives']);
+    // Route::post('/memorias/agregar-memoria', [FlashdriveController::class, 'insert']);    
+    // // FIN MEMORIAS
+
+    // AREA
+    Route::get('/areas', [AreaController::class, 'index'])->name('area');
+    Route::post('/areas/obtener-areas', [AreaController::class, 'getAreas']);
+    Route::post('/areas/obtener-areas-cargo', [AreaController::class, 'getPositionsByArea']);
+    // AREA
+
+    // CARGO    
+    Route::post('/cargos/obtener-cargos', [WorkerTypeController::class, 'getWorkerTypes']);    
+    // CARGO
+
 });
 
 Route::get('/create', function(){
@@ -228,7 +243,7 @@ Route::get('/create', function(){
 
 //     DB::table('areas')->insert(
 //         array(
-//             'name' => 'POST-PRODUCCIÓN'
+//             'name' => 'EDICIÓN'
 //         )
 //     );
     
@@ -240,34 +255,10 @@ Route::get('/create', function(){
 
 //     DB::table('areas')->insert(
 //         array(
-//             'name' => 'PRODUCCIÓN'
+//             'name' => 'CAMPO'
 //         )
 //     );
-
-//     DB::table('areas')->insert(
-//         array(
-//             'name' => 'RR.HH'
-//         )
-//     );
-
-//     DB::table('areas')->insert(
-//         array(
-//             'name' => 'CONTABLE'
-//         )
-//     );
-
-//     DB::table('areas')->insert(
-//         array(
-//             'name' => 'COMPRAS'
-//         )
-//     );
-
-//     DB::table('areas')->insert(
-//         array(
-//             'name' => 'MANTENIMIENTO'
-//         )
-//     );
-
+    
 // });
 
 // Route::get('/create-companies', function(){

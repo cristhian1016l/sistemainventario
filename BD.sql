@@ -176,12 +176,17 @@ CREATE TABLE workers
     worker_type_id int not null,
     area_type_id int not null,
     document varchar(25),
+    birthdate date,
+    phone varchar(12),
+    email varchar(50),
+    company_id int not null,
     deleted_at datetime,
     created_at datetime,
     updated_at datetime,    
 	foreign key (document_type_id) references document_type(id),
     foreign key (worker_type_id) references worker_type(id),
-    foreign key (area_type_id) references areas(id)
+    foreign key (area_type_id) references areas(id),
+    foreign key (company_id) references companies(id)
 );
 
 -- ALTER TABLE workers
@@ -196,7 +201,7 @@ CREATE TABLE products
     supplier_id int not null,
     brand_id int not null,
     category_id int not null,
-    store_id int not null,    
+    color varchar(50), 
     description varchar(255),
     price decimal(7,2),
     stock int,
@@ -312,40 +317,47 @@ ADD FOREIGN KEY (`model_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 SELECT * FROM flashdrives;
 SELECT * FROM workers;
+SELECT * FROM areas;
 SELECT * FROM categories;
 SELECT * FROM products;
 SELECT * FROM worker_product;
+SELECT * FROM worker_type;
 SELECT * FROM requests;
-
-
-
-
-
-
-
--- EJECUTAR ESTO- 
-
-drop table if exists companies;
-CREATE TABLE companies
-(
-	id int auto_increment not null primary key,
-    name varchar(255)
-);
-
-ALTER TABLE workers
-ADD company_id int not null after document;
-
-SET FOREIGN_KEY_CHECKS = 1;
-
-ALTER TABLE workers
-ADD FOREIGN KEY (company_id) REFERENCES companies(id);
-
 SELECT * FROM companies;
-SELECT * FROM workers;
 
-SELECT w.id, CONCAT(w.lastname,' ', w.name) as names, wt.name AS type, dt.document_type, w.document, a.name AS area, c.name AS company FROM workers w
-INNER JOIN document_type dt ON w.document_type_id = dt.id
-INNER JOIN worker_type wt ON w.worker_type_id = wt.id
-INNER JOIN areas a ON w.area_type_id = a.id
-INNER JOIN companies c ON w.company_id = c.id
-WHERE w.deleted_at IS NULL
+-- EJECUTAR ESTO
+
+ALTER TABLE workers
+ADD birthdate date AFTER document;
+
+ALTER TABLE workers
+ADD phone varchar(20) AFTER birthdate;
+
+ALTER TABLE workers
+ADD email varchar(50) AFTER phone;
+
+ALTER TABLE worker_type
+ADD area_id int not null AFTER name;
+
+ALTER TABLE worker_type
+ADD FOREIGN KEY (area_id) REFERENCES areas(id);
+
+SELECT * FROM areas;
+SELECT * FROM worker_type WHERE area_id = 2;
+
+UPDATE workers SET worker_type_id = 6 WHERE worker_type_id = 3;
+ 
+ALTER TABLE workers
+DROP area_type_id;
+
+SELECT * FROM products p
+INNER JOIN categories c
+ON p.category_id = c.id
+ORDER BY p.stock DESC LIMIT 5;
+
+SELECT SUM(Precios) FROM Productos WHERE Categoria = 'Guitarra';
+SELECT SUM(stock) FROM products WHERE category_id = '3';
+
+SELECT * FROM worker_type;
+ALTER TABLE products 
+ADD COLUMN color varchar(50) AFTER category_id

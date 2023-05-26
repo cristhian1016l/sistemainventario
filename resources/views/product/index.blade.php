@@ -115,19 +115,17 @@
                                 @endforeach
                             </select>  
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-md-6">
+                            <label for="color" class="col-form-label">Color:</label>
+                            <input type="text" class="form-control" id="color">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <div class="col-md-12">
                             <label for="description" class="col-form-label">Descripción (opcional):</label>
                             <textarea class="form-control" id="description"></textarea>
                         </div>
-                        <!-- <div class="col-md-6">
-                            <label for="select-store" class="col-form-label">Almacén:</label>
-                            <select class="form-control" id="select-store" autocomplete="off" style="width: 100%">
-                                <option value="">Seleccione un almacén</option>
-                                @foreach($stores as $store)
-                                <option value="{{ $store->id }}">{{ $store->address }}</option>
-                                @endforeach
-                            </select>  
-                        </div> -->
                     </div>
 
                     <div class="form-group row">

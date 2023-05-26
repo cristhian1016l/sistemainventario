@@ -1,3 +1,4 @@
+let preventChange = 0;
 $(document).ready(function() {
     initializeTable();
 });
@@ -20,15 +21,14 @@ function initializeTable(){
         "columns":[                                  
             {"data": "names"},
             {"data": "company"},
-            {"data": "type"},
-            {"data": "area"},
+            {"data": "type"},            
             {"data": "document_type"},
             {"data": "document"},
             {"data": "id"},
         ],
         "columnDefs": [
             {
-                "targets":[6],
+                "targets":[5],
                 render: function(data, type, row){
                     return '<button class="btn btn-shadow btn-primary btn-sm"'+
                             'onclick="setDataToEdit('+"'" + data + "'"+')"'+                             
@@ -81,6 +81,12 @@ $("#formButton").click(function(e){
 
     let company_id = document.getElementById('company_id').value;
 
+    let birthdate = document.getElementById('birthdate').value;
+    
+    let phone = document.getElementById('phone').value;
+
+    let email = document.getElementById('email').value;
+
     hideErrors();
 
     $.ajax({
@@ -98,7 +104,10 @@ $("#formButton").click(function(e){
                 'worker_type_id': worker_type_id,
                 'area_type': area_type,
                 'company_id': company_id,
-                'document': document_number },
+                'document': document_number,
+                'birthdate': birthdate,
+                'phone': phone,
+                'email': email },
         success:function(data) {
 
             console.log(data);
@@ -336,7 +345,7 @@ function setDataToInsert(){
     $('#myForm').attr('action', 'trabajadores/agregar-trabajador');
 }
 
-function setDataToEdit(id){
+function setDataToEdit(id){    
     document.getElementById('cod_worker').value = id;
 
     titleForm = document.getElementById("titleForm").innerHTML = "Editar Trabajador <button type='button' class='close' onclick='reduceTable(false)'><span aria-hidden='true'>&times;</span></button>";
@@ -348,8 +357,9 @@ function setDataToEdit(id){
         },
         type:'POST',
         url: 'trabajadores/obtener-trabajador/'+id,        
-        success:function(data) {
+        success:function(data) {            
             const worker = data.worker            
+            worker_type_id_ToChange = worker['worker_type_id'];
             console.log(worker);
             document.getElementById("name").value = worker['name']
             document.getElementById("lastname").value = worker['lastname']
@@ -368,6 +378,9 @@ function setDataToEdit(id){
             $('#company_id').trigger('change');
 
             document.getElementById("document").value = worker['document']
+            document.getElementById("birthdate").value = worker['birthdate']
+            document.getElementById("phone").value = worker['phone']
+            document.getElementById("email").value = worker['email']
             
             switch(data.status){
                 case 500:
@@ -385,6 +398,12 @@ function setDataToEdit(id){
     });
     document.getElementById("formButton").innerText = "Actualizar"
     $('#myForm').attr('action', 'trabajadores/editar-trabajador');
+
+    $("#area_type").change(function(e) {
+        e.preventDefault();
+        // alert(e.cancelable?"Is cancelable":"Not cancelable");
+    });
+    // $("#area_type").off('change')
 }
 
 function cleanFields(){
@@ -403,6 +422,9 @@ function cleanFields(){
     $('#area_type').trigger('change');
     
     document.getElementById('document').value = "";    
+    document.getElementById('birthdate').value = "";    
+    document.getElementById('phone').value = "";    
+    document.getElementById('email').value = "";    
 }
 
 function cleanProducts(){

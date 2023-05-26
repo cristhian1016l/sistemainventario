@@ -3,6 +3,7 @@
 @section('title', 'Trabajadores')
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
+<link href="{{ asset('css/plugins/daterangepicker.css') }}" rel="stylesheet" />
 <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
 @endsection
 @section('content')
@@ -90,7 +91,7 @@
             <div class="card-body">
 
                 <form id="myForm" method="POST" action="#">
-
+                    <h5>Datos Personales</h5>
                     <div class="form-group row">
                         <div class="col-md-3">
                             <label for="name" class="col-form-label">Nombres:</label>
@@ -119,16 +120,24 @@
                         <div class="col-sm-3">
                             <label for="document" class="col-form-label">Documento:</label>
                             <input type="number" class="form-control" id="document"></input>
+                        </div>               
+                        <div class="col-sm-2">
+                            <label for="birthdate" class="col-form-label">Fec. Nacimiento:</label>
+                            <input type="text" id="birthdate" class="form-control"/>         
                         </div>
                         <div class="col-sm-2">
-                            <label for="worker_type" class="col-form-label">Seleccione el cargo:</label>
-                            <select class="form-control" id="worker_type" autocomplete="off" style="width: 100%">                        
-                                @foreach($types as $type)
-                                <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                            <label for="phone" class="col-form-label">Celular:</label>
+                            <input class="form-control" id="phone"></input>
+                        </div>               
                         <div class="col-sm-2">
+                            <label for="email" class="col-form-label">Correo:</label>
+                            <input type="email" class="form-control" id="email"></input>
+                        </div>               
+                    </div>                    
+
+                    <h5>Datos de la empresa</h5>
+                    <div class="form-group row">
+                        <div class="col-sm-4">
                             <label for="area_type" class="col-form-label">Seleccione un área:</label>
                             <select class="form-control" id="area_type" autocomplete="off" style="width: 100%">                        
                                 @foreach($areas as $area)
@@ -136,7 +145,15 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-sm-4">
+                            <label for="worker_type" class="col-form-label">Seleccione el cargo:</label>
+                            <select class="form-control" id="worker_type" autocomplete="off" style="width: 100%">                        
+                                @foreach($types as $type)
+                                <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>                        
+                        <div class="col-sm-4">
                             <label for="company_id" class="col-form-label">Seleccione la empresa:</label>
                             <select class="form-control" id="company_id" autocomplete="off" style="width: 100%">                        
                                 @foreach($companies as $company)
@@ -144,8 +161,7 @@
                                 @endforeach
                             </select>
                         </div>
-                    </div>                    
-
+                    </div>
                         
                     <div class="form-group">
                         <button id="formButton" class="btn btn-info btn-block" type="submit">Actualizar</button>
@@ -188,7 +204,6 @@
                                 <th style="width: 30%">NOMBRES</th>
                                 <th style="width: 20%">EMPRESA</th>
                                 <th style="width: 10%">CARGO</th>
-                                <th style="width: 10%">AREA</th>
                                 <th style="width: 10%">TIP. DOC.</th>
                                 <th style="width: 10%">DOCUMENTO</th>
                                 <th style="width: 10%">ACCIONES</th>
@@ -200,8 +215,7 @@
                             <tr>
                                 <th>NOMBRES</th>
                                 <th>EMPRESA</th>
-                                <th>CARGO</th>
-                                <th>AREA</th>
+                                <th>CARGO</th>                                
                                 <th>TIP. DOC.</th>
                                 <th>DOCUMENTO</th>
                                 <th>ACCIONES</th>
@@ -307,7 +321,94 @@
     <script src="{{ asset('js/plugins/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('js/pages/worker.js') }}"></script>
     <script src="{{ asset('js/plugins/select2.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/moment.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/daterangepicker.js') }}"></script>
+    <script src="{{ asset('js/plugins/imask.js') }}"></script>
+
     <script>
+
+        let worker_type_id_ToChange = 0;
+
+        $("#area_type").change(function() {            
+            let area_id = document.getElementById('area_type').value;
+
+            $.ajax({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type:'POST',
+                url: '/areas/obtener-areas-cargo',
+                data: { 'area_id': area_id },
+                success:function(data) {
+                    console.log(data.positions);
+
+                    $("#worker_type").empty();
+
+                    $.each(data.positions, function(idx, opt) {                
+                        $('#worker_type').append(
+                        "<option value="+opt.id+">" + opt.name + "</option>"
+                        );               
+                    });
+                    
+                },
+                complete: function(data) {
+                    // console.log("WTI: " + worker_type_id_ToChange);
+                    if(worker_type_id_ToChange != 0){
+                        $('#worker_type').val(worker_type_id_ToChange)
+                        $('#worker_type').trigger('change');
+                    }
+                }
+            });            
+        })        
+
+        var phoneMask = IMask(
+            document.getElementById('phone'), {
+            mask: '+{(00)} 000-000-000'
+        });
+
+        $(function() {
+
+            $('input[id="birthdate"]').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                minYear: 1901,
+                maxYear: parseInt(moment().format('YYYY'),10),
+                "locale": {
+                    "format": "YYYY-MM-DD",
+                    "separator": " - ",
+                    "applyLabel": "Aplicar",
+                    "cancelLabel": "Cancelar",
+                    "fromLabel": "De",
+                    "toLabel": "Até",
+                    "customRangeLabel": "Custom",
+                    "daysOfWeek": [
+                        "Dom",
+                        "Lun",
+                        "Mar",
+                        "Mie",
+                        "Jue",
+                        "Vie",
+                        "Sab"
+                    ],
+                    "monthNames": [
+                        "Enero",
+                        "Febrero",
+                        "Marzo",
+                        "Abril",
+                        "Mayo",
+                        "Junio",
+                        "Julio",
+                        "Agosto",
+                        "Septiembre",
+                        "Octubre",
+                        "Noviembre",
+                        "Diciembre"
+                    ],
+                    "firstDay": 0
+                },
+                opens: 'left'
+            });
+        });  
 
         $("#select_category").change(function() {
             

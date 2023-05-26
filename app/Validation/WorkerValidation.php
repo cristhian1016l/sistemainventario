@@ -27,9 +27,11 @@ class WorkerValidation{
                 'lastname' => 'required',
                 'document_type_id' => 'required|numeric',
                 'worker_type_id' => 'required|numeric',
-                'area_type' => 'required|numeric',
                 'company_id' => 'required|numeric',
-                'document' => 'required|numeric|min_digits:8'
+                'document' => 'required|numeric|min_digits:8',
+                'birthdate' => 'required|date',
+                'phone' => 'nullable|min:17',
+                'email' => 'nullable|email'
             ];
 
             $messages = [                
@@ -39,13 +41,15 @@ class WorkerValidation{
                 'document_type_id.numeric' => 'Error al elegir el tipo de documento',
                 'worker_type_id.required' => 'Elija el cargo',
                 'worker_type_id.numeric' => 'Error al elegir el cargo',
-                'area_type.required' => 'Elija el area',
-                'area_type.numeric' => 'Error al elegir el area',
                 'company_id.required' => 'Elija la empresa',
                 'company_id.numeric' => 'Error al elegir la empresa',
                 'document.required' => 'Ingrese el documento',
                 'document.numeric' => 'El documento no tiene el formato correcto',
-                'document.min_digits' => 'El documento no tiene los dígitos suficientes'
+                'document.min_digits' => 'El documento no tiene los dígitos suficientes',
+                'birthdate.required' => 'Ingrese la fecha de nacimiento',
+                'birthdate.date' => 'La fecha no tiene el formato correcto',
+                'phone.min' => 'El celular no tiene el formato correcto',
+                'email.email' => 'El correo no tiene el formato correcto'
             ];
 
             $validator = Validator::make($request->all(), $rules, $messages);

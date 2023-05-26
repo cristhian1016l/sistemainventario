@@ -15,19 +15,40 @@ class DashboardController extends Controller
     
     public function index()
     {
-        $suppliers = DB::select("SELECT COUNT(*) AS total FROM suppliers");
-        $stores = DB::select("SELECT COUNT(*) AS total FROM stores");
+        $suppliers = DB::select("SELECT COUNT(*) AS total FROM suppliers");        
         $categories = DB::select("SELECT COUNT(*) AS total FROM categories");
         $products = DB::select("SELECT COUNT(*) AS total FROM products");
         $workers = DB::select("SELECT COUNT(*) AS total FROM workers");
-        $requests = DB::select("SELECT COUNT(*) AS total FROM requests");
+        $requests = DB::select("SELECT COUNT(*) AS total FROM requests");        
 
-        $data = ['suppliers' => $suppliers, 
-                'stores' => $stores, 
+        $data = ['suppliers' => $suppliers,                
                 'categories' => $categories, 
                 'products' => $products,
                 'requests' => $requests,
                 'workers' => $workers];
+
         return view('admin.dashboard.index', $data);
+    }
+
+    public function categories_with_more_products()
+    {
+        $categories_with_more_products = 
+            DB::select("SELECT c.name, SUM(p.stock) AS stock FROM products p INNER JOIN categories c ON p.category_id = c.id
+                        GROUP BY c.name ORDER BY stock DESC LIMIT 5");
+
+        $data = ['categories_with_more_products' => $categories_with_more_products];
+        return response()->json($data);
+    }
+
+    public function employees_in_companies()
+    {
+        $employees_in_companies = 
+        DB::select("SELECT c.name, SUM(w.company_id) AS total FROM workers w
+                    INNER JOIN companies c 
+                    ON w.company_id = c.id
+                    GROUP BY c.name
+                    ORDER BY total DESC");
+        $data = ['employees_in_companies' => $employees_in_companies];
+        return response()->json($data);                    
     }
 }

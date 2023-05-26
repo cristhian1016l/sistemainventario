@@ -73,7 +73,7 @@ $("#formButton").click(function(e){
     let supplier_id = document.getElementById('select-supplier').value;
     let brand_id = document.getElementById('select-brand').value;
     let category_id = document.getElementById('select-category').value;
-    // let store_id = document.getElementById('select-store').value;
+    let color = document.getElementById('color').value;
 
     let description = document.getElementById('description').value;
     let price = document.getElementById('price').value;
@@ -93,7 +93,7 @@ $("#formButton").click(function(e){
                 'supplier_id': supplier_id, 
                 'brand_id': brand_id, 
                 'category_id': category_id, 
-                // 'store_id': store_id,
+                'color': color, 
                 'description': description,
                 'price': price,
                 'stock': stock },
@@ -217,11 +217,9 @@ function setDataToEdit(id){
             $('#select-supplier').trigger('change');
 
             $('#select-category').val(product['category_id'])            
-            $('#select-category').trigger('change');
+            $('#select-category').trigger('change');            
 
-            $('#select-store').val(product['store_id'])            
-            $('#select-store').trigger('change');
-
+            document.getElementById("color").value = product['color']
             document.getElementById("price").value = product['price']
             document.getElementById("stock").value = product['stock']
             
@@ -259,6 +257,7 @@ function cleanFields(){
     $('#select-store').val("")
     $('#select-store').trigger('change');
 
+    document.getElementById('color').value = "";
     document.getElementById('description').value = "";
     document.getElementById('price').value = "";
     document.getElementById('stock').value = "";
