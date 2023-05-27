@@ -115,6 +115,9 @@
                     <td>
                         <span style="font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: bold; text-align: center;">Dirección</span>
                     </td>
+                    <td>
+                        <span style="font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: bold; text-align: center;">Celular</span>
+                    </td>
                     <td style="text-align: center">
                         <span style="font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: bold; text-align: center;">DNI</span>
                     </td>                    
@@ -131,8 +134,11 @@
                         <td>
                             <span style="font-family: 'Inter', sans-serif; font-size: 9px; font-weight: bold">{{ $worker->lastname. ' '.$worker->name }}</span>
                         </td>                                                
-                        <td style="text-align: center">
+                        <td style="text-align: left">
                             <span style="text-align: center; font-family: 'Inter', sans-serif; font-size: 9px; text-align: center">{{ $worker->address }}</span>
+                        </td>
+                        <td style="text-align: left">
+                            <span style="text-align: center; font-family: 'Inter', sans-serif; font-size: 9px; text-align: center">{{ $worker->phone }}</span>
                         </td>
                         <td style="text-align: center">
                             <span style="text-align: center; font-family: 'Inter', sans-serif; font-size: 9px; text-align: center">{{ $worker->document }}</span>

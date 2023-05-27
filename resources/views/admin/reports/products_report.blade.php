@@ -100,8 +100,10 @@
                 </td>
             </tr>
         </table>
-        <p style="margin-top: -8px; font-family: 'Inter', sans-serif; font-size: 20px; font-weight: bold; text-align: center;">LISTADO DE ACTIVOS REGISTRADOS</p>        
-        <br>                 
+        <p style="margin-top: -8px; font-family: 'Inter', sans-serif; font-size: 20px; font-weight: bold; text-align: center;">LISTADO DE ACTIVOS REGISTRADOS</p>                
+        <span style="font-family: 'Inter', sans-serif; font-size: 9px; font-weight: bold; color: blue">Los productos menores a 3 unidades se marcarán en rojo</span>
+        <br>                         
+        <br>                         
         <hr style="border: 0 none; border-top: 2px dashed #332f32; background: none; height: 0; margin-top: -5px;">
         <table id="table">
             <thead>
@@ -111,6 +113,9 @@
                     </td>
                     <td>
                         <span style="font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: bold; text-align: center;">Producto</span>
+                    </td>
+                    <td>
+                        <span style="font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: bold; text-align: center;">Color</span>
                     </td>
                     <td>
                         <span style="font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: bold; text-align: center;">Categoría</span>
@@ -135,13 +140,24 @@
                             <span style="font-family: 'Inter', sans-serif; font-size: 9px; font-weight: bold">{{ $product->product_name }}</span>
                         </td>                        
                         <td>
+                            @if($product->color)
+                                <span style="font-family: 'Inter', sans-serif; font-size: 9px; font-weight: bold">{{ $product->color }}</span>
+                            @else
+                                <span style="font-family: 'Inter', sans-serif; font-size: 9px; font-weight: bold; color: red">No asignado</span>
+                            @endif
+                        </td>                        
+                        <td>
                             <span style="text-align: center; font-family: 'Inter', sans-serif; font-size: 9px; text-align: center">{{ $product->category }}</span>
                         </td>
                         <td style="text-align: center">
                             <span style="text-align: center; font-family: 'Inter', sans-serif; font-size: 9px; text-align: center">S/. {{ $product->price }}</span>
                         </td>
                         <td style="text-align: center">
-                            <span style="text-align: center; font-family: 'Inter', sans-serif; font-size: 9px; text-align: center">{{ $product->stock }}</span>
+                            @if($product->stock < 3)
+                                <span style="text-align: center; font-family: 'Inter', sans-serif; font-size: 9px; text-align: center; color: red">{{ $product->stock }}</span>
+                            @else
+                                <span style="text-align: center; font-family: 'Inter', sans-serif; font-size: 9px; text-align: center">{{ $product->stock }}</span>
+                            @endif                            
                         </td>
                     </tr>   
                     <?php $i++ ?>

@@ -204,8 +204,9 @@ class ProductController extends Controller
 
     public function productsReport()
     {
-        $products = DB::select("SELECT p.product_name, p.price, p.stock, c.name AS category FROM products p
-                                INNER JOIN categories c ON p.category_id = c.id");
+        $products = DB::select("SELECT p.product_name, p.color, p.price, p.stock, c.name AS category FROM products p
+                                INNER JOIN categories c ON p.category_id = c.id
+                                ORDER BY category ASC");
         $data = ['products' => $products];
         $pdf=PDF::loadView('admin.reports.products_report', $data);
         // $pdf->setPaper('A4', 'landscape');
