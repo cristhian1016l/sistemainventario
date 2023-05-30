@@ -103,10 +103,22 @@
         #table tbody tr:nth-child(even) {
             background: #d4d4d4;
         }
-
+        #watermark {
+            position: fixed;
+            top: 20%;
+            width: 110%;
+            text-align: center;
+            opacity: .1;
+            /* transform: rotate(10deg); */
+            transform-origin: 50% 50%;
+            /* z-index: -1000; */
+        }
     </style>
 </head>
 <body>
+    <div id="watermark">
+        <img src="{{URL::asset('/images/logounishuayrecords.png')}}" alt="Ponce Producciones" height="500" width="500">
+    </div>
     <div>
     <table>
             <tr>
@@ -121,17 +133,20 @@
         </table>
         <table style="margin-left: 75px; margin-top: 20px; font-family: monospace; font-size: 15px">
             <tr>
-                <td style="width: 300px">
-                    COD. REQ.: {{ $header[0]->cod_request }}
+                <td style="width: 220px">
+                    <b>COD. REQ.: </b>{{ $header[0]->cod_request }}
                 </td>
                 <td>
-                    FECHA DE ENT.: {{ \Carbon\Carbon::parse($header[0]->since_date)->format('d-m-Y') }}
+                    <b>FECHA DE ENT.: </b>{{ \Carbon\Carbon::parse($header[0]->since_date)->format('d-m-Y') }}
                 </td>
+                <td style="padding-left: 50px" rowspan="2">
+                    <img src="{{URL::asset('/images/logounishuayrecords.png')}}" alt="Ponce Producciones" height="65" width="65">
+                </td>                
             </tr>
 
             <tr>
-                <td style="width: 300px">
-                    ¿ENTREGÓ?: 
+                <td style="width: 220px">
+                    <b>¿ENTREGÓ?: </b>
                     <?php
 
                         if($header[0]->was_entered == 0){
@@ -143,9 +158,9 @@
                     ?>                    
                 </td>
                 <td >
-                    FECHA DE DEV.: {{ \Carbon\Carbon::parse($header[0]->to_date)->format('d-m-Y') }}
-                </td>
-            </tr>
+                    <b>FECHA DE DEV.: </b>{{ \Carbon\Carbon::parse($header[0]->to_date)->format('d-m-Y') }}
+                </td>                
+            </tr>            
         </table>
     </div>
     
