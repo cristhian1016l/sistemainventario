@@ -11,6 +11,9 @@ function initializeTable(){
         "ajax":{
             "type": "POST",
             "url": "trabajadores/obtener-trabajadores",
+            'data': {
+                payroll: document.getElementById('select_payroll').value,
+             },
             "dataSrc": function(data) {
                 return data.workers;
             },
@@ -81,6 +84,9 @@ $("#formButton").click(function(e){
 
     let company_id = document.getElementById('company_id').value;
 
+    let payroll = document.querySelector('#payroll').checked; 
+    console.log("ESSSSSSSSSS: " + payroll);   
+
     let birthdate = document.getElementById('birthdate').value;
     
     let phone = document.getElementById('phone').value;
@@ -104,6 +110,7 @@ $("#formButton").click(function(e){
                 'worker_type_id': worker_type_id,
                 'area_type': area_type,
                 'company_id': company_id,
+                'payroll': payroll,
                 'document': document_number,
                 'birthdate': birthdate,
                 'phone': phone,
@@ -380,6 +387,9 @@ function setDataToEdit(id){
             $('#company_id').val(worker['company_id'])
             $('#company_id').trigger('change');
 
+            worker['payroll'] == 1 ? document.querySelector('#payroll').checked = true : document.querySelector('#payroll').checked = false;
+
+            document.querySelector('#payroll').checked = worker['payroll'];
             document.getElementById("document").value = worker['document']
             document.getElementById("birthdate").value = worker['birthdate']
             document.getElementById("phone").value = worker['phone']
@@ -424,6 +434,7 @@ function cleanFields(){
     $('#area_type').val(1)
     $('#area_type').trigger('change');
     
+    document.querySelector('#payroll').checked = false;
     document.getElementById('document').value = "";    
     document.getElementById('birthdate').value = "";    
     document.getElementById('phone').value = "";    

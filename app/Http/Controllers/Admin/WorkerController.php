@@ -34,21 +34,27 @@ class WorkerController extends Controller
         return view('worker.index', $data);
     }
 
-    public function returnWorkers()
-    {
-        $workers = DB::select("SELECT w.id, CONCAT(w.lastname,' ', w.name) as names, wt.name AS type, dt.document_type, w.document, c.name AS company FROM workers w
-                                INNER JOIN document_type dt ON w.document_type_id = dt.id
-                                INNER JOIN worker_type wt ON w.worker_type_id = wt.id
-                                INNER JOIN companies c ON w.company_id = c.id
-                                WHERE w.deleted_at IS NULL");
-        return $workers;
-    }
-
     // RETURN DATA LIKE JSON
 
-    public function getWorkers()
+    public function getWorkers(Request $request)
     {
-        return response()->json(['workers' => $this->returnWorkers()]);
+        $payroll = $request->payroll == "SI" ? 1 : 0;
+
+        if($request->payroll <> ""){
+            $workers = DB::select("SELECT w.id, CONCAT(w.lastname,' ', w.name) as names, wt.name AS type, dt.document_type, w.document, c.name AS company FROM workers w
+            INNER JOIN document_type dt ON w.document_type_id = dt.id
+            INNER JOIN worker_type wt ON w.worker_type_id = wt.id
+            INNER JOIN companies c ON w.company_id = c.id
+            WHERE w.deleted_at IS NULL AND w.payroll = ".$payroll."");
+        }else{
+            $workers = DB::select("SELECT w.id, CONCAT(w.lastname,' ', w.name) as names, wt.name AS type, dt.document_type, w.document, c.name AS company FROM workers w
+            INNER JOIN document_type dt ON w.document_type_id = dt.id
+            INNER JOIN worker_type wt ON w.worker_type_id = wt.id
+            INNER JOIN companies c ON w.company_id = c.id
+            WHERE w.deleted_at IS NULL");
+        }        
+
+        return response()->json(['workers' => $workers]);
     }
 
     public function getWorkerById($id)
@@ -79,6 +85,8 @@ class WorkerController extends Controller
 
             try{
 
+                $payroll = ($request->payroll == true) ?  1 : 0;
+
                 DB::beginTransaction();
                 $worker = new Worker();
                 $worker->name = mb_strtoupper($request->name, 'utf-8');
@@ -88,6 +96,7 @@ class WorkerController extends Controller
                 $worker->document = $request->document;
                 $worker->worker_type_id = $request->worker_type_id;
                 $worker->company_id = $request->company_id;
+                $worker->payroll = $payroll;
                 $worker->birthdate = $request->birthdate;
                 $worker->phone = $request->phone;
                 $worker->email = $request->email;
@@ -125,7 +134,10 @@ class WorkerController extends Controller
                 return response()->json(['status' => 500, 'msg' => 'El trabajador no fue editado', 'errors' => $validator->errors()->all()]);
             }else{
 
-                try{
+                try{                    
+
+                    $payroll = $request->payroll == "true" ? 1 : 0;
+
                     DB::beginTransaction();
                     $update = DB::update('UPDATE workers SET
                                         name = ?,
@@ -134,6 +146,7 @@ class WorkerController extends Controller
                                         document_type_id = ?,
                                         worker_type_id = ?,
                                         company_id = ?,
+                                        payroll = ?,
                                         document = ?,
                                         birthdate = ?,
                                         phone = ?,
@@ -146,6 +159,7 @@ class WorkerController extends Controller
                                 $request->document_type_id,
                                 $request->worker_type_id,
                                 $request->company_id,
+                                $payroll,
                                 $request->document,
                                 $request->birthdate,
                                 $request->phone,

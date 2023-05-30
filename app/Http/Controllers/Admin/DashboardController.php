@@ -51,4 +51,13 @@ class DashboardController extends Controller
         $data = ['employees_in_companies' => $employees_in_companies];
         return response()->json($data);                    
     }
+
+    public function employees_in_payroll()
+    {
+        $payroll = DB::select("SELECT SUM(case when payroll = 1 THEN 1 ELSE 0 END) AS on_payroll, SUM(case when payroll = 0 THEN 1 ELSE 0 END) AS off_payroll
+                    FROM workers WHERE deleted_at IS NULL");
+
+        $data = ['employees_in_payroll' => $payroll];
+        return response()->json($data);
+    }
 }

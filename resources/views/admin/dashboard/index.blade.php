@@ -479,6 +479,12 @@
         <canvas id="myChart2"></canvas>
     </div>
 </div>
+<div class="row">    
+    <div class="col-md-8">
+        <h4 style="text-align: center">En planilla</h4>
+        <canvas id="payroll"></canvas>
+    </div>
+</div>
 @endsection
 @section('js')
 <!-- Apex Chart -->
@@ -496,6 +502,7 @@
         
         getCategoriesWithMoreProducts();
         getEmployeesInCompanies();
+        getEmployeesInPayroll();
 
         function getCategoriesWithMoreProducts() {            
             $.ajax({
@@ -529,6 +536,24 @@
                 }
             });
         }
+
+        function getEmployeesInPayroll(){
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type:'POST',
+                url:'/panel/empleados-en-planilla',
+                data: {'_token' : '{{ csrf_token() }}'},
+                success:function(data) {
+                    console.log(data);            
+                    showEmployeesInPayroll(data.employees_in_payroll);
+                }
+            });
+        }
+
+
+        // SET DATA IN GRAPHICS
 
         function showWorkersInCompanies(companies){
             const ctx = document.getElementById('myChart');
@@ -580,6 +605,33 @@
             new Chart(ctx2, {
                 type: 'doughnut',
                 data: data,
+            });
+        }
+
+        function showEmployeesInPayroll(payroll){            
+            const ctx3 = document.getElementById('payroll');            
+
+            new Chart(ctx3, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'EN PLANILLA',
+                        'NO ESTÁN EN PLANILLA'
+                    ],
+                    datasets: [{
+                        label: 'Total de trabajadores',
+                        data: [payroll[0].on_payroll, payroll[0].off_payroll],                        
+                        backgroundColor: [
+                            'rgba(159, 237, 151, 0.8)',
+                            'rgba(255, 99, 132, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgb(0, 255, 0)',
+                            'rgb(255, 99, 132)'
+                        ],
+                        borderWidth: 1
+                    }]    
+                }                         
             });
         }
     </script>

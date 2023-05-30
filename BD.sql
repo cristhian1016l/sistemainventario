@@ -180,6 +180,7 @@ CREATE TABLE workers
     phone varchar(12),
     email varchar(50),
     company_id int not null,
+    payroll tinyint(1) DEFAULT 0,
     deleted_at datetime,
     created_at datetime,
     updated_at datetime,    
@@ -355,9 +356,8 @@ INNER JOIN categories c
 ON p.category_id = c.id
 ORDER BY p.stock DESC LIMIT 5;
 
-SELECT SUM(Precios) FROM Productos WHERE Categoria = 'Guitarra';
 SELECT SUM(stock) FROM products WHERE category_id = '3';
 
 SELECT * FROM worker_type;
 ALTER TABLE products 
-ADD COLUMN color varchar(50) AFTER category_id
+ADD COLUMN color varchar(50) AFTER category_id;

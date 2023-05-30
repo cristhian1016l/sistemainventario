@@ -42,6 +42,7 @@ Route::group(['middleware' => 'isAdmin'], function (){
 
     Route::post('/panel/categorias-con-mas-productos', [DashboardController::class, 'categories_with_more_products']);
     Route::post('/panel/empleados-en-empresas', [DashboardController::class, 'employees_in_companies']);
+    Route::post('/panel/empleados-en-planilla', [DashboardController::class, 'employees_in_payroll']);
 
     // // ALMACENES
     // Route::get('/almacenes', [StoreController::class, 'index'])->name('store');

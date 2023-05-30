@@ -137,7 +137,7 @@
 
                     <h5>Datos de la empresa</h5>
                     <div class="form-group row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <label for="area_type" class="col-form-label">Seleccione un área:</label>
                             <select class="form-control" id="area_type" autocomplete="off" style="width: 100%">                        
                                 @foreach($areas as $area)
@@ -145,7 +145,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <label for="worker_type" class="col-form-label">Seleccione el cargo:</label>
                             <select class="form-control" id="worker_type" autocomplete="off" style="width: 100%">                        
                                 @foreach($types as $type)
@@ -153,13 +153,20 @@
                                 @endforeach
                             </select>
                         </div>                        
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <label for="company_id" class="col-form-label">Seleccione la empresa:</label>
                             <select class="form-control" id="company_id" autocomplete="off" style="width: 100%">                        
                                 @foreach($companies as $company)
                                 <option value="{{ $company->id }}">{{ $company->name }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="payroll" class="col-form-label">¿Está en planilla?:</label>
+                            <div class="custom-control custom-switch">                                
+                                <input type="checkbox" class="custom-control-input" id="payroll">
+                                <label class="custom-control-label" for="payroll"></label>
+                            </div>
                         </div>
                     </div>
                         
@@ -192,8 +199,18 @@
                         class="btn btn-primary"
                         onclick="showAndHideReports(true)">
                         Crear Reporte
-                    </button>
-
+                    </button>                    
+                </div>                
+                <br>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="select_payroll" class="col-form-label">Filtrar por planilla:</label>
+                        <select class="form-control" id="select_payroll" autocomplete="off" style="width: 100%">                                                            
+                            <option value="">TODOS</option>                            
+                            <option value="SI">SI</option>                            
+                            <option value="NO">NO</option>                            
+                        </select>  
+                    </div>
                 </div>
             </div>
             <div class="card-body">
@@ -326,11 +343,16 @@
     <script src="{{ asset('js/plugins/daterangepicker.js') }}"></script>
     <script src="{{ asset('js/plugins/imask.js') }}"></script>
 
-    <script>
-
+    <script>        
+    
         let worker_type_id_ToChange = 0;
 
-        $("#area_type").change(function() {            
+        $("#select_payroll").change(function() {
+            console.log(document.getElementById('select_payroll').value);
+            initializeTable();
+        });
+
+        $("#area_type").change(function() {
             let area_id = document.getElementById('area_type').value;
 
             $.ajax({
@@ -442,6 +464,7 @@
         $("#worker_type").select2();
         $("#area_type").select2();
         $("#company_id").select2();
+        $("#select_payroll").select2();
 
         $("#area_type_report").select2();
         $("#worker_type_report").select2();
