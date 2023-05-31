@@ -96,8 +96,15 @@ class WorkerController extends Controller
                 $worker->document = $request->document;
                 $worker->worker_type_id = $request->worker_type_id;
                 $worker->company_id = $request->company_id;
-                $worker->payroll = $payroll;
+                $worker->payroll = $payroll;                
                 $worker->birthdate = $request->birthdate;
+
+                if($payroll == 1){                    
+                    $worker->entered_payroll = $request->entered_payroll;
+                }else{
+                    $worker->entered_payroll = null;
+                }
+                $worker->joined_company = $request->joined_company;
                 $worker->phone = $request->phone;
                 $worker->email = $request->email;
                 $worker->save();
@@ -138,6 +145,12 @@ class WorkerController extends Controller
 
                     $payroll = $request->payroll == "true" ? 1 : 0;
 
+                    $entered_to_payroll = null;
+                                    
+                    if($payroll == 1){                    
+                        $entered_to_payroll = $request->entered_payroll;
+                    }
+
                     DB::beginTransaction();
                     $update = DB::update('UPDATE workers SET
                                         name = ?,
@@ -149,6 +162,8 @@ class WorkerController extends Controller
                                         payroll = ?,
                                         document = ?,
                                         birthdate = ?,
+                                        entered_payroll = ?,
+                                        joined_company = ?,
                                         phone = ?,
                                         email = ?,
                                         updated_at = ?
@@ -162,6 +177,8 @@ class WorkerController extends Controller
                                 $payroll,
                                 $request->document,
                                 $request->birthdate,
+                                $entered_to_payroll,
+                                $request->joined_company,
                                 $request->phone,
                                 $request->email,
                                 date_format(now(), "Y-m-d H:i:s"),

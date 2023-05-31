@@ -181,6 +181,8 @@ CREATE TABLE workers
     email varchar(50),
     company_id int not null,
     payroll tinyint(1) DEFAULT 0,
+    joined_company date,
+    entered_payroll date,
     deleted_at datetime,
     created_at datetime,
     updated_at datetime,    
@@ -361,3 +363,9 @@ SELECT SUM(stock) FROM products WHERE category_id = '3';
 SELECT * FROM worker_type;
 ALTER TABLE products 
 ADD COLUMN color varchar(50) AFTER category_id;
+
+SELECT c.name, SUM(w.company_id) AS total FROM workers w
+INNER JOIN companies c 
+ON w.company_id = c.id
+GROUP BY c.name
+ORDER BY total DESC;

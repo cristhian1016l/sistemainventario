@@ -66,17 +66,18 @@ function initializeTable(){
 }
 
 $("#formButton").click(function(e){
-    e.preventDefault();    
+    e.preventDefault();        
+
     const action = $('#myForm').attr('action');
     
     let cod_worker = document.getElementById('cod_worker').value;
     let name = document.getElementById('name').value;
-    let lastname = document.getElementById('lastname').value;    
-    let address = document.getElementById('address').value;    
+    let lastname = document.getElementById('lastname').value;
+    let address = document.getElementById('address').value;
 
     let document_type_id = document.getElementById('document_type').value;
     
-    let document_number = document.getElementById('document').value;    
+    let document_number = document.getElementById('document').value;
 
     let worker_type_id = document.getElementById('worker_type').value;
 
@@ -85,15 +86,32 @@ $("#formButton").click(function(e){
     let company_id = document.getElementById('company_id').value;
 
     let payroll = document.querySelector('#payroll').checked; 
-    console.log("ESSSSSSSSSS: " + payroll);   
 
     let birthdate = document.getElementById('birthdate').value;
+
+    let joined_company = document.getElementById('joined_company').value;
+
+    let entered_payroll = document.getElementById('entered_payroll').value;
     
     let phone = document.getElementById('phone').value;
 
     let email = document.getElementById('email').value;
 
     hideErrors();
+
+    console.log(payroll + entered_payroll);
+
+    if(payroll == true && (entered_payroll == null || entered_payroll == "" )){
+        return  Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: "Debe poner una fecha de inicio si el trabajador está en planilla",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+    }
+
+    console.log("return");
 
     $.ajax({
         headers: {
@@ -113,6 +131,8 @@ $("#formButton").click(function(e){
                 'payroll': payroll,
                 'document': document_number,
                 'birthdate': birthdate,
+                'joined_company': joined_company,
+                'entered_payroll': entered_payroll,
                 'phone': phone,
                 'email': email },
         success:function(data) {
@@ -158,7 +178,7 @@ $("#formButton").click(function(e){
 
 $("#btnAddProductToWorker").click(function(e){
     e.preventDefault();
-    let cod_worker = document.getElementById('cod_worker').value;    
+    let cod_worker = document.getElementById('cod_worker').value;
     let product_id = document.getElementById('product_id').value;
     let amount = document.getElementById('amount').value;
 
@@ -201,7 +221,7 @@ $("#btnAddProductToWorker").click(function(e){
 
 $("#btnDelete").click(function(e){
     e.preventDefault();
-    let cod_worker = document.getElementById('cod_worker').value;    
+    let cod_worker = document.getElementById('cod_worker').value;
     $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -356,6 +376,7 @@ function setDataToInsert(){
 }
 
 function setDataToEdit(id){    
+    cleanFields();
     document.getElementById('cod_worker').value = id;
 
     titleForm = document.getElementById("titleForm").innerHTML = "Editar Trabajador <button type='button' class='close' onclick='reduceTable(false)'><span aria-hidden='true'>&times;</span></button>";
@@ -392,6 +413,8 @@ function setDataToEdit(id){
             document.querySelector('#payroll').checked = worker['payroll'];
             document.getElementById("document").value = worker['document']
             document.getElementById("birthdate").value = worker['birthdate']
+            document.getElementById("joined_company").value = worker['joined_company']
+            document.getElementById("entered_payroll").value = worker['entered_payroll']
             document.getElementById("phone").value = worker['phone']
             document.getElementById("email").value = worker['email']
             
@@ -437,6 +460,8 @@ function cleanFields(){
     document.querySelector('#payroll').checked = false;
     document.getElementById('document').value = "";    
     document.getElementById('birthdate').value = "";    
+    document.getElementById('joined_company').value = "";    
+    document.getElementById('entered_payroll').value = "";    
     document.getElementById('phone').value = "";    
     document.getElementById('email').value = "";    
 }

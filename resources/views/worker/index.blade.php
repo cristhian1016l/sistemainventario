@@ -137,7 +137,7 @@
 
                     <h5>Datos de la empresa</h5>
                     <div class="form-group row">
-                        <div class="col-sm-3">
+                        <div class="col-sm-4">
                             <label for="area_type" class="col-form-label">Seleccione un área:</label>
                             <select class="form-control" id="area_type" autocomplete="off" style="width: 100%">                        
                                 @foreach($areas as $area)
@@ -145,7 +145,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-4">
                             <label for="worker_type" class="col-form-label">Seleccione el cargo:</label>
                             <select class="form-control" id="worker_type" autocomplete="off" style="width: 100%">                        
                                 @foreach($types as $type)
@@ -153,20 +153,31 @@
                                 @endforeach
                             </select>
                         </div>                        
-                        <div class="col-sm-3">
+                        <div class="col-sm-4">
                             <label for="company_id" class="col-form-label">Seleccione la empresa:</label>
                             <select class="form-control" id="company_id" autocomplete="off" style="width: 100%">                        
                                 @foreach($companies as $company)
                                 <option value="{{ $company->id }}">{{ $company->name }}</option>
                                 @endforeach
                             </select>
+                        </div>                        
+                    </div>
+
+                    <div class="form-group row">                        
+                        <div class="col-sm-4">
+                            <label for="joined_company" class="col-form-label">Fecha Ingreso a la Empresa:</label>
+                            <input type="text" id="joined_company" class="form-control"/>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-4">
                             <label for="payroll" class="col-form-label">¿Está en planilla?:</label>
                             <div class="custom-control custom-switch">                                
                                 <input type="checkbox" class="custom-control-input" id="payroll">
                                 <label class="custom-control-label" for="payroll"></label>
                             </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="entered_payroll" class="col-form-label">Fecha Ingreso a Planilla:</label>
+                            <input type="text" id="entered_payroll" class="form-control"/>
                         </div>
                     </div>
                         
@@ -347,6 +358,17 @@
     
         let worker_type_id_ToChange = 0;
 
+        $('#payroll').change(function() { 
+            let payroll = document.querySelector('#payroll').checked;             
+            if(payroll == false){
+                document.getElementById('entered_payroll').readOnly = true;
+                document.getElementById('entered_payroll').value = "";    
+            }else{
+                document.getElementById('entered_payroll').readOnly = false;                
+            }
+        });
+        $('#payroll').trigger('change');
+        
         $("#select_payroll").change(function() {
             console.log(document.getElementById('select_payroll').value);
             initializeTable();
@@ -391,7 +413,8 @@
 
         $(function() {
 
-            $('input[id="birthdate"]').daterangepicker({
+            let option = 
+            {
                 singleDatePicker: true,
                 showDropdowns: true,
                 minYear: 1901,
@@ -430,7 +453,11 @@
                     "firstDay": 0
                 },
                 opens: 'left'
-            });
+            }
+
+            $('input[id="birthdate"]').daterangepicker(option);
+            $('input[id="joined_company"]').daterangepicker(option);
+            $('input[id="entered_payroll"]').daterangepicker(option);
         });  
 
         $("#select_category").change(function() {

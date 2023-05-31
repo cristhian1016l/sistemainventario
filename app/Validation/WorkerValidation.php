@@ -30,6 +30,7 @@ class WorkerValidation{
                 'company_id' => 'required|numeric',
                 'document' => 'required|numeric|min_digits:8',
                 'birthdate' => 'nullable|date',
+                'joined_company' => 'required|date',
                 'phone' => 'nullable|min:17',
                 'email' => 'nullable|email'
             ];
@@ -46,7 +47,9 @@ class WorkerValidation{
                 'document.required' => 'Ingrese el documento',
                 'document.numeric' => 'El documento no tiene el formato correcto',
                 'document.min_digits' => 'El documento no tiene los dígitos suficientes',              
-                'birthdate.date' => 'La fecha no tiene el formato correcto',
+                'birthdate.date' => 'La fecha de nacimiento no tiene el formato correcto',
+                'joined_company.required' => 'Debe ingresar la fecha de ingreso a la empresa',
+                'joined_company.date' => 'La fecha de ingreso a la empresa no tiene el formato correcto',
                 'phone.min' => 'El celular no tiene el formato correcto',
                 'email.email' => 'El correo no tiene el formato correcto'
             ];
