@@ -12,23 +12,6 @@ class DashboardController extends Controller
     {
         $this->middleware('auth');
     }
-    
-    public function index()
-    {
-        $suppliers = DB::select("SELECT COUNT(*) AS total FROM suppliers");        
-        $categories = DB::select("SELECT COUNT(*) AS total FROM categories");
-        $products = DB::select("SELECT COUNT(*) AS total FROM products");
-        $workers = DB::select("SELECT COUNT(*) AS total FROM workers");
-        $requests = DB::select("SELECT COUNT(*) AS total FROM requests");        
-
-        $data = ['suppliers' => $suppliers,                
-                'categories' => $categories, 
-                'products' => $products,
-                'requests' => $requests,
-                'workers' => $workers];
-
-        return view('admin.dashboard.index', $data);
-    }
 
     public function categories_with_more_products()
     {

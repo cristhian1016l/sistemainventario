@@ -7,9 +7,12 @@ use App\Models\User;
 use App\Models\Supplier; //DELETE
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
+use App\Http\Controllers\DashboardController;
 
 //ADMIN CONTROLLER 
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DashboardController AS AdminDashboardController;
 use App\Http\Controllers\Admin\StoreController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\SupplierController;
@@ -36,13 +39,35 @@ Route::get('/', [LoginController::class, 'show_login'])->name('show_login');
 Route::post('login', [LoginController::class, 'login'])->name('login');
 Route::post('logout', [LoginController::class, 'logout'])->name('logout'); //sólo para invitados!
 
-Route::get('/panel', [DashboardController::class, 'index'])->name('panel');
+// Route::get('/panel', [DashboardController::class, 'index'])->name('panel');
+
+//RUTA PARA DESVIAR A LOS ROLES
+Route::get('/panel', [DashboardController::class, 'get_news'])->name('panel');
+
+Route::group(['middleware' => ['can:administrar solicitudes']], function() {
+    // SOLICITUDES
+    Route::get('/solicitudes', [RequestController::class, 'index'])->name('request');
+    Route::get('/solicitudes/crear-solicitud', [RequestController::class, 'create'])->name('request.create');
+
+    Route::post('/solicitudes/obtener-solicitudes', [RequestController::class, 'getRequests']);
+    Route::post('/solicitudes/obtener-solicitud/{id}', [RequestController::class, 'getRequestById']);
+    Route::post('/solicitudes/agregar-solicitud', [RequestController::class, 'insert']);
+    Route::post('/solicitudes/editar-solicitud', [RequestController::class, 'edit']);
+    Route::post('/solicitudes/eliminar-solicitud', [RequestController::class, 'delete']);
+    Route::post('/solicitudes/cambiar-estado', [RequestController::class, 'changeStatus']);
+
+    Route::get('/solicitudes/solicitud-pdf/{cod_request}', [RequestController::class, 'request_report'])->name('request.request_report');
+    // FIN SOLICITUDES
+});
 
 Route::group(['middleware' => 'isAdmin'], function (){
 
-    Route::post('/panel/categorias-con-mas-productos', [DashboardController::class, 'categories_with_more_products']);
-    Route::post('/panel/empleados-en-empresas', [DashboardController::class, 'employees_in_companies']);
-    Route::post('/panel/empleados-en-planilla', [DashboardController::class, 'employees_in_payroll']);
+    Route::get('/panel-administracion', [DashboardController::class, 'show_dashboard_admin'])->name('panel.admin');    
+
+
+    Route::post('/panel/categorias-con-mas-productos', [AdminDashboardController::class, 'categories_with_more_products']);
+    Route::post('/panel/empleados-en-empresas', [AdminDashboardController::class, 'employees_in_companies']);
+    Route::post('/panel/empleados-en-planilla', [AdminDashboardController::class, 'employees_in_payroll']);
 
     // // ALMACENES
     // Route::get('/almacenes', [StoreController::class, 'index'])->name('store');
@@ -114,21 +139,6 @@ Route::group(['middleware' => 'isAdmin'], function (){
 
     // FIN TRABAJADORES
 
-    // SOLICITUDES
-    Route::get('/solicitudes', [RequestController::class, 'index'])->name('request');
-    Route::get('/solicitudes/crear-solicitud', [RequestController::class, 'create'])->name('request.create');
-
-    Route::post('/solicitudes/obtener-solicitudes', [RequestController::class, 'getRequests']);
-    Route::post('/solicitudes/obtener-solicitud/{id}', [RequestController::class, 'getRequestById']);
-    Route::post('/solicitudes/agregar-solicitud', [RequestController::class, 'insert']);
-    Route::post('/solicitudes/editar-solicitud', [RequestController::class, 'edit']);
-    Route::post('/solicitudes/eliminar-solicitud', [RequestController::class, 'delete']);
-    Route::post('/solicitudes/cambiar-estado', [RequestController::class, 'changeStatus']);
-
-    Route::get('/solicitudes/solicitud-pdf/{cod_request}', [RequestController::class, 'request_report'])->name('request.request_report');
-
-    // FIN SOLICITUDES
-
     // EQUIPO
     Route::get('/equipos', [TeamController::class, 'index'])->name('team');
 
@@ -156,7 +166,39 @@ Route::group(['middleware' => 'isAdmin'], function (){
 
 });
 
+
+Route::group(['middleware' => 'isAssistance'], function (){
+
+    Route::get('/panel-asistente', [DashboardController::class, 'show_dashboard_assistance'])->name('panel.assistance');
+
+
+    // Route::post('/panel/categorias-con-mas-productos', [AdminDashboardController::class, 'categories_with_more_products']);
+    // Route::post('/panel/empleados-en-empresas', [AdminDashboardController::class, 'employees_in_companies']);
+    // Route::post('/panel/empleados-en-planilla', [AdminDashboardController::class, 'employees_in_payroll']);
+
+});
+
 Route::get('/create', function(){
+
+    // $permission = Permission::create(['name' => 'administrar productos']);
+    // $permission = Permission::create(['name' => 'administrar categorias']);
+    // $permission = Permission::create(['name' => 'administrar marcas']);
+    // $permission = Permission::create(['name' => 'administrar proveedores']);
+    // $permission = Permission::create(['name' => 'administrar rrhh']);
+    // $permission = Permission::create(['name' => 'administrar areas y cargos']);
+    // $permission = Permission::create(['name' => 'administrar solicitudes']);
+    // $permission = Permission::create(['name' => 'administrar equipos']);
+
+    // User::find(1)->givePermissionTo('administrar productos');
+    // User::find(1)->givePermissionTo('administrar categorias');
+    // User::find(1)->givePermissionTo('administrar marcas');
+    // User::find(1)->givePermissionTo('administrar proveedores');
+    // User::find(1)->givePermissionTo('administrar rrhh');
+    // User::find(1)->givePermissionTo('administrar areas y cargos');
+    // User::find(1)->givePermissionTo('administrar solicitudes');
+    // User::find(1)->givePermissionTo('administrar equipos');
+
+    // User::find(2)->givePermissionTo('administrar solicitudes');
 
     // User::create([
     //     'email' => 'juanup@ponceproducciones.com',
