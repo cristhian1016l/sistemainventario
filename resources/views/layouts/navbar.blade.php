@@ -78,7 +78,7 @@
 					</li>
 					<li class="dropdown pc-h-item">
 						<a class="pc-head-link dropdown-toggle arrow-none mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-							<img src="{{ asset('images/user/avatar-2.jpg') }}" alt="user-image" class="user-avtar">
+							<img src="{{ asset('images/logo-ponce-dark.svg') }}" alt="user-image" class="user-avtar">
 							<span>
 								<span class="user-name">{{ Auth::user()->email }}</span>
 								<!-- <span class="user-desc">Administrator</span> -->

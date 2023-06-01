@@ -117,30 +117,54 @@
 </head>
 <body>
     <div id="watermark">
-        <img src="{{URL::asset('/images/logounishuayrecords.png')}}" alt="Ponce Producciones" height="500" width="500">
+        @switch($header[0]->company)
+            @case('PRODUCCIONES 89 S.A.C')
+                <img src="{{URL::asset('/images/logoproducciones89.png')}}" alt="Producciones 89" height="500" width="500">
+                @break
+            @case('UNSIHUAY RECORDS S.A.C.')
+                <img src="{{URL::asset('/images/logounishuayrecords.png')}}" alt="Unsihuay Records" height="500" width="500">
+                @break
+            @case('PONCE PRODUCCIONES S.A.C')
+                <img src="{{URL::asset('/images/logoponceproducciones.png')}}" alt="Ponce Producciones" height="500" width="500">
+                @break
+            @default
+                <img alt="Ponce Producciones" height="500" width="500">
+        @endswitch        
     </div>
     <div>
-    <table>
+    <table style="margin-top: 60px">
+        <tr>
+            <td>
+                <span style="margin-left: 75px; font-family: monospace; font-size: 12px; sans-serif; font-weight: bold; text-align: center">
+                <?php 
+                    echo date('d-m-y h:i A');
+                ?>
+                </span>
+            </td>                
+        </tr>
+    </table>
+        <table style="margin-left: 75px; margin-top: 50px; font-family: monospace; font-size: 15px">
             <tr>
-                <td>
-                    <span style="margin-left: 75px; font-family: monospace; font-size: 12px; sans-serif; font-weight: bold; text-align: center">
-                    <?php 
-                        echo date('d-m-y h:i A');
-                    ?>
-                    </span>
-                </td>                
-            </tr>
-        </table>
-        <table style="margin-left: 75px; margin-top: 20px; font-family: monospace; font-size: 15px">
-            <tr>
-                <td style="width: 220px">
+                <td style="width: 220px: text-align: bottom">
                     <b>COD. REQ.: </b>{{ $header[0]->cod_request }}
                 </td>
-                <td>
+                <td style="text-align: top">
                     <b>FECHA DE ENT.: </b>{{ \Carbon\Carbon::parse($header[0]->since_date)->format('d-m-Y') }}
                 </td>
-                <td style="padding-left: 50px" rowspan="2">
-                    <img src="{{URL::asset('/images/logounishuayrecords.png')}}" alt="Ponce Producciones" height="65" width="65">
+                <td style="padding-left: 70px" rowspan="2">
+                    @switch($header[0]->company)
+                        @case('PRODUCCIONES 89 S.A.C')
+                            <img src="{{URL::asset('/images/logoproducciones89.png')}}" alt="Producciones 89" height="100" width="100">
+                            @break
+                        @case('UNSIHUAY RECORDS S.A.C.')                            
+                            <img src="{{URL::asset('/images/logounishuayrecords.png')}}" alt="Ponce Producciones" height="100" width="100">
+                            @break
+                        @case('PONCE PRODUCCIONES S.A.C')
+                            <img src="{{URL::asset('/images/logoponceproducciones.png')}}" alt="Ponce Producciones" height="100" width="100">
+                            @break
+                        @default
+                            <img alt="Ponce Producciones" height="100" width="100">
+                    @endswitch                                     
                 </td>                
             </tr>
 
@@ -165,24 +189,24 @@
     </div>
     
     <div>        
-        <p style="margin-top: 20px; font-family: monospace; font-size: 20px; font-weight: bold; text-align: center; text-decoration: underline">SOLICITUD</p>
+        <p style="margin-top: 50px; font-family: monospace; font-size: 20px; font-weight: bold; text-align: center; text-decoration: underline">SOLICITUD DE MEMORIAS</p>
         <!-- <br> -->
         <p style="font-family: monospace; margin-left: 75px; margin-right: 75px; text-align: justify">
             POR EL PRESENTE DOCUMENTO, YO <b>{{ $header[0]->name }}</b>, DE 
             NACIONALIDAD PERUANA, IDENTIFICADO CON DOCUMENTO NACIONAL DE IDENTIDAD 
             NÚMERO <b>{{ $header[0]->document }}</b>; EN MI CALIDAD DE TRABAJADOR 
-            CON CARGO DE PRODUCTOR DESIGNADO DE LA SOCIEDAD DENOMINDAD
-            “UNSIHUAY RECORDS S.A.C.”. DECLARO BAJO JURAMENTO
+            CON CARGO DE PRODUCTOR DESIGNADO DE LA SOCIEDAD DENOMINADA
+            <b>“{{ $header[0]->company }}”.</b> DECLARO BAJO JURAMENTO
             HABER RECIBIDO EL BIEN QUE A CONTINUACIÓN SE DETALLA.
         </p>    
         <p style="font-family: monospace; font-weight: bold; text-decoration: underline; margin-left: 75px; margin-top: 50px">DESCRIPCIÓN DE LOS BIENES:</p>    
         <ul style="font-family: monospace; font-weight: bold; text-decoration: none; margin-left: 75px">
             @foreach($details as $detail)
-            <li>{{ $detail->amount }} | {{ $detail->product_name }}</li>
+            <li>{{ $detail->amount }} | {{ $detail->product_name }} - {{ $detail->name }} - {{ $detail->color }}</li>
             @endforeach
         </ul>
         <p style="font-family: monospace; margin-left: 75px; margin-right: 75px; margin-top: 50px; text-align: justify">            
-            EL TRABAJADOR DECALARA QUE TODOS LOS BIENES PATRIMONIALES DETALLADOS 
+            EL TRABAJADOR(A) DECLARA QUE TODOS LOS BIENES PATRIMONIALES DETALLADOS 
             SE ENCUENTRAN EN BUEN ESTADO. EL TRABAJADOR ES RESPONSABLE DIRECTO DE 
             LA EXISTENCIA, PERMANENCIA, CONSERVACION Y BUEN USO DE CADA UNO DE LOS 
             BIENES DESCRITOS Y MOSTRADOS. POR LO QUE SE RECOMIENDA TOMAR LAS 

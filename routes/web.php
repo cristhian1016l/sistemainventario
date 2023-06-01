@@ -58,6 +58,12 @@ Route::group(['middleware' => ['can:administrar solicitudes']], function() {
 
     Route::get('/solicitudes/solicitud-pdf/{cod_request}', [RequestController::class, 'request_report'])->name('request.request_report');
     // FIN SOLICITUDES
+
+    // PRODUCTOS
+    Route::post('/productos/obtener-producto/{id}', [ProductController::class, 'getProductById']);
+    Route::post('/productos/obtener-productos-categoria', [ProductController::class, 'getProductsByCategory']);
+    // FIN PRODUCTOS
+    
 });
 
 Route::group(['middleware' => 'isAdmin'], function (){
@@ -117,8 +123,6 @@ Route::group(['middleware' => 'isAdmin'], function (){
     Route::post('/productos/eliminar-producto', [ProductController::class, 'delete']);
 
     Route::get('/productos/reporte-productos', [ProductController::class, 'productsReport'])->name('product.reports');
-
-
     // FIN PRODUCTOS
 
     // TRABAJADORES

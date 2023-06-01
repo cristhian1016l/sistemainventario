@@ -26,7 +26,7 @@ class RequestController extends Controller
     public function create()
     {
         $categories = DB::select("SELECT * FROM categories");
-        $workers = DB::select("SELECT * FROM workers WHERE worker_type_id = 2");
+        $workers = DB::select("SELECT * FROM workers WHERE worker_type_id IN (2, 7)");
         $data = ["workers" => $workers, "categories" => $categories];
         
         return view('request.create', $data);
@@ -203,14 +203,17 @@ class RequestController extends Controller
         $header = DB::select("SELECT 
                                     r.cod_request, r.since_date, r.to_date, 
                                     r.deadline, r.date, r.was_entered, CONCAT(w.name, ' ', w.lastname) as name,
-                                    w.document, w.address
-                                FROM requests r INNER JOIN workers w 
+                                    w.document, w.address, c.name AS company  FROM requests r 
+                                INNER JOIN workers w 
                                 ON r.responsible_id = w.id
+                                INNER JOIN companies c
+                                ON w.company_id = c.id
                                 WHERE r.cod_request = '".$cod_request."'");
 
-        $details = DB::select("SELECT rd.id, p.product_name, p.description, rd.amount
-                                FROM requests_details rd INNER JOIN products p
-                                ON rd.product_id = p.id
+        $details = DB::select("SELECT rd.id, p.product_name, b.name, p.color, p.description, rd.amount
+                                FROM requests_details rd 
+                                INNER JOIN products p ON rd.product_id = p.id                                
+                                INNER JOIN brands b ON p.brand_id = b.id
                                 WHERE rd.cod_request = '".$cod_request."'");
         
         $data = ['cod' => $cod_request, 'header' => $header, 'details' => $details];    
