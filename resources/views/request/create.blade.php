@@ -27,13 +27,14 @@
                     <div class="form-group">
                         <div class="form-row">
                             <div class="col-md-6">
-                                <label for="select-responsible" class="col-form-label">Productor:</label>
+                                <label for="select-responsible" class="col-form-label">Responsable:</label>
                                 <select class="form-control" id="select-responsible" autocomplete="off" style="width: 100%">
-                                    <option value="">Seleccione un productor</option>
+                                    <option value="">Seleccione el responsable</option>
                                     @foreach($workers as $worker)
                                     <option value="{{ $worker->id }}">{{ $worker->lastname.' '.$worker->name }}</option>
                                     @endforeach
                                 </select>  
+                                <small id="emailHelp" class="form-text text-muted">Solo están listados los camarógrafos y productores.</small>
                             </div>
                             <div class="col-md-6">
 
@@ -57,17 +58,20 @@
                                 <select class="form-control" id="product_id" autocomplete="off" style="width: 100%">                                    
                                 </select>  
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <label for="amount" class="col-form-label">Cantidad:</label>
-                                <input type="text" class="form-control" id="amount"/>                        
+                                <input type="number" class="form-control" id="amount"/>                        
                             </div>
                             <div class="col-md-2">
+                                <label for="note" class="col-form-label">Nota:</label>
+                                <input type="text" class="form-control" id="note"/>                        
+                            </div>
+                            <div class="col-md-1">
                                 <label for="amount" class="col-form-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><br>
                                 <button class="btn btn-shadow btn-success" id="addProduct">
                                 <i class="fas fa-plus"></i></button>                            
                             </div>
                         </div>
-
                     </div>       
 
                     <div class="form-group">
@@ -94,6 +98,7 @@
                             <th>COLOR</th>
                             <th>DESCRIPCIÓN</th>
                             <th>CANTIDAD</th>
+                            <th>NOTA</th>
                             <th>OPCIONES</th>
                         </tr>                                                
                     </thead>
@@ -202,6 +207,7 @@
 
             let product_id = document.getElementById('product_id').value;            
             let amount = document.getElementById('amount').value;            
+            let note = document.getElementById('note').value;            
 
             //Get Text
             var selected = $('#product_id').select2("data");
@@ -233,7 +239,8 @@
                                             product: productSelected.product_name, 
                                             color: productSelected.color,
                                             description: productSelected.description,
-                                            amount: amount});
+                                            amount: amount,
+                                            note: note});
                                 Toastify({
                                     text: "Fueron añadidos "+amount + " " + productSelected.product_name,
                                     duration: 3000
@@ -267,6 +274,9 @@
                                 "</td>"+
                                 "<td>"+
                                     elem.amount+
+                                "</td>"+
+                                "<td>"+
+                                    elem.note+
                                 "</td>"+
                                 "<td>"+
                                     "<button onclick='deleteProductAssigned("+id+")' class='btn btn-sm' ><i class='feather icon-trash-2 ml-3 f-16 text-danger'></i></button>"+

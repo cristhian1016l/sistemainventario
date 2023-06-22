@@ -287,6 +287,19 @@ CREATE TABLE companies
     name varchar(255)
 );
 
+drop table if exists external_disks;
+CREATE TABLE external_disks
+(
+	id int auto_increment not null primary key,
+    code varchar(10) unique,
+    storage varchar(20),
+    description varchar(255),
+    brand_id int not null,
+    created_at datetime,
+    updated_at datetime,
+	foreign key (brand_id) references brands(id)
+);
+
 -- --------------- RELACIONES DE LOS ROLES Y PERMISOS --------------- 
 
 ALTER TABLE model_has_permissions
@@ -352,20 +365,3 @@ UPDATE workers SET worker_type_id = 6 WHERE worker_type_id = 3;
  
 ALTER TABLE workers
 DROP area_type_id;
-
-SELECT * FROM products p
-INNER JOIN categories c
-ON p.category_id = c.id
-ORDER BY p.stock DESC LIMIT 5;
-
-SELECT SUM(stock) FROM products WHERE category_id = '3';
-
-SELECT * FROM worker_type;
-ALTER TABLE products 
-ADD COLUMN color varchar(50) AFTER category_id;
-
-SELECT c.name, SUM(w.company_id) AS total FROM workers w
-INNER JOIN companies c 
-ON w.company_id = c.id
-GROUP BY c.name
-ORDER BY total DESC;

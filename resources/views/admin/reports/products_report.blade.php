@@ -100,7 +100,13 @@
                 </td>
             </tr>
         </table>
-        <p style="margin-top: -8px; font-family: 'Inter', sans-serif; font-size: 20px; font-weight: bold; text-align: center;">LISTADO DE ACTIVOS REGISTRADOS</p>                
+        <p style="margin-top: -8px; font-family: 'Inter', sans-serif; font-size: 20px; font-weight: bold; text-align: center;">
+            @if(isset($category))
+                LISTADO DE "{{ $category }}"
+            @else
+                LISTADO DE ACTIVOS REGISTRADOS
+            @endif    
+        </p>                
         <span style="font-family: 'Inter', sans-serif; font-size: 9px; font-weight: bold; color: blue">Los productos menores a 3 unidades se marcarán en rojo</span>
         <br>                         
         <br>                         

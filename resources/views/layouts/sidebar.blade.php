@@ -40,6 +40,7 @@
 						<a class="pc-link "><span class="pc-micon"><i data-feather="box"></i></span><span class="pc-mtext">Inventario</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span></a>
 						<ul class="pc-submenu">
 							<!-- <li class="pc-item"><a class="pc-link" href="#">Memorias</a></li> -->
+							<li class="pc-item"><a class="pc-link" href="{{ route('external_disk') }}">Discos Externos</a></li>
 							<li class="pc-item"><a class="pc-link" href="{{ route('product') }}">Productos</a></li>
 							<li class="pc-item"><a class="pc-link" href="{{ route('category') }}">Categorias</a></li>
 							<!-- <li class="pc-item"><a class="pc-link" href="#">Almacén</a></li> -->
@@ -67,7 +68,6 @@
 						<a href="{{ route('team') }}" class="pc-link "><span class="pc-micon"><i data-feather="users"></i></span><span class="pc-mtext">EQUIPOS</span></a>
 					</li>
 					@endif
-
 				</ul>				
 			</div>
 		</div>

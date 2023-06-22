@@ -202,12 +202,24 @@ class ProductController extends Controller
 
     // ****************************  REPORTES  ****************************
 
-    public function productsReport()
+    public function productsReport($category_id)
     {
-        $products = DB::select("SELECT p.product_name, p.color, p.price, p.stock, c.name AS category FROM products p
-                                INNER JOIN categories c ON p.category_id = c.id
-                                ORDER BY category ASC");
-        $data = ['products' => $products];
+
+        $products = [];
+
+        if($category_id == 0){
+            $products = DB::select("SELECT p.product_name, p.color, p.price, p.stock, c.name AS category FROM products p
+                                    INNER JOIN categories c ON p.category_id = c.id
+                                    ORDER BY category ASC");
+            $data = ['products' => $products];
+
+        }else{
+            $products = DB::select("SELECT p.product_name, p.color, p.price, p.stock, c.name AS category FROM products p
+                                    INNER JOIN categories c ON p.category_id = c.id
+                                    WHERE c.id = ".$category_id." ORDER BY category ASC");                                    
+            $data = ['products' => $products, 'category' => $products[0]->category];
+        }
+
         $pdf=PDF::loadView('admin.reports.products_report', $data);
         // $pdf->setPaper('A4', 'landscape');
         return $pdf->stream();

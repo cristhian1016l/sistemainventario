@@ -13,6 +13,50 @@
 <!-- TERMINO DE MENSAJES DE ERROR -->
 
 <div class="row">
+    <div class="col-md-12" id="reports">
+        <div class="card">
+            <div class="card-header">                
+                <h5 class="card-title">
+                    Reportes Personalizados
+                    <button type="button" class="close" onclick="showAndHideReports(false)"><span aria-hidden="true">&times;</span></button>
+                </h5>                
+            </div>
+            <div class="card-body">                
+                <div class="form-row row">
+                    <div class="col-md-6">
+                        <fieldset style="margin: 8px; border: 1px solid silver; padding: 8px; border-radius: 4px">
+                        <legend>Listado por categoría</legend>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <select class="form-control" id="select_category_report" autocomplete="off" style="width: 100%">
+                                    <option value="0">TODAS LAS CATEGORÍAS</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach                                
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <a href="#">
+                                    <button onclick="downloadListing()"
+                                        class="btn btn-success btn-block">
+                                        Descargar Reporte
+                                    </button>
+                                </a>                                
+                            </div>
+
+                        </div>
+                        </fieldset>
+                    </div>
+                    
+                    <div class="col-md-6"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
     <input type="hidden" class="form-control" id="cod_product">
     <div class="col-sm-12 data" id="data">
         <div class="card">
@@ -23,14 +67,7 @@
                         class="btn btn-primary"
                         onclick="setDataToInsert()">
                         Agregar
-                    </button>
-                    <a href="{{ route('product.reports') }}" target="_blank">
-                        <button 
-                            type="button" 
-                            class="btn btn-primary">
-                            Reporte PDF
-                        </button>
-                    </a>
+                    </button>                    
                 </div>
             </div>
             <div class="card-body">
@@ -191,6 +228,7 @@
         $("#select-category").select2();                
         $("#select-supplier").select2();                
         $("#select-store").select2();                
+        $("#select_category_report").select2();                
 
         $('#price').priceFormat({
             limit: 7,
@@ -199,5 +237,15 @@
             centsSeparator: '.',
             thousandsSeparator: ''
         });
+
+        function downloadListing(){
+            var category_id = $('#select_category_report').val();
+            var url = '{{ route("product.reports", ":id") }}'
+            url = url.replace(':id', category_id);
+            window.open(
+            url,
+            "_blank"
+            );   
+        }
     </script>
 @endsection

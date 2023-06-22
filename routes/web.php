@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\StoreController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ExternalDiskController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\WorkerController;
 use App\Http\Controllers\Admin\RequestController;
@@ -113,6 +114,16 @@ Route::group(['middleware' => 'isAdmin'], function (){
     // FIN CATEGORÍAS
 
     // PRODUCTOS
+    Route::get('/discos', [ExternalDiskController::class, 'index'])->name('external_disk');
+
+    Route::post('/discos/obtener-discos', [ExternalDiskController::class, 'getExternalDisks']);
+    Route::post('/discos/obtener-disco/{id}', [ExternalDiskController::class, 'getExternalDiskById']);
+    Route::post('/discos/agregar-disco', [ExternalDiskController::class, 'insert']);
+    Route::post('/discos/editar-disco', [ExternalDiskController::class, 'edit']);
+    Route::post('/discos/eliminar-disco', [ExternalDiskController::class, 'delete']);
+    // FIN PRODUCTOS
+
+    // PRODUCTOS
     Route::get('/productos', [ProductController::class, 'index'])->name('product');
 
     Route::post('/productos/obtener-productos', [ProductController::class, 'getProducts']);
@@ -122,7 +133,7 @@ Route::group(['middleware' => 'isAdmin'], function (){
     Route::post('/productos/editar-producto', [ProductController::class, 'edit']);
     Route::post('/productos/eliminar-producto', [ProductController::class, 'delete']);
 
-    Route::get('/productos/reporte-productos', [ProductController::class, 'productsReport'])->name('product.reports');
+    Route::get('/productos/reporte-productos/{category_id}', [ProductController::class, 'productsReport'])->name('product.reports');
     // FIN PRODUCTOS
 
     // TRABAJADORES

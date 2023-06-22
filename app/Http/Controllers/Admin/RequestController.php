@@ -96,6 +96,7 @@ class RequestController extends Controller
                     $requestDetail->cod_request = _CodRequest;
                     $requestDetail->product_id = $detail['id'];
                     $requestDetail->amount = $detail['amount'];
+                    $requestDetail->note = mb_strtoupper($detail['note'], 'utf-8');
                     $requestDetail->save();
                 }                
 
@@ -210,7 +211,7 @@ class RequestController extends Controller
                                 ON w.company_id = c.id
                                 WHERE r.cod_request = '".$cod_request."'");
 
-        $details = DB::select("SELECT rd.id, p.product_name, b.name, p.color, p.description, rd.amount
+        $details = DB::select("SELECT rd.id, p.product_name, b.name, p.color, p.description, rd.amount, rd.note
                                 FROM requests_details rd 
                                 INNER JOIN products p ON rd.product_id = p.id                                
                                 INNER JOIN brands b ON p.brand_id = b.id
