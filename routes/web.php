@@ -113,7 +113,7 @@ Route::group(['middleware' => 'isAdmin'], function (){
     Route::post('/categorias/eliminar-categoria', [CategoryController::class, 'delete']);
     // FIN CATEGORÍAS
 
-    // PRODUCTOS
+    // DISCOS EXTERNOS
     Route::get('/discos', [ExternalDiskController::class, 'index'])->name('external_disk');
 
     Route::post('/discos/obtener-discos', [ExternalDiskController::class, 'getExternalDisks']);
@@ -121,14 +121,14 @@ Route::group(['middleware' => 'isAdmin'], function (){
     Route::post('/discos/agregar-disco', [ExternalDiskController::class, 'insert']);
     Route::post('/discos/editar-disco', [ExternalDiskController::class, 'edit']);
     Route::post('/discos/eliminar-disco', [ExternalDiskController::class, 'delete']);
-    // FIN PRODUCTOS
+    // FIN DISCOS EXTERNOS
 
     // PRODUCTOS
     Route::get('/productos', [ProductController::class, 'index'])->name('product');
 
     Route::post('/productos/obtener-productos', [ProductController::class, 'getProducts']);
     Route::post('/productos/obtener-producto/{id}', [ProductController::class, 'getProductById']);
-    Route::post('/productos/obtener-productos-categoria', [ProductController::class, 'getProductsByCategory']);
+    // Route::post('/productos/obtener-productos-categoria', [ProductController::class, 'getProductsByCategory']);
     Route::post('/productos/agregar-producto', [ProductController::class, 'insert']);
     Route::post('/productos/editar-producto', [ProductController::class, 'edit']);
     Route::post('/productos/eliminar-producto', [ProductController::class, 'delete']);
