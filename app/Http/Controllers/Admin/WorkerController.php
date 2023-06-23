@@ -399,4 +399,40 @@ class WorkerController extends Controller
         return $pdf->stream();
     }
 
+    public function swornDeclarationByCompanyPDF($company_id)
+    {                
+
+        $all_data = array();
+        $products_asigned = array();        
+
+        $workers = DB::select("SELECT w.*, wt.name as position FROM workers w
+                                INNER JOIN worker_type wt ON w.worker_type_id = wt.id
+                                WHERE w.payroll = 1 AND w.company_id = ".$company_id);
+
+        $company = DB::select("SELECT name FROM companies WHERE id = ".$company_id);
+
+        foreach($workers as $worker){
+
+            $products = DB::select("SELECT p.id, p.product_name, wp.amount, c.name, b.name AS brand FROM worker_product wp
+                                    INNER JOIN products p ON wp.product_id = p.id
+                                    INNER JOIN categories c ON p.category_id = c.id
+                                    INNER JOIN brands b ON p.brand_id = b.id
+                                    WHERE wp.worker_id = ".$worker->id);
+            
+            foreach($products as $product){
+                array_push($products_asigned, ['amount' => $product->amount, 'product_name' => $product->product_name, 'category' => $product->name, 'brand' => $product->brand]);
+            }
+
+            array_push($all_data, ['id' => $worker->id, 'names' => $worker->name.' '.$worker->lastname, 'position' => $worker->position,'document' => $worker->document, 'address' => $worker->address, 'company' => $company[0]->name,'products' => collect($products_asigned) ]);
+            $products_asigned = [];
+
+        }
+
+
+        $data = ['all_data' => collect($all_data)];        
+        $pdf=PDF::loadView('admin.reports.sworndeclarationbycompany', $data);
+        return $pdf->stream();
+
+    }
+
 }

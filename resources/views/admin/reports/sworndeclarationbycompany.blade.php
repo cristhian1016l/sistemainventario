@@ -89,14 +89,14 @@
             POR EL PRESENTE DOCUMENTO, YO <b>{{ $data['names'] }}</b>, DE 
             NACIONALIDAD PERUANA, IDENTIFICADO CON DOCUMENTO NACIONAL DE IDENTIDAD 
             NÚMERO <b>{{ $data['document'] }}</b>; SEÑALANDO DOMICILIO <b>{{ $data['address'] }}</b>. EN 
-            MI CALIDAD DE TRABAJADOR CON CARGO EDICION DE VIDEOS DESIGNADO DE LA 
-            SOCIEDAD DENOMINADA “PRODUCCIONES 89 S.A.C.”., DECLARO BAJO JURAMENTO 
+            MI CALIDAD DE TRABAJADOR CON CARGO <b>{{ $data['position'] }}</b> DESIGNADO DE LA 
+            SOCIEDAD DENOMINADA <b>“{{ $data['company'] }}”</b>., DECLARO BAJO JURAMENTO 
             HABER RECIBIDO EL BIEN QUE A CONTINUACIÓN SE DETALLA.
         </p>    
         <p style="font-family: monospace; font-weight: bold; text-decoration: underline; margin-left: 75px; margin-top: 50px">DESCRIPCIÓN DE LOS BIENES:</p>    
         <ul style="font-family: monospace; font-weight: bold; text-decoration: none; margin-left: 75px">
             @foreach($data['products'] as $product)
-            <li>{{ $product['amount'] }} | {{ $product['category'] }} - {{ $product['product_name'] }}</li>
+            <li>{{ $product['amount'] }} | {{ $product['category'] }} - {{ $product['product_name'] }} - {{ $product['brand'] }}</li>
             @endforeach
         </ul>
         <p style="font-family: monospace; margin-left: 75px; margin-right: 75px; margin-top: 50px; text-align: justify">

@@ -151,6 +151,7 @@ Route::group(['middleware' => 'isAdmin'], function (){
 
     Route::get('/trabajadores/declaracion-jurada-pdf/{area}', [WorkerController::class, 'swornDeclarationPDF'])->name('worker.sworndeclarationpdf');
     Route::get('/trabajadores/listado-por-cargo/{cod_type}', [WorkerController::class, 'listingByPositionPDF'])->name('worker.listingByPosition');
+    Route::get('/trabajadores/declaracion-jurada-empresa/{company_id}', [WorkerController::class, 'swornDeclarationByCompanyPDF'])->name('worker.swornDeclarationByCompany');
 
     // FIN TRABAJADORES
 

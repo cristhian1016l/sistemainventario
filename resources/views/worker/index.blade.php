@@ -16,13 +16,13 @@
 <div class="row">
     <div class="col-md-12" style="display: none" id="reports">
         <div class="card">
-            <div class="card-header">                
+            <div class="card-header">
                 <h5 class="card-title">
                     Reportes Personalizados
                     <button type="button" class="close" onclick="showAndHideReports(false)"><span aria-hidden="true">&times;</span></button>
-                </h5>                
+                </h5>
             </div>
-            <div class="card-body">                
+            <div class="card-body">
                 <div class="form-row row">
 
                     <div class="col-md-6">
@@ -30,7 +30,7 @@
                         <legend>Declaración Jurada por área</legend>
                         <div class="row">
                             <div class="col-md-6">
-                                <select class="form-control" id="area_type_report" autocomplete="off" style="width: 100%">                        
+                                <select class="form-control" id="area_type_report" autocomplete="off" style="width: 100%">
                                     @foreach($areas as $area)
                                     <option value="{{ $area->id }}">{{ $area->name }}</option>
                                     @endforeach
@@ -72,8 +72,35 @@
                         </div>
                         </fieldset>
                     </div>
-                    
-                    <div class="col-md-6"></div>
+                                        
+                </div>
+
+                <div class="form-row row">
+
+                    <div class="col-md-6">
+                        <fieldset style="margin: 8px; border: 1px solid silver; padding: 8px; border-radius: 4px">
+                        <legend>Declaración Jurada por empresa (planilla)</legend>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <select class="form-control" id="company_report" autocomplete="off" style="width: 100%">
+                                    @foreach($companies as $company)
+                                    <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <a href="#">
+                                    <button onclick="sworndeclarationByCompanies()"
+                                        class="btn btn-success btn-block">
+                                        Descargar declaración jurada
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                        </fieldset>
+                    </div>
+                                        
                 </div>
             </div>
         </div>
@@ -83,10 +110,10 @@
 <div class="row">
     <div class="col-md-12" style="display: none" id="form">
         <div class="card">
-            <div class="card-header">                
-                <h5 class="card-title" id="titleForm">                    
+            <div class="card-header">
+                <h5 class="card-title" id="titleForm">
                     <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
-                </h5>                
+                </h5>
             </div>
             <div class="card-body">
 
@@ -115,7 +142,7 @@
                                 @foreach($documents as $document)
                                 <option value="{{ $document->id }}">{{ $document->document_type }}</option>
                                 @endforeach
-                            </select>                              
+                            </select>
                         </div>
                         <div class="col-sm-3">
                             <label for="document" class="col-form-label">Documento:</label>
@@ -133,13 +160,13 @@
                             <label for="email" class="col-form-label">Correo:</label>
                             <input type="email" class="form-control" id="email"></input>
                         </div>               
-                    </div>                    
+                    </div>
 
                     <h5>Datos de la empresa</h5>
                     <div class="form-group row">
                         <div class="col-sm-4">
                             <label for="area_type" class="col-form-label">Seleccione un área:</label>
-                            <select class="form-control" id="area_type" autocomplete="off" style="width: 100%">                        
+                            <select class="form-control" id="area_type" autocomplete="off" style="width: 100%">
                                 @foreach($areas as $area)
                                 <option value="{{ $area->id }}">{{ $area->name }}</option>
                                 @endforeach
@@ -147,30 +174,30 @@
                         </div>
                         <div class="col-sm-4">
                             <label for="worker_type" class="col-form-label">Seleccione el cargo:</label>
-                            <select class="form-control" id="worker_type" autocomplete="off" style="width: 100%">                        
+                            <select class="form-control" id="worker_type" autocomplete="off" style="width: 100%">
                                 @foreach($types as $type)
                                 <option value="{{ $type->id }}">{{ $type->name }}</option>
                                 @endforeach
                             </select>
-                        </div>                        
+                        </div>
                         <div class="col-sm-4">
                             <label for="company_id" class="col-form-label">Seleccione la empresa:</label>
-                            <select class="form-control" id="company_id" autocomplete="off" style="width: 100%">                        
+                            <select class="form-control" id="company_id" autocomplete="off" style="width: 100%">
                                 @foreach($companies as $company)
                                 <option value="{{ $company->id }}">{{ $company->name }}</option>
                                 @endforeach
                             </select>
-                        </div>                        
+                        </div>
                     </div>
 
-                    <div class="form-group row">                        
+                    <div class="form-group row">
                         <div class="col-sm-4">
                             <label for="joined_company" class="col-form-label">Fecha Ingreso a la Empresa:</label>
                             <input type="text" id="joined_company" class="form-control"/>
                         </div>
                         <div class="col-sm-4">
                             <label for="payroll" class="col-form-label">¿Está en planilla?:</label>
-                            <div class="custom-control custom-switch">                                
+                            <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="payroll">
                                 <label class="custom-control-label" for="payroll"></label>
                             </div>
@@ -211,15 +238,15 @@
                         onclick="showAndHideReports(true)">
                         Crear Reporte
                     </button>                    
-                </div>                
+                </div>
                 <br>
                 <div class="row">
                     <div class="col-md-3">
                         <label for="select_payroll" class="col-form-label">Filtrar por planilla:</label>
-                        <select class="form-control" id="select_payroll" autocomplete="off" style="width: 100%">                                                            
-                            <option value="">TODOS</option>                            
-                            <option value="SI">SI</option>                            
-                            <option value="NO">NO</option>                            
+                        <select class="form-control" id="select_payroll" autocomplete="off" style="width: 100%">
+                            <option value="">TODOS</option>
+                            <option value="SI">SI</option>
+                            <option value="NO">NO</option>
                         </select>  
                     </div>
                 </div>
@@ -243,7 +270,7 @@
                             <tr>
                                 <th>NOMBRES</th>
                                 <th>EMPRESA</th>
-                                <th>CARGO</th>                                
+                                <th>CARGO</th>
                                 <th>TIP. DOC.</th>
                                 <th>DOCUMENTO</th>
                                 <th>ACCIONES</th>
@@ -287,7 +314,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Asignar artículos a <p id="nameToAsign"></p></h4>                    
+                    <h4 class="modal-title">Asignar artículos a <p id="nameToAsign"></p></h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -306,12 +333,12 @@
                         </thead>
                         <tbody>
                         </tbody>
-                    </table>                
+                    </table>
                 
                     <div class="form-group row">
                         <div class="col-md-5">
                             <label for="select_category" class="col-form-label">Seleccione la categoría:</label>
-                            <select class="form-control" id="select_category" autocomplete="off" style="width: 100%">                                
+                            <select class="form-control" id="select_category" autocomplete="off" style="width: 100%">
                                 @foreach($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
@@ -321,13 +348,13 @@
                             <label for="product_id" class="col-form-label">Producto a agregar:</label>
                             <select class="form-control" id="product_id" autocomplete="off" style="width: 100%">
                                 <option value="">Seleccione un producto</option>
-                                <option></option>                                
+                                <option></option>
                             </select>  
-                        </div>                        
+                        </div>
                         <div class="col-md-2">
                             <label for="amount" class="col-form-label">Cantidad:</label>
                             <input type="number" class="form-control" id="amount">
-                        </div>                        
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -495,6 +522,7 @@
 
         $("#area_type_report").select2();
         $("#worker_type_report").select2();
+        $("#company_report").select2();
     </script>
     <script>
         $("#select_category").select2({
@@ -521,6 +549,16 @@
             var cod_area = $('#area_type_report').val();
             var url = '{{ route("worker.sworndeclarationpdf", ":id") }}'
             url = url.replace(':id', cod_area);
+            window.open(
+            url,
+            "_blank"
+            );   
+        }
+
+        function sworndeclarationByCompanies(){
+            var company_id = $('#company_report').val();
+            var url = '{{ route("worker.swornDeclarationByCompany", ":id") }}'
+            url = url.replace(':id', company_id);
             window.open(
             url,
             "_blank"
