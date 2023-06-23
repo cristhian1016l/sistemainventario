@@ -127,7 +127,7 @@ Route::group(['middleware' => 'isAdmin'], function (){
     Route::get('/productos', [ProductController::class, 'index'])->name('product');
 
     Route::post('/productos/obtener-productos', [ProductController::class, 'getProducts']);
-    Route::post('/productos/obtener-producto/{id}', [ProductController::class, 'getProductById']);
+    // Route::post('/productos/obtener-producto/{id}', [ProductController::class, 'getProductById']);
     // Route::post('/productos/obtener-productos-categoria', [ProductController::class, 'getProductsByCategory']);
     Route::post('/productos/agregar-producto', [ProductController::class, 'insert']);
     Route::post('/productos/editar-producto', [ProductController::class, 'edit']);
