@@ -67,15 +67,18 @@ $("#formButton").click(function(e){
     const action = $('#myForm').attr('action');    
 
     let cod_disk = document.getElementById('cod_disk').value;
-
     let code = document.getElementById('code').value;
-
-    let storage = document.getElementById('storage').value;
-        
     let brand_id = document.getElementById('select-brand').value;
-
+    let storage = document.getElementById('storage').value;    
+    let in_use = document.querySelector('#in_use').checked; 
+    let video_format = document.getElementById('format').value;
+    let video_type = document.querySelector('input[name="radios"]:checked').value;
+    let since = document.getElementById('since-date').value;
+    let until = document.getElementById('until-date').value;
     let description = document.getElementById('description').value;    
-
+    // let datesince = since.substring(0, since.length - 1);
+    // console.log("FORMAROOOOOOO: "+moment(datesince, 'YYYY/MM/DD', true));
+    console.log("FORMAT:" + moment(since.toString()));
     hideErrors();
 
     $.ajax({
@@ -87,8 +90,13 @@ $("#formButton").click(function(e){
         data: {
                 'id': cod_disk,
                 'code': code, 
-                'storage': storage, 
                 'brand_id': brand_id,                 
+                'storage': storage, 
+                'in_use': in_use, 
+                'video_format': video_format, 
+                'video_type': video_type, 
+                'since': since, 
+                'until': until, 
                 'description': description },
         success:function(data) {
 
@@ -186,6 +194,7 @@ function setDataToInsert(){
 }
 
 function setDataToEdit(id){
+    
     document.getElementById('cod_disk').value = id;    
 
     document.getElementById('code').disabled = true;
@@ -200,14 +209,39 @@ function setDataToEdit(id){
         type:'POST',
         url: 'discos/obtener-disco/'+id,        
         success:function(data) {                        
-            const disk = data.disk            
-            console.log(disk);
+            const disk = data.disk                        
+            console.log("FECHA: " + moment(disk['since']).format("DD/MM/YYYY"));
             document.getElementById("code").value = disk['code']
             
             $('#select-brand').val(disk['brand_id'])            
             $('#select-brand').trigger('change');            
             
             document.getElementById("storage").value = disk['storage']
+
+            disk['in_use'] == 1 ? document.querySelector('#in_use').checked = true : document.querySelector('#in_use').checked = false;
+
+            document.getElementById("format").value = disk['video_format'];
+
+            $type = disk['video_type']
+
+            switch ($type) {
+                case 'en bruto':
+                    let radio1 = document.getElementById("radio1");
+                    radio1.checked = true;
+                    break;
+                case 'editado':
+                    let radio2 = document.getElementById("radio2");
+                    radio2.checked = true;
+                    break;
+                case 'ambos':
+                    let radio3 = document.getElementById("radio3");
+                    radio3.checked = true;
+                    break;                
+            }            
+
+            document.getElementById("since-date").value = moment(disk['since']).format('DD/MM/YYYY');
+
+            document.getElementById("until-date").value = moment(disk['until']).format('DD/MM/YYYY');
 
             document.getElementById("description").value = disk['description']
             
@@ -231,10 +265,23 @@ function setDataToEdit(id){
 
 function cleanFields(){
     document.getElementById('code').value = "";
-    document.getElementById('storage').value = "";
 
     $('#select-brand').val("")
     $('#select-brand').trigger('change');
+
+    document.getElementById('storage').value = "";
+    
+    document.querySelector('#in_use').checked = false;
+    
+    document.getElementById('format').value = "";
+    
+    let radBtnDefault = document.getElementById("radio1");
+    radBtnDefault.checked = true;
+
+
+    document.getElementById('since-date').value = "";    
+    document.getElementById('until-date').value = "";    
+
 
     document.getElementById('description').value = "";
 }

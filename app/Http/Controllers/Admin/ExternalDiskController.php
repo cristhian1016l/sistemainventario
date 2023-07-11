@@ -67,7 +67,12 @@ class ExternalDiskController extends Controller
         $rules = [                
             'code' => 'required|min:10|max:10',
             'brand_id' => 'required',
-            'storage' => 'required|numeric',            
+            'storage' => 'required|numeric',      
+            'in_use' => 'required',
+            'video_format' => 'required',            
+            'video_type' => 'required',
+            'since' => 'required',
+            'until' => 'required',      
         ];
 
         $messages = [                
@@ -76,7 +81,12 @@ class ExternalDiskController extends Controller
             'code.max' => 'El código no puede tener mas de 12 caracteres',
             'brand_id.required' => 'Ingrese la marca',
             'storage.required' => 'Ingrese la capacidad del disco',
-            'storage.numeric' => 'La capacidad del disco debe ser numérica'
+            'storage.numeric' => 'La capacidad del disco debe ser numérica',
+            'in_use.required' => 'Debe seleccionar si el disco está en uso o almacenado',
+            'video_format.required' => 'Ingrese el formato que hay en el vídeo',            
+            'video_type.required' => 'Debe seleccionar el tipo de vídeo',
+            'since.required' => 'Ingrese la fecha de inicio de uso del disco',
+            'until.required' => 'Ingrese la fecha de fin de uso del disco'
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);        
@@ -86,6 +96,9 @@ class ExternalDiskController extends Controller
         }else{
 
             try{
+
+                $in_use = ($request->in_use == true) ?  1 : 0;
+
                 DB::beginTransaction();
                 
                 $disk = new ExternalDisk();
@@ -93,6 +106,11 @@ class ExternalDiskController extends Controller
                 $disk->storage = $request->storage;
                 $disk->description = mb_strtoupper($request->description, 'utf-8');
                 $disk->brand_id = $request->brand_id;                
+                $disk->in_use = $in_use;                
+                $disk->video_format = $request->video_format;                
+                $disk->video_type = $request->video_type;
+                $disk->since = date("Y/m/d", strtotime($request->since));
+                $disk->until = date("Y/m/d", strtotime($request->until));
                 $disk->save();
                 DB::commit();
                 return response()->json([
@@ -124,7 +142,12 @@ class ExternalDiskController extends Controller
             $rules = [                
                 'code' => 'required|min:10|max:10',
                 'brand_id' => 'required',
-                'storage' => 'required|numeric',            
+                'storage' => 'required|numeric',      
+                'in_use' => 'required',
+                'video_format' => 'required',            
+                'video_type' => 'required',
+                'since' => 'required',
+                'until' => 'required',      
             ];
     
             $messages = [                
@@ -133,7 +156,12 @@ class ExternalDiskController extends Controller
                 'code.max' => 'El código no puede tener mas de 12 caracteres',
                 'brand_id.required' => 'Ingrese la marca',
                 'storage.required' => 'Ingrese la capacidad del disco',
-                'storage.numeric' => 'La capacidad del disco debe ser numérica'
+                'storage.numeric' => 'La capacidad del disco debe ser numérica',
+                'in_use.required' => 'Debe seleccionar si el disco está en uso o almacenado',
+                'video_format.required' => 'Ingrese el formato que hay en el vídeo',            
+                'video_type.required' => 'Debe seleccionar el tipo de vídeo',
+                'since.required' => 'Ingrese la fecha de inicio de uso del disco',
+                'until.required' => 'Ingrese la fecha de fin de uso del disco'
             ];
     
             $validator = Validator::make($request->all(), $rules, $messages);        
@@ -144,16 +172,27 @@ class ExternalDiskController extends Controller
             }else{
 
                 try{
+                    $in_use = $request->in_use == "true" ? 1 : 0;
                     DB::beginTransaction();
                     $update = DB::update('UPDATE external_disks SET
                                         storage = ?,
                                         description = ?,
                                         brand_id = ?,
+                                        in_use = ?,
+                                        video_format = ?,
+                                        video_type = ?,
+                                        since = ?,
+                                        until = ?,
                                         updated_at = ?
                                         WHERE id = ? ',
                                 [$request->storage,
                                 mb_strtoupper($request->description, 'utf-8'), 
-                                $request->brand_id,                                
+                                $request->brand_id,
+                                $in_use,
+                                $request->video_format,
+                                $request->video_type,                                
+                                date('Y-m-d', strtotime($request->since)), 
+                                date('Y-m-d', strtotime($request->until)), 
                                 date_format(now(), "Y-m-d H:i:s"), 
                                 $request->id]);
                     DB::commit();

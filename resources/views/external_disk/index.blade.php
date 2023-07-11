@@ -3,6 +3,7 @@
 @section('title', 'Gestión de Discos Duros Externos')
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
+<link href="{{ asset('css/plugins/daterangepicker.css') }}" rel="stylesheet" />
 <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
 @endsection
 @section('content')
@@ -85,7 +86,7 @@
                         </select>  
                     </div>
                     <div class="form-group row">
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <label for="storage" class="col-form-label">Capacidad:</label>
                             <div class="input-group">                        
                                 <input type="number" class="form-control" id="storage">
@@ -93,6 +94,50 @@
                                     <span class="input-group-text">TB</span>
                                 </div>
                             </div>                    
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label for="in_use" class="col-form-label" id="in_use_label"></label>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="in_use">
+                                <label class="custom-control-label" for="in_use"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label for="format" class="col-form-label">Formato de vídeos guardados:</label>
+                            <input type="text" class="form-control" id="format">
+                        </div>
+                    </div>
+                    <fieldset class="form-group">
+                        <div class="row">
+                            <label for="inputPassword3" class="col-sm-3 col-form-label">Vídeos</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="radios" id="radio1" value="en bruto" checked="">
+                                    <label class="form-check-label" for="radio1">En Bruto</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="radios" id="radio2" value="editado">
+                                    <label class="form-check-label" for="radio2">Editados</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="radios" id="radio3" value="ambos">
+                                    <label class="form-check-label" for="radio3">Ambos</label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="description" class="col-form-label">Vídeos Desde:</label>                                                        
+                            <input type="text" id="since-date" class="form-control"/>         
+                        </div>
+                        <div class="col-md-6">
+                            <label for="description" class="col-form-label">Vídeos Hasta:</label>                            
+                            <input type="text" id="until-date" class="form-control"/>         
                         </div>
                     </div>
                     <div class="form-group row">
@@ -146,15 +191,73 @@
     <script src="{{ asset('js/plugins/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/plugins/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('js/pages/external_disk.js') }}"></script>
-    <script src="{{ asset('js/plugins/select2.min.js') }}"></script>    
+    <script src="{{ asset('js/plugins/select2.min.js') }}"></script>   
+    <script src="{{ asset('js/plugins/moment.min.js') }}"></script> 
+    <script src="{{ asset('js/plugins/daterangepicker.js') }}"></script>
     <script>
+
+        let option = 
+        {
+            singleDatePicker: true,
+            showDropdowns: true,
+            minYear: 1901,
+            maxYear: parseInt(moment().format('YYYY'),10),
+            "locale": {
+                "format": "YYYY-MM-DD",
+                "separator": " - ",
+                "applyLabel": "Aplicar",
+                "cancelLabel": "Cancelar",
+                "fromLabel": "De",
+                "toLabel": "Até",
+                "customRangeLabel": "Custom",
+                "daysOfWeek": [
+                    "Dom",
+                    "Lun",
+                    "Mar",
+                    "Mie",
+                    "Jue",
+                    "Vie",
+                    "Sab"
+                ],
+                "monthNames": [
+                    "Enero",
+                    "Febrero",
+                    "Marzo",
+                    "Abril",
+                    "Mayo",
+                    "Junio",
+                    "Julio",
+                    "Agosto",
+                    "Septiembre",
+                    "Octubre",
+                    "Noviembre",
+                    "Diciembre"
+                ],
+                "firstDay": 0
+            },
+            opens: 'left'
+        }
+        
+        $('input[id="since-date"]').daterangepicker(option);
+        $('input[id="until-date"]').daterangepicker(option);
 
         $("#select-brand").select2();
         
         function generateCode(){
             let code = Math.floor(Math.random() * (999999 - 100000 + 1) ) + 100000;
-            document.getElementById('code').value = "DISC"+ code;
+            document.getElementById('code').value = "DIEX"+ code;
         }
         
+        $('#in_use').change(function() { 
+            let payroll = document.querySelector('#in_use').checked;    
+
+            if(payroll == false){
+                document.getElementById('in_use_label').innerHTML = "Estado: En uso";
+            }else{
+                document.getElementById('in_use_label').innerHTML = "Estado: Almacenado";
+            }
+        });
+        $('#in_use').trigger('change');        
+
     </script>
 @endsection
